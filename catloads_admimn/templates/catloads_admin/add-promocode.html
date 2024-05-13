@@ -1,0 +1,236 @@
+{% extends 'catloads_admin/index.html' %}
+
+{% block header %}
+{% endblock %}
+
+{% block nav %}
+<div class="center">
+    <div class="center-item">
+        <div class="center-heading"> Home</div>
+        <ul class="menu-list">
+            <li class="menu-item">
+                <a href="{% url 'catloadsadmin:dashboard' %}" class="menu-item-button">
+                    <div class="icon"><i class="icon-grid"></i></div>
+                    <div class="text">Dashboard</div>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="center-item">
+        <div class="center-heading">All Menu</div>
+        <ul class="menu-list">
+            <li class="menu-item has-children">
+                <a href="javascript:void(0);" class="menu-item-button">
+                    <div class="icon"><i class="icon-shopping-cart"></i></div>
+                    <div class="text">Products</div>
+                </a>
+                <ul class="sub-menu">
+                    <li class="sub-menu-item" >
+                        <a href="{% url 'catloadsadmin:product_create' %}" class="">
+                            <div class="text">Add Product</div>
+                        </a>
+                    </li>
+                    <li class="sub-menu-item">
+                        <a href="{% url 'catloadsadmin:product_list' %}" class="">
+                            <div class="text">Product List</div>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="menu-item has-children">
+                <a href="javascript:void(0);" class="menu-item-button">
+                    <div class="icon"><i class="icon-shopping-bag"></i></div>
+                    <div class="text">Sale</div>
+                </a>
+                <ul class="sub-menu" >
+                    <li class="sub-menu-item">
+                        <a href="{% url 'catloadsadmin:sale_create' %}" class="">
+                            <div class="text">Add Sale</div>
+                        </a>
+                    </li>
+                    <li class="sub-menu-item">
+                        <a href="{% url 'catloadsadmin:sale_list' %}" class="">
+                            <div class="text">Sale List</div>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="menu-item has-children">
+                <a href="javascript:void(0);" class="menu-item-button">
+                    <div class="icon"><i class="icon-layers"></i></div>
+                    <div class="text">Category</div>
+                </a>
+                <ul class="sub-menu">
+                    <li class="sub-menu-item">
+                        <a href="{% url 'catloadsadmin:category_list' %}" class="">
+                            <div class="text">Category list</div>
+                        </a>
+                    </li>
+                    <li class="sub-menu-item">
+                        <a href="{% url 'catloadsadmin:category_create' %}" class="">
+                            <div class="text">New category</div>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="menu-item has-children active">
+                <a href="javascript:void(0);" class="menu-item-button">
+                    <div class="icon"><i class="icon-box"></i></div>
+                    <div class="text">Promo Code</div>
+                </a>
+                <ul class="sub-menu">
+                    <li class="sub-menu-item">
+                        <a href="{% url 'catloadsadmin:promocode_list' %}" class="">
+                            <div class="text">Promo Codes</div>
+                        </a>
+                    </li>
+                    <li class="sub-menu-item">
+                        <a href="{% url 'catloadsadmin:promocode_create' %}" class="active">
+                            <div class="text">Add Promo Code</div>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="menu-item has-children " >
+                <a href="javascript:void(0);" class="menu-item-button">
+                    <div class="icon"><i class="icon-file-plus"></i></div>
+                    <div class="text">Order</div>
+                </a>
+                <ul class="sub-menu">
+                    <li class="sub-menu-item">
+                        <a href="{% url 'catloadsadmin:orderlist' %}" class="">
+                            <div class="text">Order list</div>
+                        </a>
+                    </li>
+                   
+                   
+                </ul>
+            </li>
+            <li class="menu-item has-children">
+                <a href="javascript:void(0);" class="menu-item-button">
+                    <div class="icon"><i class="icon-user"></i></div>
+                    <div class="text">User</div>
+                </a>
+                <ul class="sub-menu">
+                    <li class="sub-menu-item">
+                        <a href="{% url 'catloadsadmin:userlist' %}" class="">
+                            <div class="text">All user</div>
+                        </a>
+                    </li>
+                
+                </ul>
+            </li>
+
+            <li class="menu-item has-children">
+                <a href="javascript:void(0);" class="menu-item-button">
+                    <div class="icon"><i class="icon-image"></i></div>
+                    <div class="text">Banner</div>
+                </a>
+                <ul class="sub-menu">
+                    <li class="sub-menu-item">
+                        <a href="{% url 'catloadsadmin:banner_create' %}" class="">
+                            <div class="text">Banner Create</div>
+                        </a>
+                    </li>
+                    <li class="sub-menu-item">
+                        <a href="{% url 'catloadsadmin:bannerlist' %}" class="">
+                            <div class="text">All Banners</div>
+                        </a>
+                    </li>
+                
+                </ul>
+            </li>
+            
+        </ul>
+    </div>
+   
+</div>
+{% endblock %}
+
+{% block main %}
+
+<div class="main-content-inner">
+    <!-- main-content-wrap -->
+    <div class="main-content-wrap">
+        <div class="flex items-center flex-wrap justify-between gap20 mb-27">
+            <h3>Add Promo Code</h3>
+            <ul class="breadcrumbs flex items-center flex-wrap justify-start gap10">
+                <li>
+                    <a href="index.html"><div class="text-tiny">Dashboard</div></a>
+                </li>
+                <li>
+                    <i class="icon-chevron-right"></i>
+                </li>
+                <li>
+                    <a href="#"><div class="text-tiny">Promo Code</div></a>
+                </li>
+                <li>
+                    <i class="icon-chevron-right"></i>
+                </li>
+                <li>
+                    <div class="text-tiny">Add Promocode</div>
+                </li>
+            </ul>
+        </div>
+        <!-- new-attribute -->
+        <div class="wg-box">
+            <form class="form-new-product form-style-1" method="post">
+                {% csrf_token %}
+                <fieldset class="name">
+                    <div class="body-title">Promo Code</div>
+                    {{ form.code }}
+                    {% if form.code.errors %}
+                    <div class="alert alert-danger m-1">{{ form.code.errors.as_text }}</div>
+                            {% endif %}
+                </fieldset>
+                <fieldset class="name">
+                    <div class="body-title">Promo Code Discount</div>
+                    {{ form.discount_value }}
+                    {% if form.discount_value.errors %}
+                    <div class="alert alert-danger m-1">{{ form.discount_value.errors.as_text }}</div>
+                            {% endif %}
+                </fieldset>
+                <fieldset class="name">
+                    <div class="body-title">Promo Valid From</div>
+                    {{ form.valid_from }}
+                    {% if form.valid_from.errors %}
+                    <div class="alert alert-danger m-1">{{ form.valid_from.errors.as_text }}</div>
+                            {% endif %}
+                </fieldset>
+                <fieldset class="name">
+                    <div class="body-title">Promo Code Valid Until</div>
+                    {{ form.valid_to }}
+                    {% if form.valid_to.errors %}
+                    <div class="alert alert-danger m-1">{{ form.valid_to.errors.as_text }}</div>
+                            {% endif %}
+                </fieldset>
+                <fieldset class="name">
+                    <div class="body-title">Min Order Value</div>
+                    {{ form.minimum_order_value }}
+                    {% if form.minimum_order_value.errors %}
+                    <div class="alert alert-danger m-1">{{ form.minimum_order_value.errors.as_text }}</div>
+                            {% endif %}
+                    
+                </fieldset>
+                <fieldset class="name">
+                    <div class="body-title">Usage Limit</div>
+                    {{ form.usage_limit }}
+                    {% if form.product_size.errors %}
+                    <div class="alert alert-danger m-1">{{ form.product_size.errors.as_text }}</div>
+                            {% endif %}
+                </fieldset>
+                <div class="bot">
+                    <div></div>
+                    <button class="tf-button w208" type="submit">{{action}}</button>
+                </div>
+            </form>
+        </div>
+        <!-- /new-category -->
+    </div>
+    <!-- /main-content-wrap -->
+</div>
+
+{% endblock %}
+
+{% block footer %}
+{% endblock %}    

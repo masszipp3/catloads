@@ -1,0 +1,223 @@
+{% extends 'catloads_admin/index.html' %}
+
+{% block header %}
+{% endblock %}
+
+{% block nav %}
+<div class="center">
+    <div class="center-item">
+        <div class="center-heading"> Home</div>
+        <ul class="menu-list">
+            <li class="menu-item">
+                <a href="{% url 'catloadsadmin:dashboard' %}" class="menu-item-button">
+                    <div class="icon"><i class="icon-grid"></i></div>
+                    <div class="text">Dashboard</div>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="center-item">
+        <div class="center-heading">All Menu</div>
+        <ul class="menu-list">
+            <li class="menu-item has-children">
+                <a href="javascript:void(0);" class="menu-item-button">
+                    <div class="icon"><i class="icon-shopping-cart"></i></div>
+                    <div class="text">Products</div>
+                </a>
+                <ul class="sub-menu">
+                    <li class="sub-menu-item" >
+                        <a href="{% url 'catloadsadmin:product_create' %}" class="">
+                            <div class="text">Add Product</div>
+                        </a>
+                    </li>
+                    <li class="sub-menu-item">
+                        <a href="{% url 'catloadsadmin:product_list' %}" class="">
+                            <div class="text">Product List</div>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="menu-item has-children">
+                <a href="javascript:void(0);" class="menu-item-button">
+                    <div class="icon"><i class="icon-shopping-bag"></i></div>
+                    <div class="text">Sale</div>
+                </a>
+                <ul class="sub-menu" >
+                    <li class="sub-menu-item">
+                        <a href="{% url 'catloadsadmin:sale_create' %}" class="">
+                            <div class="text">Add Sale</div>
+                        </a>
+                    </li>
+                    <li class="sub-menu-item">
+                        <a href="{% url 'catloadsadmin:sale_list' %}" class="">
+                            <div class="text">Sale List</div>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="menu-item has-children active">
+                <a href="javascript:void(0);" class="menu-item-button">
+                    <div class="icon"><i class="icon-layers"></i></div>
+                    <div class="text">Category</div>
+                </a>
+                <ul class="sub-menu">
+                    <li class="sub-menu-item">
+                        <a href="{% url 'catloadsadmin:category_list' %}" class="active">
+                            <div class="text">Category list</div>
+                        </a>
+                    </li>
+                    <li class="sub-menu-item">
+                        <a href="{% url 'catloadsadmin:category_create' %}" class="">
+                            <div class="text">New category</div>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="menu-item has-children">
+                <a href="javascript:void(0);" class="menu-item-button">
+                    <div class="icon"><i class="icon-box"></i></div>
+                    <div class="text">Promo Code</div>
+                </a>
+                <ul class="sub-menu">
+                    <li class="sub-menu-item">
+                        <a href="{% url 'catloadsadmin:promocode_list' %}" class="">
+                            <div class="text">Promo Codes</div>
+                        </a>
+                    </li>
+                    <li class="sub-menu-item">
+                        <a href="{% url 'catloadsadmin:promocode_create' %}" class="">
+                            <div class="text">Add Promo Code</div>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="menu-item has-children " >
+                <a href="javascript:void(0);" class="menu-item-button">
+                    <div class="icon"><i class="icon-file-plus"></i></div>
+                    <div class="text">Order</div>
+                </a>
+                <ul class="sub-menu">
+                    <li class="sub-menu-item">
+                        <a href="{% url 'catloadsadmin:orderlist' %}" class="">
+                            <div class="text">Order list</div>
+                        </a>
+                    </li>
+                   
+                   
+                </ul>
+            </li>
+            <li class="menu-item has-children">
+                <a href="javascript:void(0);" class="menu-item-button">
+                    <div class="icon"><i class="icon-user"></i></div>
+                    <div class="text">User</div>
+                </a>
+                <ul class="sub-menu">
+                    <li class="sub-menu-item">
+                        <a href="{% url 'catloadsadmin:userlist' %}" class="">
+                            <div class="text">All user</div>
+                        </a>
+                    </li>
+                
+                </ul>
+            </li>
+
+            <li class="menu-item has-children">
+                <a href="javascript:void(0);" class="menu-item-button">
+                    <div class="icon"><i class="icon-image"></i></div>
+                    <div class="text">Banner</div>
+                </a>
+                <ul class="sub-menu">
+                    <li class="sub-menu-item">
+                        <a href="{% url 'catloadsadmin:banner_create' %}" class="">
+                            <div class="text">Banner Create</div>
+                        </a>
+                    </li>
+                    <li class="sub-menu-item">
+                        <a href="{% url 'catloadsadmin:bannerlist' %}" class="">
+                            <div class="text">All Banners</div>
+                        </a>
+                    </li>
+                
+                </ul>
+            </li>
+            
+        </ul>
+    </div>
+   
+</div>
+{% endblock %}
+{% block main %}
+
+<div class="main-content-inner">
+    <!-- main-content-wrap -->
+    <div class="main-content-wrap">
+        <div class="flex items-center flex-wrap justify-between gap20 mb-27">
+            <h3>Category infomation</h3>
+            <ul class="breadcrumbs flex items-center flex-wrap justify-start gap10">
+                <li>
+                    <a href="index.html"><div class="text-tiny">Dashboard</div></a>
+                </li>
+                <li>
+                    <i class="icon-chevron-right"></i>
+                </li>
+                <li>
+                    <a href="#"><div class="text-tiny">Category</div></a>
+                </li>
+                <li>
+                    <i class="icon-chevron-right"></i>
+                </li>
+                <li>
+                    <div class="text-tiny">New category</div>
+                </li>
+            </ul>
+        </div>
+        <!-- new-category -->
+        <div class="wg-box">
+            <form class="form-new-product form-style-1" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <fieldset class="name">
+                    <div class="body-title">Category name <span class="tf-color-1">*</span></div>
+                    {{ form.name }}
+                </fieldset>
+                {% if form.name.errors %}
+                <div class="alert alert-danger">{{ form.name.errors.as_text }}</div>
+                {% endif %}
+                <fieldset>
+                    <div class="body-title">Upload Icon <span class="tf-color-1">*</span></div>
+                    <div class="upload-image flex-grow">
+                        <div class="item up-load">
+                            <label class="uploadfile" for="myFile">
+                                <span class="icon">
+                                    <i class="icon-upload-cloud"></i>
+                                </span>
+                                <span class="body-text">Drop your images here or select <span class="tf-color">click to browse</span></span>
+                                {{ form.icon }}
+                            </label>
+                            {% if form.icon.errors %}
+                <div class="alert alert-danger">{{ form.icon.errors.as_text }}</div>
+                {% endif %}
+                        </div>
+                    </div>
+                </fieldset>
+                <!-- <fieldset class="category">
+                    <div class="body-title">Select category icon</div>
+                    <div class="select flex-grow">
+                        <select class="">
+                            <option>Select icon</option>
+                            <option>icon 1</option>
+                            <option>icon 2</option>
+                        </select>
+                    </div>
+                </fieldset> -->
+                <div class="bot">
+                    <div></div>
+                    <button class="tf-button w208" type="submit">Save</button>
+                </div>
+            </form>
+        </div>
+        <!-- /new-category -->
+    </div>
+    {% endblock %}
+
+{% block footer %}
+{% endblock %}    
