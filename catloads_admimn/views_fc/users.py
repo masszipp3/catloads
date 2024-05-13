@@ -5,15 +5,17 @@ from catloads_web.models import CustomUser
 from django.views.generic.list import ListView
 from django.views.generic.edit import UpdateView
 from django.db.models import Count, Q
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
-
+@method_decorator(login_required, name='dispatch')
 class UsersListView(ListView):
     model = CustomUser
     template_name = 'catloads_admin/all-user.html'
     context_object_name = 'users'
     paginate_by = 10
     queryset = CustomUser.objects.filter(usertype=2,is_deleted=False).order_by('-id')  
-
+@method_decorator(login_required, name='dispatch')
 class UserSoftDeleteView(View):
     success_url = reverse_lazy('catloadsadmin:userlist')
 

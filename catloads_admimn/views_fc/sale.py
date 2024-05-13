@@ -7,11 +7,13 @@ from django.views.generic.list import ListView
 from django.views.generic.edit import UpdateView
 from django.db.models import Count, Q
 from django.http import JsonResponse   
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
 class SaleCreateView(View):
     template_name = 'catloads_admin/salecreate.html'
     form_class = ProductSaleForm
-    success_url = 'catloadsadmin:category_list' 
+    success_url = 'catloadsadmin:sale_list' 
 
     def get(self,request,id=None):
         try:

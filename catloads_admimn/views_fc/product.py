@@ -6,10 +6,14 @@ from catloads_admimn.froms import CategoryForm,ProductForm
 from django.views.generic.list import ListView
 from django.views.generic.edit import UpdateView
 from django.db.models import Count, Q
-from django.http import JsonResponse    
+from django.http import JsonResponse   
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator 
 
 #-----------------------------------Category Create / Update/ List/ Delete ----------------------------------------
 
+
+@method_decorator(login_required, name='dispatch')
 class CategoryCreateView(View):
     template_name = 'catloads_admin/new-category.html'
     form_class = CategoryForm
@@ -37,7 +41,7 @@ class CategoryCreateView(View):
         except Exception as e:
             print('Error Occured on Posting Category Form')    
 
-
+@method_decorator(login_required, name='dispatch')
 class CategoryListView(ListView):
     model = Category
     template_name = 'catloads_admin/category-list.html'
@@ -51,7 +55,7 @@ class CategoryListView(ListView):
         queryset = queryset.annotate(
             download_count=Count('products_category__products_sale__order_items', filter=Q(products_category__products_sale__order_items__order__paid=True))).filter(is_deleted=False).order_by('-id')   
         return queryset
-
+@method_decorator(login_required, name='dispatch')
 class CategorySoftDeleteView(View):
     success_url = reverse_lazy('catloadsadmin:category_list')
 
@@ -67,7 +71,7 @@ class CategorySoftDeleteView(View):
 
 
 #-----------------------------------Product Create / Update/ List/Delete ----------------------------------------
-
+@method_decorator(login_required, name='dispatch')
 class ProductCreateUpdateView(View):
     template_name = 'catloads_admin/add-product.html'
     form_class = ProductForm
@@ -94,7 +98,7 @@ class ProductCreateUpdateView(View):
                 return render(request, self.template_name, {"form": form,'action':action})
         except Exception as e:
             print('Product Posting Error', e)
-
+@method_decorator(login_required, name='dispatch')
 class ProductListView(ListView):
     model = Product
     template_name = 'catloads_admin/product-list.html'
@@ -116,7 +120,7 @@ class ProductListView(ListView):
             download_count=Count('products_sale__order_items', filter=Q(products_sale__order_items__order__paid=True))).filter(is_deleted=False).order_by('-id')
         return queryset   
                  
-    
+@method_decorator(login_required, name='dispatch')  
 class ProductSoftDeleteView(View):
     success_url = reverse_lazy('catloadsadmin:product_list')
 

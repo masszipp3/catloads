@@ -6,8 +6,10 @@ from catloads_admimn.froms import PromoCodeForm
 from django.views.generic.list import ListView
 from django.views.generic.edit import UpdateView
 from django.db.models import Count, Q
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
-
+@method_decorator(login_required, name='dispatch')
 class PromoCodeCreateUpdateView(View):
     template_name = 'catloads_admin/add-promocode.html'
     form_class = PromoCodeForm
@@ -35,7 +37,7 @@ class PromoCodeCreateUpdateView(View):
         except Exception as e:
             print('Promo Code Posting Error', e)
 
-
+@method_decorator(login_required, name='dispatch')
 class PromoCodeListView(ListView):
     model = PromoCode
     template_name = 'catloads_admin/promocodelist.html'

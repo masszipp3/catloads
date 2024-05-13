@@ -6,7 +6,10 @@ from catloads_admimn.froms import PromoCodeForm,BannerForm
 from django.views.generic.list import ListView
 from django.views.generic.edit import UpdateView
 from django.db.models import Count, Q
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
+@method_decorator(login_required, name='dispatch')
 class BannerCreateUpdateView(View):
     template_name = 'catloads_admin/add_banner.html'
     form_class = BannerForm
@@ -33,7 +36,7 @@ class BannerCreateUpdateView(View):
                 return render(request, self.template_name, {"form": form,'action':action})
         except Exception as e:
             print('Banner Posting Error', e)
-
+@method_decorator(login_required, name='dispatch')
 class BannerListView(ListView):
     model = Banner
     template_name = 'catloads_admin/bannerlists.html'
@@ -41,6 +44,7 @@ class BannerListView(ListView):
     paginate_by = 10
     queryset = Banner.objects.filter(is_deleted=False).order_by('-id')   
 
+@method_decorator(login_required, name='dispatch')
 class BannerSoftDeleteView(View):
     success_url = reverse_lazy('catloadsadmin:banner_list')
 

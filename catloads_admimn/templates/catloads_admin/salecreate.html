@@ -1,4 +1,4 @@
-{% extends 'catloads_admin/index.html' %}
+{% extends 'catloads_admin/{% url 'catloadsadmin:dashboard' %}' %}
 
 {% block header %}
 <style>
@@ -194,7 +194,7 @@
             <h3>Add Sale</h3>
             <ul class="breadcrumbs flex items-center flex-wrap justify-start gap10">
                 <li>
-                    <a href="index.html">
+                    <a href="{% url 'catloadsadmin:dashboard' %}">
                         <div class="text-tiny">Dashboard</div>
                     </a>
                 </li>

@@ -7,7 +7,10 @@ from django.views.generic.list import ListView
 from django.views.generic.edit import UpdateView
 from django.db.models import Count, Q
 from django.views.generic import DetailView
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
+@method_decorator(login_required, name='dispatch')
 class OrderListView(ListView):
     model = Order
     template_name = 'catloads_admin/orders.html'
@@ -15,6 +18,7 @@ class OrderListView(ListView):
     paginate_by = 10
     queryset = Order.objects.filter(is_deleted=False).order_by('-id').annotate( items_count=Count('items'))
 
+@method_decorator(login_required, name='dispatch')
 class OrderDetailView(DetailView):
     model = Order
     template_name = 'catloads_admin/order-detail.html'
@@ -27,7 +31,7 @@ class OrderDetailView(DetailView):
         context['total'] = total
         return context
 
-
+@method_decorator(login_required, name='dispatch')
 class OrderSoftDeleteView(View):
     success_url = reverse_lazy('catloadsadmin:orderlist')
 
