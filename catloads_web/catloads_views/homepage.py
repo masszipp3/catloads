@@ -1,0 +1,32 @@
+from django.shortcuts import render,get_object_or_404,redirect
+from django.urls import reverse_lazy
+from django.views import View
+from catloads_web.models import Category,Product,ProductSale,Banner,CustomUser
+from catloads_admimn.forms import CategoryForm,ProductForm
+from django.views.generic.list import ListView
+from django.views.generic.edit import UpdateView
+from django.db.models import Count, Q
+from django.http import JsonResponse   
+from django.contrib.auth import authenticate, login,logout
+from django.urls import reverse
+
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator 
+
+class DashboardView(View):
+    template_name = 'catloads_web/index.html'
+    def get(self,request):
+        try:
+            products_sale = ProductSale.objects.filter(is_deleted=False).annotate(order_count=Count('order_items')).order_by('-order_count')
+            banners = Banner.objects.filter(is_deleted= False)
+            context = {'products_sale':products_sale,'banners':banners}
+            return render(request,self.template_name,context=context)
+        except Exception as e:
+            print("Error in dashboard view : ",e)   
+
+class LogoutView(View):
+    def get(self, request):
+        # Log out the user
+        logout(request)
+        # Redirect to home page or login page after logout
+        return redirect(reverse('catloads_web:login'))            

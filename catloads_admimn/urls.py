@@ -8,7 +8,7 @@ urlpatterns=[
 
     path('',dashboard.DashboardView.as_view(),name='dashboard'),
 
-    #------------------------- Dashboard ------------------------------------------------
+    #------------------------- Login ------------------------------------------------
 
     path('login',login.LoginView.as_view(),name='login'),
 

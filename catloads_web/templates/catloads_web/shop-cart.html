@@ -1,0 +1,141 @@
+﻿{% extends 'catloads_web/index.html' %}
+ 
+{% block header %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+{% endblock %}
+{% block content %}
+		
+	<div class="page-content bg-light">
+		<!--Banner Start-->
+		<div class="dz-bnr-inr" style="background-color:rgb(236, 208, 244);">
+			<div class="container">
+				<div class="dz-bnr-inr-entry">
+					<h1>Shop Cart</h1>
+					<nav aria-label="breadcrumb" class="breadcrumb-row">
+						<ul class="breadcrumb">
+							<li class="breadcrumb-item"><a href="{% url 'catloads_web:dashboard' %}"> Home</a></li>
+							<li class="breadcrumb-item">Shop Cart</li>
+						</ul>
+					</nav>
+				</div>
+			</div>	
+		</div>
+		<!--Banner End-->
+
+		
+		<!-- contact area -->
+		<section class="content-inner shop-account">
+			<!-- Product -->
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-8">
+						<div class="table-responsive cartsdata" >
+							<table class="table check-tbl">
+								<thead>
+									<tr>
+										<th>Product</th>
+										<th></th>
+										<th>Price</th>
+										<th>Quantity</th>
+										<th>Subtotal</th>
+										<th></th>
+									</tr>
+								</thead>
+								<tbody id="cart_table">
+									<!-- <tr>
+										<td class="product-item-img"><img src="https://i0.wp.com/justinodisho.com/wp-content/uploads/2020/10/FXPack2Boxmockup.png" alt="/"></td>
+										<td class="product-item-name">Adobe Premier Effects</td>
+										<td class="product-item-price">₹40.00</td>
+										<td class="product-item-quantity">
+											<div class=" btn-quantity style-1 me-3" style="display:  flex; justify-content: space-between; align-items: center;">
+												<button class="p-2" style="background-color: black; color: white;border-radius: 100%;" ><i class="fa-solid fa-minus"></i></button>
+												<input style="margin: 10px !important;" type="text" value="1" name=""> 
+												<button class="p-2" style="background-color: black; color: white;border-radius: 100%;" ><i class="fa-solid fa-plus"></i></button>
+												
+
+											</div>
+										</td>
+										<td class="product-item-totle">₹160.00</td>
+										<td class="product-item-close" ><a href="javascript:void(0);" style="display: flex;align-items: center; justify-content: center;"><i class="fa fa-trash-o"></i></a></td>
+
+									</tr> -->
+								</tbody>
+							</table>
+							
+						</div>
+						<div class="cartmsg" style="display: none;">
+							<p class="text-center text-danger">Your cart is empty!</p>
+						</div>
+						<div class="row shop-form m-t30">
+							<div class="col-md-6">
+								<div class="form-group">
+									<!-- <div class="input-group mb-0">
+										<input name="dzEmail" required="required" type="text" class="form-control" placeholder="Coupon Code">
+										<div class="input-group-addon">
+											<button name="submit" value="Submit" type="submit" class="btn coupon">
+												Apply Coupon
+											</button>
+										</div>
+									</div> -->
+								</div>
+							</div>
+							<div class="col-md-6 text-end">
+								<!-- <a href="shop-cart.html" class="btn btn-secondary">UPDATE CART</a> -->
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-4">
+						<h4 class="title mb15">Cart Total</h4>
+						<div class="cart-detail">
+							<!-- <a href="javascript:void(0);" class="btn btn-outline-secondary w-100 m-b20">Bank Offer 5% Cashback</a> -->
+							<div class="icon-bx-wraper style-4 m-b15">
+								<div class="icon-bx">
+									<i class="flaticon flaticon-ship"></i>
+								</div>
+								<div class="icon-content">
+									<span class=" font-14">FREE</span>
+									<h6 class="dz-title">Enjoy The Product</h6>
+								</div>
+							</div>
+							<div class="icon-bx-wraper style-4 m-b30">
+								<!-- <div class="icon-bx">
+									<img src="images/shop/shop-cart/icon-box/pic2.png" alt="/">
+								</div> -->
+								<!-- <div class="icon-content">
+									<h6 class="dz-title">Enjoy The Product</h6>
+									<p>Lorem Ipsum is simply dummy text of the printing and typesetting</p>
+								</div> -->
+							</div>
+							{% csrf_token %}
+							<div class="save-text">
+								<i class="icon feather icon-check-circle"></i>
+								<span class="m-l10">Verified</span>
+							</div>
+							<table>
+								<tbody>
+									<tr class="total">
+										<td>
+											<h6 class="mb-0">Total</h6>
+										</td>
+										<td class="price" id="cart_total">
+											
+										</td>
+									</tr>
+								</tbody>
+							</table>
+							<a id="checkout_btn" data-url="{% url 'catloads_web:cartdata' %}" class="btn btn-secondary w-100">PLACE ORDER</a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Product END -->
+		</section>
+		<!-- contact area End--> 
+
+	</div>
+		
+	
+	<!-- Footer -->
+	{% endblock %}
+	{% block footer %}
+	{% endblock %}

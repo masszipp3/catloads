@@ -59,7 +59,7 @@ $(function() {
             </div>
             <div>
                 <div class="text-tiny mb-3">Size</div>
-                <div class="body-text">${$(this).data('size')}GB</div>
+                <div class="body-text">${$(this).data('size')}${$(this).data('unit')}</div>
             </div>
             <div>
                 <div class="body-title-2 mb-3">

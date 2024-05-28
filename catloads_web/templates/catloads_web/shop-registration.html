@@ -1,0 +1,65 @@
+﻿{% extends 'catloads_web/index.html' %}
+ 
+{% block header %}
+{% endblock %}
+{% block content %}
+	<!-- Header End -->
+	
+	<div class="page-content bg-light">
+		<section class="px-3">
+			<div class="row">
+				
+				<div class="col-xxl-12 col-xl-12 col-lg-12 end-side-content justify-content-center">
+					<div class="login-area">
+						<h2 class="text-secondary text-center">Registration Now</h2>
+						<p class="text-center m-b30">Welcome please registration to your account</p>
+						<form method="post" id="registration-form">
+							{% csrf_token %}
+							<div class="m-b25">
+								<label class="label-title">Name</label>
+								{{form.name}}
+								{% if form.name.errors %}
+                			<div class="alert alert-danger m-1">{{ form.name.errors.as_text }}</div>
+                					{% endif %}
+							</div>
+							<div class="m-b25">
+								<label class="label-title">Email Address</label>
+								{{form.email}}
+								{% if form.email.errors %}
+								<div class="alert alert-danger m-1">{{ form.email.errors.as_text }}</div>
+								{% endif %}
+							</div>
+							<div class="m-b25">
+								<label class="label-title">Password</label>
+								{{form.password}}
+								
+								{% if form.password.errors %}
+								<div class="alert alert-danger m-1">{{ form.password.errors.as_text }}</div>
+								{% endif %}
+
+							</div>
+							
+							
+							<div class="text-center">
+								<button type="submit"  class="btn btn-secondary btnhover text-uppercase me-2">Register</button>
+								<a href="{% url 'catloads_web:login' %}" class="btn btn-outline-secondary btnhover text-uppercase">Sign In</a>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
+
+{% endblock %}
+{% block footer %}
+{% endblock %}
+
+
+
+
+
+
+
+
+

@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 # Create your models here.
 from django.db import models
@@ -6,6 +7,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractUser,BaseUserManager
 from django.db import models
 import datetime
+from django.db.models import F, Sum
 from django.utils.text import slugify
 
 class UserManager(BaseUserManager):
@@ -48,7 +50,7 @@ class CustomUser(AbstractUser):
     USERNAME_FIELD = "email"
     objects = UserManager()
     REQUIRED_FIELDS = ["phone"]
-    usertype = models.IntegerField(default=0, choices=userchoices)
+    usertype = models.IntegerField(default=2, choices=userchoices)
     name = models.CharField(max_length=100, null=True, blank=True)
     email = models.EmailField(null=True, blank=True, unique=True)
     city = models.CharField(max_length=500, blank=True, null=True)
@@ -104,6 +106,9 @@ class Product(BaseModel):
     def __str__(self):
         return self.name
     
+    def get_unit_display(self):
+        return dict(self.UNITCHOICES)[self.product_unit]  
+    
     def save(self, *args, **kwargs):
         creating = self._state.adding  
         if creating:
@@ -137,7 +142,6 @@ class ProductSale(BaseModel):
     thumbnail = models.ImageField(upload_to='products_thumbnail',null=True,blank=True)
     available = models.BooleanField(default=True)
 
-
     def __str__(self):
         return self.name
     
@@ -156,6 +160,20 @@ class ProductSale(BaseModel):
             self.sale_id = f"SALE-{self.id}"
         super(ProductSale, self).save(*args, **kwargs)
 
+    def get_all_categories(self):
+        sale_items = ProductSaleItems.objects.filter(sale_master=self)
+        return sale_items.values_list('product__category__name', flat=True).distinct()
+
+    def get_discount_percentage(self):
+        if self.price > 0:
+            return round((self.discount / (self.price+self.discount)) * 100)
+        return 0
+    
+    def get_maxprice(self): 
+        return self.discount + self.price if self.discount > 0 else self.discount
+    
+
+
 class ProductSaleItems(BaseModel):
     product = models.ForeignKey(Product, related_name='products_saleitem', on_delete=models.SET_NULL,null=True,blank=True)
     sale_master = models.ForeignKey(ProductSale, related_name='products_salemaster', on_delete=models.SET_NULL,null=True,blank=True)
@@ -173,7 +191,7 @@ class Order(BaseModel):
     ORDER_STATUS = (
         (1, "Pending"),
         (2, "Completed"),
-        (2, "Failed"),
+        (3, "Failed"),
 
     )
     user = models.ForeignKey(CustomUser, related_name='orders',  on_delete=models.SET_NULL,null=True,blank=True)
@@ -184,18 +202,39 @@ class Order(BaseModel):
     total_price = models.DecimalField(max_digits=10,decimal_places=2,default=0.00)
     payment_method = models.IntegerField(choices=PAYMENT_TYPE,null=True,blank=True)
     order_status = models.IntegerField(choices=ORDER_STATUS,null=True,blank=True,default=1)
-    order_id  = models.CharField(max_length=255,null=False,unique=True)
+    order_id  = models.CharField(max_length=255,null=True)
 
+
+    def get_order_total(self):
+        return (
+            self.items.annotate(
+                total_item=F('quantity') * F('price')
+            ).aggregate(total=Sum('total_item'))['total']
+            or 0.00 
+
+        )
+
+    def get_status_display(self):
+        return dict(self.ORDER_STATUS)[self.order_status]  
+    
+    def get_orderitemcount(self):
+        return self.items.count()
+    
+    def get_order_discount(self):
+        order_total = self.items.annotate(
+                total_item=F('quantity') * F('price')
+            ).aggregate(total=Sum('total_item'))['total'] or 0.00
+        order_discount = self.items.aggregate(total=Sum('product__discount'))['total'] or 0.00
+        return (
+            order_total-order_discount
+        )
 
     def __str__(self):
         return f'Order {self.id}'
     
+    
     def save(self, *args, **kwargs):
-        creating = self._state.adding  
-        if creating:
-            super(Order, self).save(*args, **kwargs) 
-        if not self.order_id:
-            self.order_id = f"ORDER-{self.id}"
+        self.order_id = f"ORDER-{self.id}"
         super(Order, self).save(*args, **kwargs)
 
 class OrderItem(BaseModel):
@@ -206,6 +245,9 @@ class OrderItem(BaseModel):
 
     def __str__(self):
         return str(self.id)
+    
+    def get_subtotal(self):
+        return self.price * self.quantity
 
 class Payment(BaseModel):
     PAYMENT_STATUS = (
@@ -228,7 +270,13 @@ class Cart(BaseModel):
 
     def __str__(self):
         return f'Cart {self.id}'
-
+    
+    def update_and_get_cart_total(self):
+        self.cart_total = self.items.annotate(
+            total_item=F('quantity') * F('product__price')
+        ).aggregate(total=Sum('total_item'))['total'] or 0.00
+        self.save()
+        return self.cart_total
 class CartItem(BaseModel):
     cart = models.ForeignKey(Cart, related_name='items', on_delete=models.CASCADE)
     product = models.ForeignKey(ProductSale, related_name='cart_items', on_delete=models.CASCADE)
@@ -249,11 +297,16 @@ class PromoCode(BaseModel):
     used = models.IntegerField(default=0)  # Counter for how many times the promo code has been used
 
     def is_valid(self):
-        return (
-            self.active and
-            self.used < (self.usage_limit or float('inf')) and
-            self.valid_from <= datetime.datetime.now() <= self.valid_to
-        )
+        current_time = timezone.now()  # This ensures the datetime is timezone-aware
+        if not self.active:
+            return False
+        if self.used >= (self.usage_limit or float('inf')):
+            return False
+        if self.valid_from and self.valid_from > current_time:
+            return False
+        if self.valid_to and self.valid_to < current_time:
+            return False
+        return True
 
     def __str__(self):
         return self.code

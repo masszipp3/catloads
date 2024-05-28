@@ -1,0 +1,83 @@
+﻿{% extends 'catloads_web/index.html' %}
+ 
+{% block header %}
+{% endblock %}
+{% block content %}
+	<!-- Header End -->
+	
+	<div class="page-content bg-light">
+		<section class="px-3">
+			<div class="row">
+				
+				<div class="col-xxl-12 col-xl-12 col-lg-12 end-side-content justify-content-center">
+					 <div class="login-area">
+						<h2 class="text-secondary text-center">Catloads Login</h2>
+						<p class="text-center m-b25">welcome please login to your account</p>
+						<p class="text-danger">{{msg}}</p>
+						<form method="post" id="login-form">
+							{% csrf_token %}
+							<div class="m-b30">
+								<label class="label-title">Email Address</label>
+								<input name="email" required="" class="form-control" placeholder="Email Address" type="email">
+							</div>
+							<div class="m-b15">
+								<label class="label-title">Password</label>
+								<div class="secure-input ">
+									<input type="password" name="password" class="form-control dz-password" placeholder="Password">
+									<div class="show-pass">
+										<i class="eye-open fa-regular fa-eye"></i>
+									</div>
+								</div>
+							</div>
+							<div class="form-row d-flex justify-content-between m-b30">
+								<div class="form-group">
+								   <div class="custom-control custom-checkbox">
+										<input type="checkbox" class="form-check-input" id="basic_checkbox_1">
+										<label class="form-check-label" for="basic_checkbox_1">Remember Me</label>
+									</div>
+								</div>
+								<div class="form-group">
+									<a class="text-primary" href="javascript:void(0);">Forgot Password</a>
+								</div>
+							</div>
+							<div class="text-center">
+								<button type="submit" class="btn btn-secondary btnhover text-uppercase me-2 sign-btn">Sign In</button>
+								<a href="{% url 'catloads_web:registration' %}" id="regbtn" class="btn btn-outline-secondary btnhover text-uppercase">Register</a>
+							</div>
+						</form>
+					</div> 
+				</div>
+			</div>
+		</section>
+	</div>
+
+{% endblock %}
+{% block footer %}
+<script>
+	document.addEventListener("DOMContentLoaded", function() {
+    const urlParams = new URLSearchParams(window.location.search);
+
+    // Get the value of the 'redirect' parameter
+    const redirect = urlParams.get('redirect');	
+
+    // Use the 'redirect' parameter (if it exists)
+    if (redirect) {
+       registerbtn =  document.getElementById('regbtn')
+	   let currentHref = registerbtn.getAttribute('href');
+	   registerbtn.setAttribute('href', `${currentHref}?redirect=${encodeURIComponent(redirect)}`);
+        // You can now use this 'redirect' value to manage your redirects or other logic
+    } 
+});
+</script>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+

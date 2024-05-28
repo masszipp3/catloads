@@ -1,0 +1,81 @@
+﻿{% extends 'catloads_web/index.html' %}
+ 
+{% block header %}
+{% endblock %}
+{% block content %}
+	
+	<div class="page-content bg-light">
+		<!--Banner Start-->
+		<div class="dz-bnr-inr "  style="background-color:rgb(236, 208, 244);">
+			<div class="container">
+				<div class="dz-bnr-inr-entry">
+					<h1>My Account</h1>
+					<nav aria-label="breadcrumb" class="breadcrumb-row">
+						<ul class="breadcrumb">
+							<li class="breadcrumb-item"><a href="{% url 'catloads_web:dashboard' %}"> Home</a></li>
+							<li class="breadcrumb-item">My Account</li>
+						</ul>
+					</nav>
+				</div>
+			</div>	
+		</div>
+		<!--Banner End-->
+
+		<!-- inner page banner End-->
+		<div class="content-inner-1">
+			<div class="container-md">
+				<div class="row dashboard-wrapper">
+					<div class="col-lg-3">
+						<div class="dz-tabs style-2 nav-full">
+							<ul class="nav nav-pills">
+								<li class="nav-item"><a class="nav-link btn btn-primary" href="{% url 'catloads_web:product_dashboard' %}">Dashboard</a></li>
+								<li class="nav-item"><a class="nav-link btn btn-primary" href="{% url 'catloads_web:orders' %}">Orders</a></li>
+								<li class="nav-item"><a class="nav-link btn btn-primary active" href="{% url 'catloads_web:downloads' %}">Downloads</a></li>
+
+								<li class="nav-item"><a class="nav-link btn btn-primary" href="{% url 'catloads_web:edit_account' %}">Account details</a></li>
+								<li class="nav-item"><a class="nav-link btn btn-primary" href="{% url 'catloads_web:login' %}">Log out</a></li>
+							</ul>
+						</div>
+					</div>
+					<div class="col-lg-9">
+						<div class="card-container">
+							<div class="alert alert-primary" role="alert">
+								<h4>Disclaimer : Read it Before Downloading</h4>
+								<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+							  </div>
+							<div class="table-responsive my-account-content">
+								<table class="table check-tbl style-1 table-responsive">
+									<thead>
+									<tr>
+										<th>Item ID</th>
+										<th>Name</th>
+										<!-- <th>Validity</th> -->
+										<th>Size</th>
+										<th class="text-end">Actions</th>
+									</tr>
+									</thead>
+									<tbody>
+										{% for product in products %}
+										<tr>
+											<td class="product-item-name text-primary">{{product.product.product_code}}</td>
+											<td class="product-item-date">{{product.product.name}}</td>
+											<!-- <td class="product-item-price">March 21, 2024</td> -->
+											<td class="product-item-Status">{{product.product.product_size}} {{product.product.get_unit_display}}</td>
+
+											<td class="product-item-totle"><a class="btn btn-sm btn-secondary" href="{{product.product.download_link}}">Download</a></td>
+										</tr>
+										{% endfor %}
+					
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+	{% endblock %}
+	{% block footer %}
+	{% endblock %}

@@ -1,0 +1,88 @@
+﻿{% extends 'catloads_web/index.html' %}
+ 
+{% block header %}
+{% endblock %}
+{% block content %}
+<div class="page-content bg-light">
+	<!--Banner Start-->
+	<div class="dz-bnr-inr "  style="background-color:rgb(236, 208, 244);">
+		<div class="container">
+			<div class="dz-bnr-inr-entry">
+				<h1>My Account</h1>
+				<nav aria-label="breadcrumb" class="breadcrumb-row">
+					<ul class="breadcrumb">
+						<li class="breadcrumb-item"><a href="{% url 'catloads_web:dashboard' %}"> Home</a></li>
+						<li class="breadcrumb-item">My Account</li>
+					</ul>
+				</nav>
+			</div>
+		</div>	
+	</div>
+	<!--Banner End-->
+
+	<!-- inner page banner End-->
+	<div class="content-inner-1">
+		<div class="container-md">
+			<div class="row dashboard-wrapper">
+				<div class="col-lg-3">
+					<div class="dz-tabs style-2 nav-full">
+						<ul class="nav nav-pills">
+							<li class="nav-item"><a class="nav-link btn btn-primary" href="{% url 'catloads_web:product_dashboard' %}">Dashboard</a></li>
+							<li class="nav-item"><a class="nav-link btn btn-primary" href="{% url 'catloads_web:orders' %}">Orders</a></li>
+							<li class="nav-item"><a class="nav-link btn btn-primary" href="{% url 'catloads_web:downloads' %}">Downloads</a></li>
+							<li class="nav-item"><a class="nav-link btn btn-primary active" href="{% url 'catloads_web:edit_account' %}">Account details</a></li>
+							<li class="nav-item"><a class="nav-link btn btn-primary" href="{% url 'catloads_web:login' %}">Log out</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="col-lg-9">
+					<div class="card-container">
+						<div class="my-account-content">
+							<form class="row" method="post">
+								{% csrf_token %}
+								<div class="col-md-6">
+									<div class="form-group m-b25">
+										<label class="label-title">Full Name</label>
+										{{form.name}}
+							{% if form.name.errors %}
+							<div class="alert alert-danger m-1">{{ form.name.errors.as_text }}</div>
+							{% endif %}
+								</div>
+						
+								<div class="col-md-12">
+									<div class="form-group m-b25">
+										<label class="label-title">Email address</label>
+										{{form.email}}
+							{% if form.email.errors %}
+							<div class="alert alert-danger m-1">{{ form.email.errors.as_text }}</div>
+							{% endif %}
+									</div>
+								</div>
+
+								<div class="col-md-12">
+									<div class="form-group m-b25">
+										<label class="label-title">Phone</label>
+										{{form.phone}}
+							{% if form.phone.errors %}
+							<div class="alert alert-danger m-1">{{ form.phone.errors.as_text }}</div>
+							{% endif %}
+									</div>
+								</div>
+
+								<button type="submit" class="btn btn-secondary">Save changes</button>
+		
+								
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+</div>
+	{% endblock %}
+	{% block footer %}
+	{% endblock %}
+
+

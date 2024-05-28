@@ -2,19 +2,26 @@ from django.shortcuts import render,get_object_or_404,redirect
 from django.urls import reverse_lazy
 from django.views import View
 from catloads_web.models import Category,ProductSale,Product,ProductSaleItems,ProductImages,ProductVideos
-from catloads_admimn.froms import ProductSaleForm
+from catloads_admimn.forms import ProductSaleForm
 from django.views.generic.list import ListView
 from django.views.generic.edit import UpdateView
 from django.db.models import Count, Q
 from django.http import JsonResponse   
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+from django.contrib.auth.mixins import UserPassesTestMixin
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 
-class SaleCreateView(View):
+class SaleCreateView(UserPassesTestMixin,View):
     template_name = 'catloads_admin/salecreate.html'
     form_class = ProductSaleForm
     success_url = 'catloadsadmin:sale_list' 
-
+    def test_func(self):
+        return self.request.user.is_superuser   
+    
+    def handle_no_permission(self):
+        return HttpResponseRedirect(reverse('catloadsadmin:login'))
     def get(self,request,id=None):
         try:
             sale = get_object_or_404(ProductSale, id=id) if id else None
@@ -59,20 +66,28 @@ class SaleCreateView(View):
         except Exception as e:
             print('Error Occured on Posting ProductSale Form', e)    
 
-class SaleProductsList(ListView):
+class SaleProductsList(UserPassesTestMixin,ListView):
     model = Product
     template_name = 'catloads_admin/salelist.html'
     context_object_name = 'sales'
     paginate_by = 10
-
+    def test_func(self):
+        return self.request.user.is_superuser   
+    
+    def handle_no_permission(self):
+        return HttpResponseRedirect(reverse('catloadsadmin:login'))
     def get_queryset(self):
         queryset = ProductSale.objects.filter(is_deleted=False).annotate(
             download_count=Count('order_items', filter=Q(order_items__order__paid=True))).filter(is_deleted=False).order_by('-id')
         return queryset             
 
-class ProductSaleSoftDeleteView(View):
+class ProductSaleSoftDeleteView(UserPassesTestMixin,View):
     success_url = reverse_lazy('catloadsadmin:sale_list')
-
+    def test_func(self):
+        return self.request.user.is_superuser   
+    
+    def handle_no_permission(self):
+        return HttpResponseRedirect(reverse('catloadsadmin:login'))
     def get(self, request,id):
         # Set the product as deleted instead of deleting it
         try:
