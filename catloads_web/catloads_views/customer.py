@@ -102,7 +102,6 @@ class CustomerOrders(TemplateView):
         context['orders'] = order
         return context
 
-@method_decorator(custom_login_required(login_url='/login/'), name='dispatch')
 class CustomerRegistrationUpdateView(View):
     template_name = 'catloads_web/shop-registration.html'
     form_class = RegisterForm
