@@ -81,17 +81,17 @@ class CustomerDahsboard(TemplateView):
     def get_context_data(self, **kwargs):
         return super().get_context_data(**kwargs)
 
-@method_decorator(custom_login_required(login_url='/login/'), name='dispatch')
-class CustomerDowloads(TemplateView):
-    template_name = 'catloads_web/account-downloads.html'
+# @method_decorator(custom_login_required(login_url='/login/'), name='dispatch')
+# class CustomerDowloads(TemplateView):
+#     template_name = 'catloads_web/account-downloads.html'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        order_items = OrderItem.objects.filter(order__user=self.request.user)
-        product_sales = ProductSale.objects.filter(id__in=order_items.values_list('product_id', flat=True))
-        products = ProductSaleItems.objects.filter(sale_master__in=product_sales).distinct()
-        context['products'] = products
-        return context
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         order_items = OrderItem.objects.filter(order__user=self.request.user)
+#         product_sales = ProductSale.objects.filter(id__in=order_items.values_list('product_id', flat=True))
+#         products = ProductSaleItems.objects.filter(sale_master__in=product_sales).distinct()
+#         context['products'] = products
+#         return context
 @method_decorator(custom_login_required(login_url='/login/'), name='dispatch')   
 class CustomerOrders(TemplateView):
     template_name = 'catloads_web/account-orders.html'
@@ -249,7 +249,7 @@ class CustomerDowloads(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         order_id = self.request.GET.get('order_id')
-        order_items = OrderItem.objects.filter(order__user=self.request.user)
+        order_items = OrderItem.objects.filter(order__user=self.request.user,order__order_status=2)
         if order_id:
            order_items= order_items.filter(id=order_id)
         product_sales = ProductSale.objects.filter(id__in=order_items.values_list('product_id', flat=True))

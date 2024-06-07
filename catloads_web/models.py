@@ -203,6 +203,8 @@ class Order(BaseModel):
     payment_method = models.IntegerField(choices=PAYMENT_TYPE,null=True,blank=True)
     order_status = models.IntegerField(choices=ORDER_STATUS,null=True,blank=True,default=1)
     order_id  = models.CharField(max_length=255,null=True)
+    razorpay_id = models.CharField(max_length=200,null=True,blank=True)
+
 
 
     def get_order_total(self):
@@ -256,9 +258,10 @@ class Payment(BaseModel):
         (2, "Completed"),
     )
     order = models.OneToOneField(Order, related_name='payment', on_delete=models.CASCADE)
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    amount = models.DecimalField(max_digits=10, decimal_places=2,default=0.00)
     transaction_id = models.CharField(max_length=255)
-    payment_method = models.CharField(max_length=50)  # E.g., 'PayPal', 'Credit card', 'Stripe'
+    signature = models.CharField(max_length=255,null=True)
+    payment_method = models.CharField(max_length=50,null=True)  # E.g., 'PayPal', 'Credit card', 'Stripe'
     status = models.CharField(max_length=50,choices=PAYMENT_STATUS,default=1)  # E.g., 'Pending', 'Completed', 'Failed'
 
     def __str__(self):

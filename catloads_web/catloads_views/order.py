@@ -1,7 +1,7 @@
 from django.shortcuts import render,get_object_or_404,redirect
 from django.urls import reverse_lazy,reverse
 from django.views import View
-from catloads_web.models import Order,OrderItem,PromoCode,CustomUser
+from catloads_web.models import Order,OrderItem,PromoCode,CustomUser,Payment
 from catloads_admimn.forms import CategoryForm,ProductForm
 from django.views.generic.list import ListView
 from django.views.generic.edit import UpdateView
@@ -13,6 +13,9 @@ from django.utils.decorators import method_decorator
 from django.http import HttpResponseRedirect
 import base64
 from .customer import decode_base64_to_id,handle_cart_data,updateto_Order
+import razorpay
+import json
+from catloads.settings import RAZOR_PAY_KEY, RAZOR_PAY_SECRET
 
 class CartView(TemplateView):
     template_name = 'catloads_web/shop-cart.html'
@@ -26,6 +29,7 @@ class OrderCreate(View):
 
     def get(self,request,encoded_id=None):
         try:
+            razorpay_client = razorpay.Client(auth=(RAZOR_PAY_KEY, RAZOR_PAY_SECRET))
             if not request.user.is_authenticated:
                 login_url = f"{reverse('catloads_web:login')}?redirect=order"
                 return HttpResponseRedirect(login_url)
@@ -36,9 +40,27 @@ class OrderCreate(View):
             order_id = decode_base64_to_id(encoded_id)
             order = Order.objects.get(user=request.user,is_deleted =False,id=order_id,order_status=1)
             orderitems  = order.items.all()
+            total_amount = order.get_order_total()*100
+
+            if not order.razorpay_id:
+                # Create Razorpay order
+                razorpay_order = razorpay_client.order.create({
+                    "amount": float(total_amount),
+                    "currency": "INR",
+                    "receipt": f"order_rcptid_{order.id}",
+                    "payment_capture": '1'
+                })
+                # Save the Razorpay order ID to the order instance
+                order.razorpay_id = razorpay_order['id']
+                order.total_price = order.get_order_total()  # Save the initial amount
+                order.save()
             context = {
                 'orderitems':orderitems,
-                'order':order
+                'order':order,
+                'razorpay_order_id': order.razorpay_id,
+                'razorpay_key_id': RAZOR_PAY_KEY,  # Add your Razorpay Key ID
+                'amount': float(order.total_price),
+                'currency': "INR",
             }
             return render(request, self.template_name,context)
         except Exception as e:
@@ -70,6 +92,10 @@ class OrderConfirmView(View):
             discount = request.POST.get('discount')
             order_id = request.POST.get('order_id')
             phone = request.POST.get('phone')
+            payment_id = request.POST.get('razorpay_payment_id')
+            print(payment_id)
+            payment_order_id = request.POST.get('razorpay_order_id')
+            payment_signature_id = request.POST.get('razorpay_signature')
             order = Order.objects.get(id=order_id)
             if promocode is not None:
                 order.promocode_id = promocode
@@ -82,6 +108,8 @@ class OrderConfirmView(View):
             order.order_status = 2    
             order.save()
             order.user.save()
+            if payment_id:
+                Payment.objects.create(order=order,transaction_id=payment_id,signature=payment_signature_id,amount=order.total_price)
             redirect_url = reverse('catloads_web:orders') 
             return JsonResponse({'Message':'Success','redirect_url':redirect_url})
         except (Exception, Exception) as e:

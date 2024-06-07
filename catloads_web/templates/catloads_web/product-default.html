@@ -7,7 +7,17 @@
 		height: 300px !important;
 	  }
 	}
+	.div {
+    position: absolute !important;
+    left: -86px !important;
+  }
 	
+	@media only screen and (max-width: 768px) {
+  .div {
+    position: absolute !important;
+    left: -50px !important;
+  }
+}
 	
 	</style>
 	{% endblock %}
@@ -54,7 +64,10 @@
 		<section class="content-inner py-0">
 			<div class="container-fluid">
 				<div class="row">
-					<div class="col-xl-6 col-md-6">
+					<div class="col-xl-1 col-md-1 col-1">
+
+					</div>
+					<div class="col-xl-5 col-md-5 col-11">
 						<div class="dz-product-detail sticky-top">
 							<div class="swiper-btn-center-lr">
 								<div class="swiper product-gallery-swiper2">
@@ -72,7 +85,7 @@
 									</div>
 								</div>
 								
-								<div class="swiper product-gallery-swiper thumb-swiper-lg swiper-vertical">
+								<div class="swiper product-gallery-swiper thumb-swiper-lg swiper-vertical div" >
 									<div class="swiper-wrapper">
 									{% for product in products_images %}
 
@@ -87,7 +100,7 @@
 							</div>	
 						</div>	
 					</div>
-					<div class="col-xl-6 col-md-6">
+					<div class="col-xl-5 col-md-5 col-11">
 						<div class="row">
 							<div class="col-xl-7">
 								<div class="dz-product-detail style-2 p-t20 ps-0">
@@ -134,9 +147,9 @@
 											</div> -->
 										</div>
 
-										
+										{% csrf_token %}
 											
-											<a  data-id="{{products.id}}" data-name="{{products.name}}" data-image="{{products.thumbnail.url}}" data-url="{{products.slug}}"  data-price="{{products.price}}"  class="btn btn-secondary w-100 cart_btn">Buy Now</a>
+											<a  data-id="{{products.id}}" data-url="{% url 'catloads_web:cartdata' %}" data-name="{{products.name}}" data-image="{{products.thumbnail.url}}" data-producturl="{{products.slug}}"  data-price="{{products.price}}"  class="btn btn-secondary w-100 cart_btn">Buy Now</a>
 											<a href="{% url 'catloads_web:carts' %}"  class="btn btn-secondary w-100 cart_btn2 mt-2" style="display: none;">Checkout</a>
 											
 										

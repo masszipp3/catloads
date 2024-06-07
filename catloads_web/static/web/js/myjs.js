@@ -1,4 +1,109 @@
 $(document).ready(function(){
+    $('#order_cofirm').on('click',function(e){
+        e.preventDefault();
+        let csrftoken = $('[name=csrfmiddlewaretoken]').val();
+        var validatation = validate_orderdata()
+        var city = $('#city').val()
+        var promocode = $('#promocode').data('id')
+        var country = $('#email').data('id')
+        var url = $(this).data('url')
+        var user_id = $('#email').data('id')
+        var total_price = $('#total_pricefinal').val()
+        var total_discount = $('#total_dsicount').val()
+        var order_id = $('#order_id').val()
+        var phone = $('#mobile').val()
+        var razorpay_id = $('#razorpay_order_id').val()
+        var razorpay_key = $('#razorpay_key_id ').val()
+        var currency = $('#currency ').val()
+        console.log(currency,razorpay_id,razorpay_key)
+    
+        if (!validatation) {
+            var options = {
+                "key": "YOUR_KEY_ID", // Enter the Key ID generated from the Dashboard
+                "amount": "50000", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+                "currency": "INR",
+                "name": "Acme Corp", //your business name
+                "description": "Test Transaction",
+                "image": "https://example.com/your_logo",
+                "order_id": "order_9A33XWu170gUtm", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+                "callback_url": "https://eneqd3r9zrjok.x.pipedream.net/",
+                "prefill": { //We recommend using the prefill parameter to auto-fill customer's contact information especially their phone number
+                    "name": "Gaurav Kumar", //your customer's name
+                    "email": "gaurav.kumar@example.com",
+                    "contact": "9000090000" //Provide the customer's phone number for better conversion rates 
+                },
+                "notes": {
+                    "address": "Razorpay Corporate Office"
+                },
+                "theme": {
+                    "color": "#3399cc"
+                }
+            };
+            var options = {
+                "key": razorpay_key, // Enter the Key ID generated from the Dashboard
+                "amount": total_price*100, // Convert to paise. Amount is in currency subunits. Default currency is INR.
+                "currency": currency,
+                "name": "Catloads",
+                "description": "Description",
+                "order_id": razorpay_id, // This is a sample Order ID. Pass the `id` obtained in the previous step
+                "handler": function (response) {
+                    // Prepare data for AJAX request
+                    var paymentData = {
+                        'razorpay_payment_id': response.razorpay_payment_id,
+                        'razorpay_order_id': response.razorpay_order_id,
+                        'razorpay_signature': response.razorpay_signature,
+                        'user': user_id,
+                        'city': city,
+                        'country': country,
+                        'promocode': promocode,
+                        'total_price': total_price,
+                        'order_id': order_id,
+                        'phone': phone,
+                        'discount': total_discount
+                    };
+    
+                    $.ajax({
+                        type: 'POST',
+                        headers: {'X-CSRFToken': csrftoken},
+                        url: url,
+                        data: paymentData,
+                        success: function(response) {
+                            if (response.Message === 'Success') {
+                                if (response.redirect_url) {
+                                    window.location.href = response.redirect_url; 
+                                }
+                            }
+                        },
+                        error: function(xhr) {
+                            console.error(xhr.responseText);
+                            // resetFields();
+                        }
+                    });
+                },
+                // "callback_url": "https://eneqd3r9zrjok.x.pipedream.net/",
+                "prefill": {
+                    "name": $('#name').val(),
+                    "email": $('#email').val(),
+                    "contact":$('#mobile').val()
+                },
+                "theme": {
+                    "color": "#F37254"
+                }
+            };
+            try {
+                var rzp1 = new Razorpay(options);
+                rzp1.on('payment.failed', function (response){
+                    alert("Payment Failed...!")
+                    window.location.href = '/customer/orders'
+
+            });
+                rzp1.open();
+            } catch (e) {
+                alert("Razorpay Checkout script failed to load. Please try again in another browser or contact support.");
+                console.error("Razorpay Checkout error: ", e);
+            }
+        }
+    })
     cart= loadCart()
     $('#cartcount').text(cart.items.length)
 
@@ -61,6 +166,8 @@ $(document).ready(function(){
         const product_name = $(this).data('name');
         const quantity = 1;  
         const cart_btn = $(this)
+        const url = $(this).data('url')
+        console.log(url)
         
 
         const productObj = {
@@ -85,10 +192,11 @@ $(document).ready(function(){
         cart.cart_total = cart.items.reduce((total, item) => total + item.subtotal, 0);
         localStorage.setItem('cart', JSON.stringify(cart));
         $('#cartcount').text(cart.items.length)
-        cart_btn.text('Added to Cart')
-        cart_btn.removeClass('btn-secondary')
-        cart_btn.addClass('btn-success')
-        $('.cart_btn2').show()
+        order_post(url,cart)
+        // cart_btn.text('Added to Cart')
+        // cart_btn.removeClass('btn-secondary')
+        // cart_btn.addClass('btn-success')
+        // $('.cart_btn2').show()
     });
     
 
@@ -217,7 +325,7 @@ $('#promocodebtn').on('click', function(){
 
                 }
                 else{
-                    $('#alertpromo').text('I    nvalid promocode').addClass('text-danger')
+                    $('#alertpromo').text('Invalid promocode').addClass('text-danger')
                 }
             },
             error: function(xhr) {
@@ -227,59 +335,19 @@ $('#promocodebtn').on('click', function(){
         });
 })
 
-$('#order_cofirm').on('click',function(){
-    let csrftoken = $('[name=csrfmiddlewaretoken]').val();
-    var validatation = validate_orderdata()
-    var city = $('#city').val()
-    var promocode = $('#promocode').data('id')
-    var country = $('#email').data('id')
-    var url = $(this).data('url')
-    var user_id = $('#email').data('id')
-    var total_price = $('#total_pricefinal').val()
-    var total_discount = $('#total_dsicount').val()
-    var order_id = $('#order_id').val()
-    var phone = $('#mobile').val()
 
-
-
-
-    if (!validatation){
-        $.ajax({
-            type: 'POST',
-            headers: {'X-CSRFToken': csrftoken},
-            url: url,
-            data: { 'user': user_id ,
-            'city':city,
-            'country':country,
-            'promocode':promocode,
-            'total_price':total_price,
-            'order_id':order_id,
-            'phone':phone,
-
-            'discount':total_discount},
-            
-            success: function(response) {
-                if (response.Message=='Success'){
-                    if (response.redirect_url) {
-                        window.location.href = response.redirect_url; 
-                    }
-            
-                }
-            },
-            error: function(xhr) {
-                console.error(xhr.responseText);
-                resetFields();
-            }
-        });
-
-    }
-})
 $('#checkout_btn').on('click',function(){
-    let csrftoken = $('[name=csrfmiddlewaretoken]').val();
     console.log('hhh')
     var url = $(this).data('url')
     var cart = loadCart()
+    order_post(url,cart)
+
+})
+});
+
+function order_post(url,cart){
     if (cart.items.length>=1){
+        let csrftoken = $('[name=csrfmiddlewaretoken]').val();
         $.ajax({
             type: 'POST',
             headers: {'X-CSRFToken': csrftoken},
@@ -304,9 +372,7 @@ $('#checkout_btn').on('click',function(){
         });
 
     }
-    
-})
-});
+}
    
 
 

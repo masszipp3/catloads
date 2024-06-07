@@ -118,6 +118,10 @@ USE_TZ = True
 
 AUTH_USER_MODEL = 'catloads_web.CustomUser'
 
+RAZOR_PAY_KEY = "rzp_test_JsXnTn63V5HMtu"
+
+RAZOR_PAY_SECRET = "eCRinwb8kkxDsH5u9ixPHLpi"
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
