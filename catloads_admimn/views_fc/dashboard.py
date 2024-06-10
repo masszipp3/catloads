@@ -1,3 +1,4 @@
+from decimal import Decimal
 from django.shortcuts import render
 from django.views import View
 from django.contrib.auth.decorators import login_required
@@ -36,7 +37,7 @@ class DashboardView(UserPassesTestMixin, View):
         # try:
         def get_sales_data(start_date, end_date):
             sales = Order.objects.filter(created_on__date__gte=start_date, created_on__date__lte=end_date, order_status=2)
-            income = sales.aggregate(total_income=Sum('total_price'))['total_income'] or 0.00
+            income = sales.aggregate(total_income=Sum('total_price'))['total_income'] or Decimal(0.00)
             return sales.count(), income
         for month in range(1, today.month + 1):  # Loop through each month up to the current month
             first_day = date(today.year, month, 1)
