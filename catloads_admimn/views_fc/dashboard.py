@@ -3,7 +3,7 @@ from django.views import View
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.contrib.auth.mixins import UserPassesTestMixin
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect,HttpResponse
 from django.urls import reverse
 from django.utils import timezone
 from django.db.models import Sum,Count
@@ -83,3 +83,4 @@ class DashboardView(UserPassesTestMixin, View):
             return render(request, self.template_name, context=context)
         except Exception as e:
             print("Error in dashboard view: ", e)
+            return HttpResponse(e)
