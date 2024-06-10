@@ -14,8 +14,12 @@
 	
 	@media only screen and (max-width: 768px) {
   .div {
-    position: absolute !important;
-    left: -50px !important;
+    position: static !important;
+    left: 0 !important;
+	display: none !important;
+  }
+  #dggi{
+	display: none;
   }
 }
 	
@@ -64,10 +68,10 @@
 		<section class="content-inner py-0">
 			<div class="container-fluid">
 				<div class="row">
-					<div class="col-xl-1 col-md-1 col-1">
+					<div class="col-xl-1 col-md-1 col-0" id="dggi">
 
 					</div>
-					<div class="col-xl-5 col-md-5 col-11">
+					<div class="col-xl-5 col-md-5 col-12">
 						<div class="dz-product-detail sticky-top">
 							<div class="swiper-btn-center-lr">
 								<div class="swiper product-gallery-swiper2">
@@ -149,7 +153,7 @@
 
 										{% csrf_token %}
 											
-											<a  data-id="{{products.id}}" data-url="{% url 'catloads_web:cartdata' %}" data-name="{{products.name}}" data-image="{{products.thumbnail.url}}" data-producturl="{{products.slug}}"  data-price="{{products.price}}"  class="btn btn-secondary w-100 cart_btn">Buy Now</a>
+											<a  data-id="{{products.id}}" data-url="{% url 'catloads_web:cartdata' %}" data-name="{{products.name}}" data-image="{{products.thumbnail.url}}" data-producturl="{{products.slug}}"  data-price="{{products.price}}"  class="btn btn-success w-100 cart_btn">Buy Now</a>
 											<a href="{% url 'catloads_web:carts' %}"  class="btn btn-secondary w-100 cart_btn2 mt-2" style="display: none;">Checkout</a>
 											
 										

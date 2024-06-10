@@ -21,8 +21,8 @@
             colors: ["#2275fc"],
             series: [
               {
-                name: "$",
-                data: [45, 52, 38, 45, 49, 43, 40 ,45, 52, 38, 45, 19]
+                name: "₹",
+                data: chartdata_sale
               }
             ],
             fill: {

@@ -668,13 +668,13 @@
                                                     <i class="icon-shopping-bag"></i>
                                                 </div>
                                                 <div>
-                                                    <div class="body-text mb-2">Total Sales</div>
-                                                    <h4>34,945</h4>
+                                                    <div class="body-text mb-2">Today Sales</div>
+                                                    <h4>{{todays_sale}}</h4>
                                                 </div>
                                             </div>
                                             <div class="box-icon-trending up">
-                                                <i class="icon-trending-up"></i>
-                                                <div class="body-title number">1.56%</div>
+                                                <i class="icon-trending-{% if diff_status_sale_today == 3 %}down{% else %}up{% endif %}"></i>
+                                                <div class="body-title number">{{today_sale_percentage}}%</div>
                                             </div>
                                         </div>
                                         <div class="wrap-chart">
@@ -693,13 +693,13 @@
                                                     <i class="icon-dollar-sign"></i>
                                                 </div>
                                                 <div>
-                                                    <div class="body-text mb-2">Total Income</div>
-                                                    <h4>$37,802</h4>
+                                                    <div class="body-text mb-2">Today Income</div>
+                                                    <h4>₹ {{todays_income}}</h4>
                                                 </div>
                                             </div>
                                             <div class="box-icon-trending down">
-                                                <i class="icon-trending-down"></i>
-                                                <div class="body-title number">1.56%</div>
+                                                <i class="icon-trending-{% if diff_status_income_today == 3 %}down{% else %}up {% endif %}"></i>
+                                                <div class="body-title number">{{today_income_percentage}}%</div>
                                             </div>
                                         </div>
                                         <div class="wrap-chart">
@@ -719,12 +719,12 @@
                                                 </div>
                                                 <div>
                                                     <div class="body-text mb-2">Month Sales</div>
-                                                    <h4>34,945</h4>
+                                                    <h4>{{month_sale}}</h4>
                                                 </div>
                                             </div>
                                             <div class="box-icon-trending">
-                                                <i class="icon-trending-up"></i>
-                                                <div class="body-title number">0.00%</div>
+                                                <i class="icon-trending-{% if diff_status_sale_month == 3%}up{% else %}down{% endif %}"></i>
+                                                <div class="body-title number">{{month_sale_percentage}}%</div>
                                             </div>
                                         </div>
                                         <div class="wrap-chart">
@@ -740,16 +740,16 @@
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="48" height="52" viewBox="0 0 48 52" fill="none">
                                                         <path d="M19.1094 2.12943C22.2034 0.343099 26.0154 0.343099 29.1094 2.12943L42.4921 9.85592C45.5861 11.6423 47.4921 14.9435 47.4921 18.5162V33.9692C47.4921 37.5418 45.5861 40.8431 42.4921 42.6294L29.1094 50.3559C26.0154 52.1423 22.2034 52.1423 19.1094 50.3559L5.72669 42.6294C2.63268 40.8431 0.726688 37.5418 0.726688 33.9692V18.5162C0.726688 14.9435 2.63268 11.6423 5.72669 9.85592L19.1094 2.12943Z" fill="#2377FC"/>
                                                     </svg>
-                                                    <i class="icon-users"></i>
+                                                    <i class="icon-dollar-sign"></i>
                                                 </div>
                                                 <div>
-                                                    <div class="body-text mb-2">Total Visitor</div>
-                                                    <h4>34,945</h4>
+                                                    <div class="body-text mb-2">Month Income</div>
+                                                    <h4>₹ {{month_income}}</h4>
                                                 </div>
                                             </div>
                                             <div class="box-icon-trending up">
-                                                <i class="icon-trending-up"></i>
-                                                <div class="body-title number">1.56%</div>
+                                                <i class="icon-trending-{% if diff_status_income_month == 3 %}down{% else %}up{% endif %}"></i>
+                                                <div class="body-title number">{{month_income_percentage}}%</div>
                                             </div>
                                         </div>
                                         <div class="wrap-chart">
@@ -762,18 +762,18 @@
                                     <!-- chart -->
                                     <div class="wg-box">
                                         <div class="flex items-center justify-between">
-                                            <h5>Total Sales</h5>
+                                            <h5>Total Sales Year</h5>
                                             <div class="dropdown default">
                                                 <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                    <span class="icon-more"><i class="icon-more-horizontal"></i></span>
                                                 </button>
                                                 <ul class="dropdown-menu dropdown-menu-end">
-                                                    <li>  
+                                                    <!-- <li>  
                                                         <a href="javascript:void(0);">This Week</a>
                                                     </li>
                                                     <li>  
                                                         <a href="javascript:void(0);">Last Week</a>
-                                                    </li>
+                                                    </li> -->
                                                 </ul>
                                             </div>
                                         </div>
@@ -788,78 +788,33 @@
                                                 <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                     <span class="view-all">View all<i class="icon-chevron-down"></i></span>
                                                 </button>
-                                                <ul class="dropdown-menu dropdown-menu-end">
+                                                <!-- <ul class="dropdown-menu dropdown-menu-end">
                                                     <li>  
                                                         <a href="javascript:void(0);">3 days</a>
                                                     </li>
                                                     <li>  
                                                         <a href="javascript:void(0);">7 days</a>
                                                     </li>
-                                                </ul>
+                                                </ul> -->
                                             </div>
                                         </div>
                                         <div class="wg-table table-top-product">
                                             <ul class="flex flex-column gap14">
+                                                {% for product in most_ordered_products%}
                                                 <li class="product-item">
                                                     <div class="image">
-                                                        <img src="https://5.imimg.com/data5/SELLER/Default/2022/8/ZN/KD/AF/71863860/adobe-photoshop-500x500.jpg" alt="">
+                                                        <img src="{{product.thumbnail.url}}" alt="">
                                                     </div>
                                                     <div class="flex items-center justify-between flex-grow">
                                                         <div class="name">
-                                                            <a href="{% url 'catloadsadmin:product_list' %}" class="body-title-2">Adobe Bundle Pack</a>
-                                                            <div class="text-tiny mt-3">100 Items</div>
+                                                            <a href="{% url 'catloadsadmin:sale_edit' product.id %}" class="body-title-2">{{product.name}}</a>
+                                                            <div class="text-tiny mt-3">{{product.order_count}} Items</div>
                                                         </div>
                                                        
                                                     </div>
                                                 </li>
-                                                <li class="product-item">
-                                                    <div class="image">
-                                                        <img src="https://5.imimg.com/data5/SELLER/Default/2022/8/ZN/KD/AF/71863860/adobe-photoshop-500x500.jpg" alt="">
-                                                    </div>
-                                                    <div class="flex items-center justify-between flex-grow">
-                                                        <div class="name">
-                                                            <a href="{% url 'catloadsadmin:product_list' %}" class="body-title-2">Adobe Bundle Pack</a>
-                                                            <div class="text-tiny mt-3">100 Items</div>
-                                                        </div>
-                                                      
-                                                    </div>
-                                                </li>
-                                                <li class="product-item">
-                                                    <div class="image">
-                                                        <img src="https://5.imimg.com/data5/SELLER/Default/2022/8/ZN/KD/AF/71863860/adobe-photoshop-500x500.jpg" alt="">
-                                                    </div>
-                                                    <div class="flex items-center justify-between flex-grow">
-                                                        <div class="name">
-                                                            <a href="{% url 'catloadsadmin:product_list' %}" class="body-title-2">Adobe Bundle Pack</a>
-                                                            <div class="text-tiny mt-3">100 Items</div>
-                                                        </div>
-                                                       
-                                                    </div>
-                                                </li>
-                                                <li class="product-item">
-                                                    <div class="image">
-                                                        <img src="https://5.imimg.com/data5/SELLER/Default/2022/8/ZN/KD/AF/71863860/adobe-photoshop-500x500.jpg" alt="">
-                                                    </div>
-                                                    <div class="flex items-center justify-between flex-grow">
-                                                        <div class="name">
-                                                            <a href="{% url 'catloadsadmin:product_list' %}" class="body-title-2">Adobe Bundle Pack</a>
-                                                            <div class="text-tiny mt-3">100 Items</div>
-                                                        </div>
-                                                        
-                                                    </div>
-                                                </li>
-                                                <li class="product-item">
-                                                    <div class="image">
-                                                        <img src="https://5.imimg.com/data5/SELLER/Default/2022/8/ZN/KD/AF/71863860/adobe-photoshop-500x500.jpg" alt="">
-                                                    </div>
-                                                    <div class="flex items-center justify-between flex-grow">
-                                                        <div class="name">
-                                                            <a href="{% url 'catloadsadmin:product_list' %}" class="body-title-2 mb-3">Adobe Bundle Pack</a>
-                                                            <div class="text-tiny">100 Items</div>
-                                                        </div>
-                                                        
-                                                    </div>
-                                                </li>
+                                                {% endfor %}
+                                               
                                             </ul>
                                         </div>
                                     </div>
@@ -893,66 +848,21 @@
                                                 </li>
                                             </ul>
                                             <ul class="flex flex-column gap18">
+                                                {% for order in recent_orders %}
                                                 <li class="product-item gap14">
                                                     <div class="image small">
-                                                        <img src="https://5.imimg.com/data5/SELLER/Default/2022/8/ZN/KD/AF/71863860/adobe-photoshop-500x500.jpg" alt="">
+                                                        <img src="" alt="">
                                                     </div>
                                                     <div class="flex items-center justify-between flex-grow gap10">
                                                         <div class="name">
-                                                            <a href="{% url 'catloadsadmin:product_list' %}" class="body-text">Adobe Bundle Pack</a>
+                                                            <a href="{% url 'catloadsadmin:order_detail' order.id %}" class="body-text">{{order.order_id}}</a>
                                                         </div>
-                                                        <div class="body-text">$2000</div>
-                                                        <div class="body-text">20 Nov 2023</div>
+                                                        <div class="body-text">{{order.total_price}}</div>
+                                                        <div class="body-text">{{order.created_on}}</div>
                                                     </div>
                                                 </li>
-                                                <li class="product-item gap14">
-                                                    <div class="image small">
-                                                        <img src="https://5.imimg.com/data5/SELLER/Default/2022/8/ZN/KD/AF/71863860/adobe-photoshop-500x500.jpg" alt="">
-                                                    </div>
-                                                    <div class="flex items-center justify-between flex-grow gap10">
-                                                        <div class="name">
-                                                            <a href="{% url 'catloadsadmin:product_list' %}" class="body-text">Adobe Bundle Pack</a>
-                                                        </div>
-                                                        <div class="body-text">$2000</div>
-                                                        <div class="body-text">20 Nov 2023</div>
-                                                    </div>
-                                                </li>
-                                                <li class="product-item gap14">
-                                                    <div class="image small">
-                                                        <img src="https://5.imimg.com/data5/SELLER/Default/2022/8/ZN/KD/AF/71863860/adobe-photoshop-500x500.jpg" alt="">
-                                                    </div>
-                                                    <div class="flex items-center justify-between flex-grow gap10">
-                                                        <div class="name">
-                                                            <a href="{% url 'catloadsadmin:product_list' %}" class="body-text">Adobe Bundle Pack</a>
-                                                        </div>
-                                                        <div class="body-text">$2000</div>
-                                                        <div class="body-text">20 Nov 2023</div>
-                                                    </div>
-                                                </li>
-                                                <li class="product-item gap14">
-                                                    <div class="image small">
-                                                        <img src="https://5.imimg.com/data5/SELLER/Default/2022/8/ZN/KD/AF/71863860/adobe-photoshop-500x500.jpg" alt="">
-                                                    </div>
-                                                    <div class="flex items-center justify-between flex-grow gap10">
-                                                        <div class="name">
-                                                            <a href="{% url 'catloadsadmin:product_list' %}" class="body-text">Adobe Bundle Pack</a>
-                                                        </div>
-                                                        <div class="body-text">$2000</div>
-                                                        <div class="body-text">20 Nov 2023</div>
-                                                    </div>
-                                                </li>
-                                                <li class="product-item gap14">
-                                                    <div class="image small">
-                                                        <img src="https://5.imimg.com/data5/SELLER/Default/2022/8/ZN/KD/AF/71863860/adobe-photoshop-500x500.jpg" alt="">
-                                                    </div>
-                                                    <div class="flex items-center justify-between flex-grow gap10">
-                                                        <div class="name">
-                                                            <a href="{% url 'catloadsadmin:product_list' %}" class="body-text">Adobe Bundle Pack.</a>
-                                                        </div>
-                                                        <div class="body-text">$2000</div>
-                                                        <div class="body-text">20 Nov 2023</div>
-                                                    </div>
-                                                </li>
+                                                {% endfor %}
+                                               
                                             </ul>
                                         </div>
                                     </div>
@@ -1290,60 +1200,10 @@
                                    
                                     <!-- /orders -->
                                     <!-- earnings -->
-                                    <div class="wg-box">
-                                        <div class="flex items-center justify-between">
-                                            <h5>Earnings</h5>
-                                            <div class="dropdown default">
-                                                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                   <span class="icon-more"><i class="icon-more-horizontal"></i></span>
-                                                </button>
-                                                <ul class="dropdown-menu dropdown-menu-end">
-                                                    <li>  
-                                                        <a href="javascript:void(0);">This Week</a>
-                                                    </li>
-                                                    <li>  
-                                                        <a href="javascript:void(0);">Last Week</a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="flex flex-wrap gap40">
-                                            <div>
-                                                <div class="mb-2">
-                                                    <div class="block-legend">
-                                                        <div class="dot t1"></div>
-                                                        <div class="text-tiny">Revenue</div>
-                                                    </div>
-                                                </div>
-                                                <div class="flex items-center gap10">
-                                                    <h4>$37,802</h4>
-                                                    <div class="box-icon-trending up">
-                                                        <i class="icon-trending-up"></i>
-                                                        <div class="body-title number">0.56%</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!-- <div>
-                                                <div class="mb-2">
-                                                    <div class="block-legend">
-                                                        <div class="dot t2"></div>
-                                                        <div class="text-tiny">Profit</div>
-                                                    </div>
-                                                </div>
-                                                <div class="flex items-center gap10">
-                                                    <h4>$28,305</h4>
-                                                    <div class="box-icon-trending up">
-                                                        <i class="icon-trending-up"></i>
-                                                        <div class="body-title number">0.56%</div>
-                                                    </div>
-                                                </div>
-                                            </div> -->
-                                        </div>
-                                        <div id="line-chart-6"></div>
-                                    </div>
+                                   
                                     <!-- /earnings -->
                                     <!-- new-comment -->
-                                    <div class="wg-box">
+                                    <!-- <div class="wg-box">
                                         <div class="flex items-center justify-between">
                                             <h5>New Comments</h5>
                                             <div class="dropdown default">
@@ -1506,7 +1366,7 @@
                                                 </div>
                                             </li>
                                         </ul>
-                                    </div>
+                                    </div> -->
                                     <!-- /new-comment -->
                                 </div>
                             </div>
@@ -1550,6 +1410,13 @@
     <script src="{% static 'js/custom.js' %}"></script>
 
     {% block footer %}
+
+    <script>
+        var chartdata_sale = []
+        {% for month_name, income in months_data %}
+             chartdata_sale.push({{ income }});
+        {% endfor %}
+    </script>
     {% endblock %}
 
 </body>

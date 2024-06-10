@@ -76,7 +76,7 @@ class PromocodeCheck(View):
             if not promocode.is_valid():
                 return JsonResponse({'Message':'Promocode Not Valid'})
             order = Order.objects.filter(user=request.user,is_deleted =False,promocode=promocode)
-            if order.count() >= promocode.usage_limit and float(promocode.minimum_order_value) > float(order_value):
+            if order.exist() or float(promocode.minimum_order_value) > float(order_value):
                 return JsonResponse({'Message':'Failed'})
             return JsonResponse({'Message':'Success','promocode_id':promocode.id,'discount':promocode.discount_value,'total':float(order_value)-float(promocode.discount_value)})
         except Exception as e:
@@ -110,7 +110,7 @@ class OrderConfirmView(View):
             order.user.save()
             if payment_id:
                 Payment.objects.create(order=order,transaction_id=payment_id,signature=payment_signature_id,amount=order.total_price)
-            redirect_url = reverse('catloads_web:orders') 
+            redirect_url = reverse('catloads_web:downloads') 
             return JsonResponse({'Message':'Success','redirect_url':redirect_url})
         except (Exception, Exception) as e:
             return  JsonResponse({'Message':'Failed','Reason':str(e)})
