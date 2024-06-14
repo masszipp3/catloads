@@ -6,7 +6,7 @@
 {% block content %}
 	<div class="page-content bg-light">
 		<!--Banner Start-->
-		<div class="dz-bnr-inr"  style="background-color:rgb(236, 208, 244);">
+		<div class="dz-bnr-inr d-none d-md-block"  style="background-color:rgb(236, 208, 244);">
 			<div class="container" id="cco" style="height: 20px;">
 				<div class="dz-bnr-inr-entry">
 					<h1>My Account</h1>
@@ -18,6 +18,15 @@
 					</nav>
 				</div>
 			</div>	
+		</div>
+
+		<div class="mob_block d-block d-md-none" style="background-color:rgb(184, 102, 207);">
+			<nav aria-label="breadcrumb" class="breadcrumb-row" style="display: flex; justify-content: center;">
+				<ul class="breadcrumb mt-3">
+					<li class="breadcrumb-item"><a href="{% url 'catloads_web:dashboard' %}"> Home</a></li>
+					<li class="breadcrumb-item">Dashboard</li>
+				</ul>
+			</nav>
 		</div>
 		<!--Banner End-->
 
