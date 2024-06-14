@@ -1,6 +1,8 @@
 ﻿{% extends 'catloads_web/index.html' %}
  
 {% block header %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 {% endblock %}
 {% block content %}
 	<!-- Header End -->
@@ -43,6 +45,11 @@
 							<div class="text-center">
 								<button type="submit" class="btn btn-secondary btnhover text-uppercase me-2 sign-btn">Sign In</button>
 								<a href="{% url 'catloads_web:registration' %}" id="regbtn" class="btn btn-outline-secondary btnhover text-uppercase">Register</a>
+							</div>
+							<div class="text-center mt-2">
+							{% load socialaccount %}
+								<a href="{% url 'google_login' %}"  class="btn btn-outline-secondary btnhover text-uppercase m-2"> <i class="fa fa-google me-2"></i> Sign In with Google &nbsp; &nbsp;</a>
+								<a href="" id="regbtn" class="btn btn-outline-secondary btnhover text-uppercase m-2"><i class="fa fa-facebook-f me-2"></i> Sign In with Facebook</a>
 							</div>
 						</form>
 					</div> 

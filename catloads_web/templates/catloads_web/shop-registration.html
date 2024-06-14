@@ -42,7 +42,7 @@
 							
 							<div class="text-center">
 								<button type="submit"  class="btn btn-secondary btnhover text-uppercase me-2">Register</button>
-								<a href="{% url 'catloads_web:login' %}" class="btn btn-outline-secondary btnhover text-uppercase">Sign In</a>
+								<a href="{% url 'catloads_web:login' %}" id="sign_inbtn" class="btn btn-outline-secondary btnhover text-uppercase">Sign In</a>
 							</div>
 						</form>
 					</div>
@@ -50,7 +50,22 @@
 			</div>
 		</section>
 	</div>
-
+	<script>
+		document.addEventListener("DOMContentLoaded", function() {
+		const urlParams = new URLSearchParams(window.location.search);
+	
+		// Get the value of the 'redirect' parameter
+		const redirect = urlParams.get('redirect');	
+	
+		// Use the 'redirect' parameter (if it exists)
+		if (redirect) {
+		   registerbtn =  document.getElementById('sign_inbtn')
+		   let currentHref = registerbtn.getAttribute('href');
+		   registerbtn.setAttribute('href', `${currentHref}?redirect=${encodeURIComponent(redirect)}`);
+			// You can now use this 'redirect' value to manage your redirects or other logic
+		} 
+	});
+	</script>
 {% endblock %}
 {% block footer %}
 {% endblock %}

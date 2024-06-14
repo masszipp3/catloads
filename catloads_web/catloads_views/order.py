@@ -16,6 +16,8 @@ from .customer import decode_base64_to_id,handle_cart_data,updateto_Order
 import razorpay
 import json
 from catloads.settings import RAZOR_PAY_KEY, RAZOR_PAY_SECRET
+from django.http import HttpResponse
+import xlwt
 
 class CartView(TemplateView):
     template_name = 'catloads_web/shop-cart.html'
@@ -114,3 +116,5 @@ class OrderConfirmView(View):
             return JsonResponse({'Message':'Success','redirect_url':redirect_url})
         except (Exception, Exception) as e:
             return  JsonResponse({'Message':'Failed','Reason':str(e)})
+        
+

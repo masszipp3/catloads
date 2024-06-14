@@ -1,0 +1,40 @@
+﻿{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="{% static 'web/js/jquery.min.js' %}"></script><!-- JQUERY MIN JS -->
+
+    <title>Document</title>
+</head>
+
+<body>
+
+    <script>
+        $(document).ready(function () {
+            let cart = JSON.parse(localStorage.getItem('catloads_cartdata'));
+            if (!cart) {
+                cart = { cart_total: 0, items: [] };
+            }
+
+                if (cart.items && cart.items.length > 0) {
+                    // Prepare the URL with the cart data
+                    const cartData = encodeURIComponent(JSON.stringify(cart));
+                    const url = `{% url 'catloads_web:login_redirect' %}?cart=${cartData}`;
+
+                    // Redirect to the URL
+                    window.location.href = url;
+                    localStorage.removeItem('catloads_cartdata')
+                }
+                else {
+                    window.location.href = "{% url 'catloads_web:dashboard' %}";
+                }
+
+        })
+    </script>
+
+</body>
+
+</html>

@@ -13,9 +13,13 @@ import json
 from django.views.generic import DetailView,TemplateView
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator 
+from urllib.parse import unquote
 from django.db import transaction
 from django.db.models import F
 import base64
+from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
+from allauth.socialaccount.providers.oauth2.client import OAuth2Client
+from allauth.socialaccount.models import SocialApp
 from django.contrib import messages
 from catloads_web.decorator import custom_login_required
 
@@ -101,6 +105,15 @@ class CustomerOrders(TemplateView):
         order = Order.objects.filter(user=self.request.user) 
         context['orders'] = order
         return context
+
+def direct_google_login(request):
+    if cart := request.GET.get('cart'):
+        cart_data = unquote(cart)
+        user = request.user
+        handle_cart_data(user, cart_data)
+        order_id = updateto_Order(user)
+        return redirect(reverse('catloads_web:order_create', kwargs={'encoded_id': order_id}))
+    return render(request,'catloads_web/redirect.html')
 
 class CustomerRegistrationUpdateView(View):
     template_name = 'catloads_web/shop-registration.html'

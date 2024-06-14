@@ -34,6 +34,7 @@
 
 	<!-- FAVICONS ICON -->
 	<link rel="icon" type="image/x-icon" href="{% static 'web/images/favicon.ico' %}">
+	
 
 	<!-- MOBILE SPECIFIC -->
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -108,6 +109,11 @@
 								<li class="has-mega-menu sub-menu-down">
 									<a href="{% url 'catloads_web:dashboard' %}"><span>Home</span><i
 											class="fas fa-chevron-down tabindex"></i></a>
+
+								</li>
+								<li class="has-mega-menu sub-menu-down d-block d-md-none">
+									<a href="{% url 'catloads_web:product_dashboard' %}"><span>Dashboard</span><i
+											class="fas fa-chevron-right tabindex"></i></a>
 
 								</li>
 								<!-- <li class="has-mega-menu sub-menu-down"><a
@@ -616,7 +622,7 @@
 										
 										<img src="{{product.thumbnail.url}}" height="500px" alt="image">
 								
-										<div class="shop-meta">
+										<div class="shop-meta" data-url="{% url 'catloads_web:product_detail' product.slug %}">
 											<a href="{% url 'catloads_web:product_detail' product.slug %}" class="btn btn-secondary btn-md btn-rounded">
 												<i class="fa-solid fa-eye d-md-none d-block"></i>
 												<span class="d-md-block d-none"> View</span>
@@ -636,7 +642,7 @@
 										<h5 class="price"> ₹{{product.price}}</h5>
 									</div>
 									<div class="product-tag">
-										<span class="badge ">Get {{ products.get_discount_percentage }}% Off</span>
+										<span class="badge ">Get {{ product.get_discount_percentage }}% Off</span>
 									</div>
 								</div>
 							</li>

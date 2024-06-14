@@ -190,7 +190,7 @@ $(document).ready(function(){
             cart.items.push(productObj);
         }
         cart.cart_total = cart.items.reduce((total, item) => total + item.subtotal, 0);
-        localStorage.setItem('cart', JSON.stringify(cart));
+        localStorage.setItem('catloads_cartdata', JSON.stringify(cart));
         $('#cartcount').text(cart.items.length)
         order_post(url,cart)
         // cart_btn.text('Added to Cart')
@@ -216,7 +216,7 @@ $('#cart_table').on('click', '.plus-cart', function() {
     cart.items[index].quantity++;
     cart.items[index].subtotal = cart.items[index].price * cart.items[index].quantity;
     cart.cart_total = updateCartTotal(cart)
-    localStorage.setItem('cart', JSON.stringify(cart));
+    localStorage.setItem('catloads_cartdata', JSON.stringify(cart));
     $(this).siblings('input').val( cart.items[index].quantity)
 });
 
@@ -241,14 +241,14 @@ $('#cart_table').on('click', '.minus-cart', function() {
     }
     updateCartTotal(cart)
 
-    localStorage.setItem('cart', JSON.stringify(cart));
+    localStorage.setItem('catloads_cartdata', JSON.stringify(cart));
 });
 
 $('#login-form, #registration-form').submit(function(e) {
     e.preventDefault(); // Prevent the default form submission
 
 // sourcery skip: avoid-using-var
-    var cartData = localStorage.getItem('cart'); // Get cart data from localStorage
+    var cartData = localStorage.getItem('catloads_cartdata'); // Get cart data from localStorage
     if (cartData) {
         $('<input>').attr({
             type: 'hidden',
@@ -256,7 +256,7 @@ $('#login-form, #registration-form').submit(function(e) {
             value: cartData
         }).appendTo(this); // Append cart data to the form
     }
-    localStorage.removeItem('cart');
+    localStorage.removeItem('catloads_cartdata');
     this.submit(); // Submit the form
 });
 
@@ -356,7 +356,7 @@ function order_post(url,cart){
             success: function(response) {
                 if (response.Message=='Success'){
                     if (response.redirect_url) {
-                        localStorage.removeItem('cart');
+                        localStorage.removeItem('catloads_cartdata');
                         window.location.href = response.redirect_url; 
                     }
                 }
@@ -390,7 +390,7 @@ function updateCartTotal(cart) {
 }
 
 function loadCart() {
-    let cart = JSON.parse(localStorage.getItem('cart'));
+    let cart = JSON.parse(localStorage.getItem('catloads_cartdata'));
     if (!cart) {
         cart = { cart_total: 0, items: [] };
     }

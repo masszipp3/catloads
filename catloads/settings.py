@@ -26,6 +26,8 @@ SECRET_KEY = 'django-insecure-j9_@c%1_sz#i#nqfluyd9h=&fkj%adcad@e5q=4!y#v+qhy71q
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+SITE_ID = 2
+
 ALLOWED_HOSTS = ['*']
 
 LOGIN_URL = '/admin/login'
@@ -33,15 +35,50 @@ LOGIN_URL = '/admin/login'
 
 INSTALLED_APPS = [
     'django.contrib.admin',
+    'django_extensions',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'catloads_web',
-    'catloads_admimn'
+    'catloads_admimn',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.facebook'
 
 ]
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
+    }
+}
+
+SOCIALACCOUNT_AUTO_SIGNUP = True
+SOCIALACCOUNT_LOGIN_ON_GET =True
+
+# Optional: This automatically logs in the user upon signup
+ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
+
+# This is also often helpful; it logs in the user on email confirmation
+ACCOUNT_SESSION_REMEMBER = True
+
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+
+SOCIALACCOUNT_ADAPTER = 'catloads_web.adapter.MySocialAccountAdapter'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -51,6 +88,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware'
 ]
 
 ROOT_URLCONF = 'catloads.urls'
@@ -66,6 +104,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                
             ],
         },
     },
@@ -105,6 +144,11 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
+
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
@@ -121,6 +165,9 @@ AUTH_USER_MODEL = 'catloads_web.CustomUser'
 RAZOR_PAY_KEY = "rzp_test_JsXnTn63V5HMtu"
 
 RAZOR_PAY_SECRET = "eCRinwb8kkxDsH5u9ixPHLpi"
+
+LOGIN_REDIRECT_URL = '/login/redirect'
+
 
 
 # Static files (CSS, JavaScript, Images)

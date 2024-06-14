@@ -46,11 +46,15 @@ urlpatterns=[
     path('order/list',order.OrderListView.as_view(),name='orderlist'),
     path('order/<int:pk>/detail',order.OrderDetailView.as_view(),name='order_detail'),
     path('order/<int:id>/delete',order.OrderSoftDeleteView.as_view(),name='order_delete'),
+    path('order/data/excel',order.ExportOrderExcel.as_view(),name='order_excel'),
+
 
     #------------------------- User Management----------------------------------------------
 
     path('user/list',users.UsersListView.as_view(),name='userlist'),
     path('user/<int:id>/delete',users.UserSoftDeleteView.as_view(),name='user_delete'),
+    path('user/export/download',users.ExportUserExcel.as_view(),name='export_user'),
+
     
     #------------------------- Sale Management----------------------------------------------
 
@@ -58,6 +62,7 @@ urlpatterns=[
     path('sale/<int:id>/edit',sale.SaleCreateView.as_view(),name='sale_edit'),
     path('sale/<int:id>/delete',sale.ProductSaleSoftDeleteView.as_view(),name='sale_delete'),
     path('sale/list',sale.SaleProductsList.as_view(),name='sale_list'),
+
 
 
 
