@@ -1,4 +1,7 @@
 $(document).ready(function(){
+    $('.shop-meta').on('click',function(){
+        window.location.href = $(this).data('url')
+    })
     $('#order_cofirm').on('click',function(e){
         e.preventDefault();
         let csrftoken = $('[name=csrfmiddlewaretoken]').val();
