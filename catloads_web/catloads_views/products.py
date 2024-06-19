@@ -22,8 +22,8 @@ class ProductDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         product = context['products']
         banners = Banner.objects.filter(is_deleted=False)
-        product_images = product.products_images.filter(is_deleted=False)
-        product_videos = product.productssale_videos.filter(is_deleted=False)
+        product_images = product.products_images.filter(is_deleted=False).order_by('id')
+        product_videos = product.productssale_videos.filter(is_deleted=False).order_by('id')
         categories = product.get_all_categories()
         context['banners'] = banners
         context['products_images'] = product_images
