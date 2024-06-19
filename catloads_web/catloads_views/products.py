@@ -31,8 +31,5 @@ class ProductDetailView(DetailView):
         context['product_videos'] = product_videos
         context['categories'] = categories
         context['max_price'] = product.get_maxprice()
-
-        
         print(categories)
-
         return context

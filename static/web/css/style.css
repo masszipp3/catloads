@@ -47500,7 +47500,6 @@ a {
 .navicon {
   width: 45px;
   height: 45px;
-  background: var(--secondary);
   position: relative;
   -webkit-transform: rotate(0deg);
   -moz-transform: rotate(0deg);
@@ -47519,7 +47518,7 @@ a {
   width: 100%;
   border-radius: 1px;
   opacity: 1;
-  background: #fff;
+  background: #9d38bd;
   left: 10px;
   -webkit-transform: rotate(0deg);
   -moz-transform: rotate(0deg);

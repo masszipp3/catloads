@@ -599,6 +599,10 @@ var PixioCarousel = function(){
 			var swiper2 = new Swiper(".product-gallery-swiper2", {
 			  spaceBetween: 0,
 			  updateOnWindowResize: true,	
+			  loop: true,
+				autoplay: {
+					delay: 2500,
+				},
 			  navigation: {
 				nextEl: ".gallery-button-next",
 				prevEl: ".gallery-button-prev",

@@ -1,5 +1,8 @@
-﻿ {% extends 'catloads_web/index.html' %}
- 
+﻿ 
+ {% extends 'catloads_web/index.html' %}
+{% load custom_filter %}
+
+
 {% block header %}
 <style>
 	@media (min-width: 1024px) {
@@ -168,8 +171,8 @@
 											</div>
 										</div>
 										<div style="display: flex;align-items: center;">
-										<h2>₹{{products.price}} </h2> 
-										<h5 class="p-2 " ><strike>{{products.get_maxprice}}</strike></h5><h5 class="text-success">{{products.get_discount_percentage}}%off</h5>
+										<h2>₹ {{ products.price | round_amount }} </h2> 
+										<h5 class="p-2" style="color: #5d575e !important;"><strike>₹ {{products.get_maxprice | round_amount}}</strike></h5><h5 class="text-success">{{products.get_discount_percentage}}%off</h5>
 										</div>
 										<p class="para-text">
 											{{ products.caption }}
