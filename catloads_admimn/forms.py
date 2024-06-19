@@ -28,6 +28,11 @@ class ProductForm(forms.ModelForm):
             'download_link':forms.TextInput(attrs={'class': 'mb-10', 'placeholder': 'Enter Download Link', 'required': True,'tabindex':"0",'aria-required':"true"}),
         }
 
+    def __init__(self, *args, **kwargs):
+        super(ProductForm, self).__init__(*args, **kwargs)
+        # Filter the category queryset to include only categories where is_deleted is False
+        self.fields['category'].queryset = self.fields['category'].queryset.filter(is_deleted=False)    
+
 class PromoCodeForm(forms.ModelForm):
     class Meta:
         model = PromoCode

@@ -52,19 +52,38 @@ class SaleCreateView(UserPassesTestMixin,View):
                             product=product,
                             sale_master=instance
                         )
-                if 'multifiles' in request.FILES :
-                    files = request.FILES.getlist('multifiles')
-                    for file in files:
-                        if file.content_type.startswith('image'):
-                            ProductImages.objects.create(image=file, product=instance)
-                        elif file.content_type.startswith('video'):
-                            ProductVideos.objects.create(video=file, product=instance)
+                if 'multifiles' in request.FILES:
+                    self._extracted_from_images(request, instance)
                 return redirect(self.success_url)
             else:
                 action = 'Add ProductSale' if id is None else 'Update ProductSale'
                 return render(request, self.template_name, {"form": form,'action':action})
         except Exception as e:
             print('Error Occured on Posting ProductSale Form', e)    
+
+    def _extracted_from_images(self, request, instance):
+        files = request.FILES.getlist('multifiles')
+        products_images = ProductImages.objects.filter(
+                    product=instance, 
+                )
+        products_videos = ProductVideos.objects.filter(
+                    product=instance, 
+                )
+        files_sorted_by_name = sorted(files, key=lambda x: x.name)
+        if products_images.exists() or products_videos.exists():
+            products_images.delete()
+            products_videos.delete()
+        for file in files_sorted_by_name:
+            if file.content_type.startswith('image'):
+                ProductImages.objects.create(
+                    image=file, 
+                    product=instance, 
+                )
+            elif file.content_type.startswith('video'):
+                ProductVideos.objects.create(
+                    video=file, 
+                    product=instance, 
+                )    
 
 class SaleProductsList(UserPassesTestMixin,ListView):
     model = Product

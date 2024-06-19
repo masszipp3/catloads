@@ -85,6 +85,7 @@ class Tag(BaseModel):
     def __str__(self):
         return self.name
 
+
 class Product(BaseModel):
     UNITCHOICES = (
         (1, "KB"),
@@ -121,10 +122,12 @@ class Product(BaseModel):
 class ProductImages(BaseModel):
     image = models.ImageField(upload_to='productSale',null=True,blank=True)
     product = models.ForeignKey("ProductSale",related_name="products_images",null=True,on_delete=models.SET_NULL,blank=True)
+    upload_order = models.IntegerField(default=0)
 
 class ProductVideos(BaseModel):
     video = models.FileField(upload_to='products_videos',null=True,blank=True)
     product = models.ForeignKey("ProductSale",related_name="productssale_videos",null=True,on_delete=models.SET_NULL,blank=True)
+    upload_order = models.IntegerField(default=0)
 
 class Banner(BaseModel):
     image = models.ImageField(upload_to='banner_image',null=True,blank=True)
@@ -288,7 +291,6 @@ class CartItem(BaseModel):
     def __str__(self):
         return str(self.id)
 
-
 class PromoCode(BaseModel):
     code = models.CharField(max_length=50, unique=True)
     active = models.BooleanField(default=True)
@@ -300,7 +302,8 @@ class PromoCode(BaseModel):
     used = models.IntegerField(default=0)  # Counter for how many times the promo code has been used
 
     def is_valid(self):
-        current_time = timezone.now()  # This ensures the datetime is timezone-aware
+        current_time = timezone.now() # This ensures the datetime is timezone-aware
+        print(current_time)
         if not self.active:
             return False
         if self.used >= (self.usage_limit or float('inf')):

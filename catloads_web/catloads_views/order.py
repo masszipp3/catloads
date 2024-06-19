@@ -18,6 +18,7 @@ import json
 from catloads.settings import RAZOR_PAY_KEY, RAZOR_PAY_SECRET
 from django.http import HttpResponse
 import xlwt
+from django.utils import timezone
 
 class CartView(TemplateView):
     template_name = 'catloads_web/shop-cart.html'
@@ -77,8 +78,8 @@ class PromocodeCheck(View):
             promocode = PromoCode.objects.get(code=request.GET.get('promocode'))
             if not promocode.is_valid():
                 return JsonResponse({'Message':'Promocode Not Valid'})
-            order = Order.objects.filter(user=request.user,is_deleted =False,promocode=promocode)
-            if order.exist() or float(promocode.minimum_order_value) > float(order_value):
+            orders = Order.objects.filter(user=request.user,is_deleted =False,promocode=promocode)
+            if orders.exists() or float(promocode.minimum_order_value) > float(order_value):
                 return JsonResponse({'Message':'Failed'})
             return JsonResponse({'Message':'Success','promocode_id':promocode.id,'discount':promocode.discount_value,'total':float(order_value)-float(promocode.discount_value)})
         except Exception as e:

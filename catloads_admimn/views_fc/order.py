@@ -68,51 +68,50 @@ class OrderSoftDeleteView(UserPassesTestMixin,View):
 @method_decorator(login_required, name='dispatch')
 class ExportOrderExcel(View):
     def get(self, request, *args, **kwargs):
-        # Create a workbook and add a worksheet.
         response = HttpResponse(content_type='application/ms-excel')
         response['Content-Disposition'] = 'attachment; filename="orders.xls"'
 
         wb = xlwt.Workbook(encoding='utf-8')
         ws = wb.add_sheet('Orders')
 
-        # Sheet header, first row
         row_num = 0
         font_style = xlwt.XFStyle()
         font_style.font.bold = True
 
-        columns = ['Order ID', 'Customer', 'Payment Method', 'Order Status', 'Tax', 'Discount', 'Total Price', 'Product', 'Quantity', 'Price', 'Subtotal']
+        # Updated columns list to include 'Order Date'
+        columns = ['Order ID', 'Customer', 'Payment Method', 'Order Status', 'Tax', 'Discount', 'Total Price', 'Order Date', 'Product', 'Quantity', 'Price', 'Subtotal']
 
         for col_num in range(len(columns)):
             ws.write(row_num, col_num, columns[col_num], font_style)
 
-        # Sheet body, remaining rows
         font_style = xlwt.XFStyle()
-
         orders = Order.objects.prefetch_related('items').all()
+
         for order in orders:
             items = order.items.all()
+            order_details = [
+                order.id,
+                order.user.username if order.user else "",
+                order.get_payment_method_display(),
+                order.get_status_display(),
+                str(order.tax),
+                str(order.discount),
+                str(order.total_price),
+                order.created_on.strftime('%Y-%m-%d') if order.created_on else "",  # Assuming 'order_date' is the field name and it is not None
+            ]
+            
             if not items:
                 row_num += 1
-                ws.write(row_num, 0, order.id, font_style)
-                ws.write(row_num, 1, order.user.username if order.user else "", font_style)
-                ws.write(row_num, 2, order.get_payment_method_display(), font_style)
-                ws.write(row_num, 3, order.get_status_display(), font_style)
-                ws.write(row_num, 4, str(order.tax), font_style)
-                ws.write(row_num, 5, str(order.discount), font_style)
-                ws.write(row_num, 6, str(order.total_price), font_style)
+                for i, detail in enumerate(order_details):
+                    ws.write(row_num, i, detail, font_style)
             for item in items:
                 row_num += 1
-                ws.write(row_num, 0, order.id, font_style)
-                ws.write(row_num, 1, order.user.username if order.user else "", font_style)
-                ws.write(row_num, 2, order.get_payment_method_display(), font_style)
-                ws.write(row_num, 3, order.get_status_display(), font_style)
-                ws.write(row_num, 4, str(order.tax), font_style)
-                ws.write(row_num, 5, str(order.discount), font_style)
-                ws.write(row_num, 6, str(order.total_price), font_style)
-                ws.write(row_num, 7, item.product.name, font_style)
-                ws.write(row_num, 8, item.quantity, font_style)
-                ws.write(row_num, 9, str(item.price), font_style)
-                ws.write(row_num, 10, str(item.get_subtotal()), font_style)
+                for i, detail in enumerate(order_details):
+                    ws.write(row_num, i, detail, font_style)
+                ws.write(row_num, 8, item.product.name, font_style)
+                ws.write(row_num, 9, item.quantity, font_style)
+                ws.write(row_num, 10, str(item.price), font_style)
+                ws.write(row_num, 11, str(item.get_subtotal()), font_style)
 
         wb.save(response)
-        return response     
+        return response  
