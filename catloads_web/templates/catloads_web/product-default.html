@@ -72,6 +72,14 @@
 							<div class="swiper-btn-center-lr">
 								<div class="swiper product-gallery-swiper2">
 									<div class="swiper-wrapper" id="lightgallery">
+										<div class="swiper-slide">
+											<div class="dz-media DZoomImage rounded">
+												<a class="mfp-link lg-item" href="{{ product.image.url }}" style="max-width: 20px; max-height: 20px;" data-src="{{ product.image.url }}">
+													<i class="feather icon-maximize dz-maximize top-right"></i>
+												</a>
+												<img src="{{ products.thumbnail.url }}" alt="image">
+											</div>
+										</div>
 										{% for product in products_images %}
 										<div class="swiper-slide">
 											<div class="dz-media DZoomImage rounded">
@@ -98,6 +106,14 @@
 								
 								<div class="swiper product-gallery-swiper thumb-swiper-lg swiper-vertical div" >
 									<div class="swiper-wrapper">
+										<div class="swiper-slide">
+											<div class="dz-media DZoomImage rounded">
+												<a class="mfp-link lg-item" href="{{ product.image.url }}" style="max-width: 20px; max-height: 20px;" data-src="{{ product.image.url }}">
+													<i class="feather icon-maximize dz-maximize top-right"></i>
+												</a>
+												<img src="{{ products.thumbnail.url }}" alt="image">
+											</div>
+										</div>
 									{% for product in products_images %}
 
 										<div class="swiper-slide">
