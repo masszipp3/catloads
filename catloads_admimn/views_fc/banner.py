@@ -17,7 +17,7 @@ from django.urls import reverse
 class BannerCreateUpdateView(UserPassesTestMixin,View):
     template_name = 'catloads_admin/add_banner.html'
     form_class = BannerForm
-    success_url = 'catloadsadmin:promocode_list' 
+    success_url = 'catloadsadmin:bannerlist' 
 
     def test_func(self):
         return self.request.user.is_superuser   
@@ -61,7 +61,7 @@ class BannerListView(UserPassesTestMixin,ListView):
 
 @method_decorator(login_required, name='dispatch')
 class BannerSoftDeleteView(UserPassesTestMixin,View):
-    success_url = reverse_lazy('catloadsadmin:banner_list')
+    success_url = reverse_lazy('catloadsadmin:bannerlist')
     def test_func(self):
         return self.request.user.is_superuser   
     

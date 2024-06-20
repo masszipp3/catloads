@@ -212,7 +212,8 @@
                     {% for banner in banners %}
                     <li class="product-item gap14">
                         <div class="image no-bg">
-                            <img src="{{banner.image.url}}" alt="">
+
+                            <img src="{% if banner.image %}{{banner.image.url}} {% endif %}" alt="">
                         </div>
                         <div class="flex items-center justify-between gap20 flex-grow">
                             <div class="name">
