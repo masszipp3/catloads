@@ -25,6 +25,27 @@
 	display: none;
   }
 }
+
+swiper-container {
+      width: 100%;
+      height: 100%;
+    }
+
+    swiper-slide {
+      text-align: center;
+      font-size: 18px;
+      background: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    swiper-slide img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
 	
 	</style>
 	{% endblock %}
@@ -70,8 +91,22 @@
 					<div class="col-xl-1 col-md-1 col-0" id="dggi">
 
 					</div>
-					<div class="col-xl-5 col-md-5 col-12">
-						<div class="dz-product-detail sticky-top">
+					<div class="col-xl-5 col-md-5 col-12 mb-3">
+						<swiper-container class="mySwiper d-block d-md-none" pagination="true" pagination-dynamic-bullets="true" >
+							<swiper-slide><img src="{{ products.thumbnail.url }}" alt="image"></swiper-slide>
+							{% for product in products_images %}
+
+							<swiper-slide><img src="{{ product.image.url }}" alt="image"></swiper-slide>
+							{% endfor %}
+							{% for product in product_videos %}
+
+							<swiper-slide><video src="{{ product.video.url }}" autoplay muted  style="width: 100%;" alt="image"></video></swiper-slide>
+							{% endfor %}
+							
+						</swiper-container>
+						
+						
+						<div class="dz-product-detail sticky-top d-none d-md-block" >
 							<div class="swiper-btn-center-lr">
 								<div class="swiper product-gallery-swiper2">
 									<div class="swiper-wrapper" id="lightgallery">
@@ -106,6 +141,8 @@
 										{% endfor %}
 									</div>
 								</div>
+
+								
 								
 								<div class="swiper product-gallery-swiper thumb-swiper-lg swiper-vertical div" >
 									<div class="swiper-wrapper">
@@ -135,12 +172,14 @@
 						
 									</div>
 								</div>
+								
 							</div>	
+							
 						</div>	
 					</div>
 					<div class="col-xl-5 col-md-5 col-11">
 						<div class="row">
-							<div class="col-xl-7">
+							<div class="col-xl-7 col-12">
 								<div class="dz-product-detail style-2 p-t20 ps-0">
 									<div class="dz-content">
 										<div class="dz-content-footer">
@@ -171,7 +210,7 @@
 											</div>
 										</div>
 										<div style="display: flex;align-items: center;">
-										<h2>₹ {{ products.price | round_amount }} </h2> 
+										<h1>₹ {{ products.price | round_amount }} </h1> 
 										<h5 class="p-2" style="color: #5d575e !important;"><strike>₹ {{products.get_maxprice | round_amount}}</strike></h5><h5 class="text-success">{{products.get_discount_percentage}}%off</h5>
 										</div>
 										<p class="para-text">
@@ -186,11 +225,12 @@
 										</div>
 
 										{% csrf_token %}
-											
-											<a  data-id="{{products.id}}" data-url="{% url 'catloads_web:cartdata' %}" data-name="{{products.name}}" data-image="{{products.thumbnail.url}}" data-producturl="{{products.slug}}"  data-price="{{products.price}}"  class="btn btn-success w-100 cart_btn">Buy Now</a>
-											<a href="{% url 'catloads_web:carts' %}"  class="btn btn-secondary w-100 cart_btn2 mt-2" style="display: none;">Checkout</a>
-											
 										
+												<a data-id="{{products.id}}" data-url="{% url 'catloads_web:cartdata' %}" data-name="{{products.name}}" data-image="{{products.thumbnail.url}}" data-producturl="{{products.slug}}"  data-price="{{products.price}}"  class="btn btn-success w-100 cart_btn ms-2">Buy Now</a>
+												<!-- <a href="{% url 'catloads_web:carts' %}"  class="btn btn-secondary w-100 cart_btn2 mt-2" style="display: none;">Checkout</a> -->
+												
+											
+											
 										<div class="dz-info" style="border-top:0">
 											<ul>
 												<li><strong>SKU:</strong></li>
@@ -425,4 +465,6 @@
 	
 
 {% block footer %}
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-element-bundle.min.js"></script>
+
 {% endblock %}

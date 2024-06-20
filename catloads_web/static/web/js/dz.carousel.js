@@ -600,9 +600,9 @@ var PixioCarousel = function(){
 			  spaceBetween: 0,
 			  updateOnWindowResize: true,	
 			  loop: true,
-				autoplay: {
-					delay: 2500,
-				},
+				// autoplay: {
+				// 	delay: 2500,
+				// },
 			  navigation: {
 				nextEl: ".gallery-button-next",
 				prevEl: ".gallery-button-prev",
