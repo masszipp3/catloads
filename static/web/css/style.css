@@ -47519,6 +47519,7 @@ a {
   border-radius: 1px;
   opacity: 1;
   background: #9d38bd;
+
   left: 10px;
   -webkit-transform: rotate(0deg);
   -moz-transform: rotate(0deg);
@@ -47531,7 +47532,7 @@ a {
 }
 .navicon span:nth-child(1) {
   top: 13px;
-  width: 22px;
+  width: 25px;
 }
 .navicon span:nth-child(2) {
   top: 22px;
@@ -47539,7 +47540,7 @@ a {
 }
 .navicon span:nth-child(3) {
   top: 32px;
-  width: 20px;
+  width: 25px;
 }
 .navicon.open span:nth-child(1) {
   top: 23px;
