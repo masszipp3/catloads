@@ -211,7 +211,7 @@ swiper-container {
 										</div>
 										<div style="display: flex;align-items: center;">
 										<h1>₹ {{ products.price | round_amount }} </h1> 
-										<h5 class="p-2" style="color: #5d575e !important;"><strike>₹ {{products.get_maxprice | round_amount}}</strike></h5><h5 class="text-success">{{products.get_discount_percentage}}%off</h5>
+										<h5 class="p-2" style="color: #5d575e !important; font-weight: 400;"><strike>₹ {{products.get_maxprice | round_amount}}</strike></h5><h5 class="text-success">{{products.get_discount_percentage}}%off</h5>
 										</div>
 										<p class="para-text">
 											{{ products.caption }}
