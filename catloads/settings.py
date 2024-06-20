@@ -155,13 +155,13 @@ AUTHENTICATION_BACKENDS = (
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+# TIME_ZONE = 'As'
 
 USE_I18N = True
 
-USE_TZ = False
+USE_TZ = True
 
-# TIME_ZONE = 'Asia/Calcutta'
+TIME_ZONE = 'Asia/Calcutta'
 
 AUTH_USER_MODEL = 'catloads_web.CustomUser'
 
