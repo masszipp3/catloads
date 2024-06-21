@@ -42,6 +42,8 @@
 							
 							<div class="text-center">
 								<button type="submit"  class="btn btn-secondary btnhover text-uppercase me-2">Register</button>
+								{% load socialaccount %}
+								<a href="{% url 'google_login' %}"  class="btn btn-outline-secondary btnhover text-uppercase m-2"> <i class="fa fa-google me-2"></i> Sign Up with Google &nbsp; &nbsp;</a>
 								<a href="{% url 'catloads_web:login' %}" id="sign_inbtn" class="btn btn-outline-secondary btnhover text-uppercase">Sign In</a>
 							</div>
 						</form>

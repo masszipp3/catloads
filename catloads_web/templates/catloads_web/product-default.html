@@ -500,7 +500,7 @@ swiper-container::part(bullet) { /* Assuming there's a part named 'bullet' for i
 	</style>
 	<div class="mobile-pricefooter row d-blcok d-md-none" style="align-items: center;">
 		<div class="col-6">
-			<h1 class="mt-2">₹ {{ products.price | round_amount }} </h1> 
+			<h1 class="mt-2" style="display: inline-block;">₹ {{ products.price | round_amount }} </h1> <h5 class="ps-1 mt-2" style="display: inline-block;color: #5d575e !important; font-weight: 400;"> <strike>₹{{products.get_maxprice | round_amount}}</strike></h5>	
 	
 		</div>
 		<div class="col-6">
