@@ -45,7 +45,7 @@ class ExportUserExcel(View):
         font_style = xlwt.XFStyle()
         font_style.font.bold = True
 
-        columns = ['User ID', 'User Type', 'Name', 'Email', 'City', 'Phone']
+        columns = ['User ID', 'User Type', 'Name', 'Email', 'City', 'Phone','Date']
 
         for col_num in range(len(columns)):
             ws.write(row_num, col_num, columns[col_num], font_style)
@@ -62,6 +62,7 @@ class ExportUserExcel(View):
             ws.write(row_num, 3, user.email or "", font_style)
             ws.write(row_num, 4, user.city or "", font_style)
             ws.write(row_num, 5, user.phone or "", font_style)
+            ws.write(row_num, 6,  user.created_on.strftime('%Y-%m-%d') if user.created_on else "", font_style)
 
         wb.save(response)
         return response

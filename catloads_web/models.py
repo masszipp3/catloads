@@ -56,6 +56,8 @@ class CustomUser(AbstractUser):
     city = models.CharField(max_length=500, blank=True, null=True)
     phone = models.CharField(max_length=20, blank=True, null=True)
     is_deleted = models.BooleanField(default=False)
+    created_on = models.DateTimeField(auto_now_add=True,null=True)
+    updated_on = models.DateTimeField(auto_now=True,null=True)
 
     def __str__(self):
         return self.username
