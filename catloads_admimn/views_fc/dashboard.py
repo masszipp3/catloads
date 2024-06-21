@@ -78,7 +78,6 @@ class DashboardView(UserPassesTestMixin, View):
                 'months_data':months_data   ,
                 'most_ordered_products':most_ordered_products,
                 'recent_orders':recent_orders[:10],
-                'time':timezone.now()
 
 
             }

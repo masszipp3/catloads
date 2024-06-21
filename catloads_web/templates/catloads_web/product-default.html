@@ -38,17 +38,26 @@ swiper-container {
       display: flex;
       justify-content: center;
       align-items: center;
+	  padding-top: 30px;
+
     }
 
     swiper-slide img {
-      display: block;
+      /* display: block; */
       width: 100%;
-      height: 100%;
+      /* height: 100%;? */
+	  aspect-ratio: 1 / 1;
       object-fit:fill;
 	  margin-bottom: 60px;
 	  /* margin-top: 60px; */
-	  padding-top: 30px;
-    }
+	  overflow-clip-margin: content-box;
+    	overflow: clip;
+		vertical-align: middle;
+		max-width: 100%;
+		border-radius: 18px;
+
+
+}
 
 	.swiper-pagination-bullet-active {
      background: #000 !important;
@@ -111,7 +120,7 @@ swiper-container::part(bullet) { /* Assuming there's a part named 'bullet' for i
 					</div>
 					<div class="col-xl-5 col-md-5 col-12">
 						<swiper-container class="mySwiper d-block d-md-none" pagination="true" pagination-dynamic-bullets="true" >
-							<swiper-slide><img src="{{ products.thumbnail.url }}" alt="image"></swiper-slide>
+							<swiper-slide><img src="{{ products.thumbnail.url }}"  alt="image"></swiper-slide>
 							{% for product in products_images %}
 
 							<swiper-slide><img src="{{ product.image.url }}" alt="image"></swiper-slide>
@@ -183,7 +192,7 @@ swiper-container::part(bullet) { /* Assuming there's a part named 'bullet' for i
 										{% for product in product_videos %}
 
 										<div class="swiper-slide">
-											<video src="{{ product.video.url }}"  style="width: 100%;" alt="image"></video>
+											<video src="{{ product.video.url }}" style="width: 100%;" alt="image"></video>
 										</div>
 										{% endfor %}
 
@@ -244,7 +253,7 @@ swiper-container::part(bullet) { /* Assuming there's a part named 'bullet' for i
 
 										{% csrf_token %}
 										
-												<a data-id="{{products.id}}" data-url="{% url 'catloads_web:cartdata' %}" data-name="{{products.name}}" data-image="{{products.thumbnail.url}}" data-producturl="{{products.slug}}"  data-price="{{products.price}}"  class="btn btn-success w-100 cart_btn ms-2">Buy Now</a>
+												<a data-id="{{products.id}}"  data-url="{% url 'catloads_web:cartdata' %}" data-name="{{products.name}}" data-image="{{products.thumbnail.url}}" data-producturl="{{products.slug}}"  data-price="{{products.price}}"  class="btn btn-success w-100 cart_btn ms-2 d-none d-md-block">Buy Now</a>
 												<!-- <a href="{% url 'catloads_web:carts' %}"  class="btn btn-secondary w-100 cart_btn2 mt-2" style="display: none;">Checkout</a> -->
 												
 											
@@ -477,10 +486,10 @@ swiper-container::part(bullet) { /* Assuming there's a part named 'bullet' for i
 	</div>
 	<style>
 		.mobile-pricefooter{
-			height: 20px;
-			padding: 40px;
+			/* height: 20px; */
+			padding: 10px;
 			width: 100%;
-			background: wheat;
+			background: rgb(253, 253, 253);
 			position: fixed;
 			bottom: 0;
 			z-index: 999;
@@ -489,11 +498,13 @@ swiper-container::part(bullet) { /* Assuming there's a part named 'bullet' for i
 		}
 	
 	</style>
-	<div class="mobile-pricefooter row">
+	<div class="mobile-pricefooter row d-blcok d-md-none" style="align-items: center;">
 		<div class="col-6">
+			<h1 class="mt-2">₹ {{ products.price | round_amount }} </h1> 
 	
 		</div>
 		<div class="col-6">
+			<a data-id="{{products.id}}" data-url="{% url 'catloads_web:cartdata' %}" data-name="{{products.name}}" data-image="{{products.thumbnail.url}}" data-producturl="{{products.slug}}"  data-price="{{products.price}}"  class="btn btn-success w-100 cart_btn ms-2">Buy Now</a>
 	
 		</div>
 	</div>
