@@ -130,12 +130,13 @@ class CustomerRegistrationUpdateView(View):
             print('Customer Create Page Loading Error', e)
 
     def post(self,request,id=None):
-        try:
+        # try:
             customer = get_object_or_404(CustomUser, id=id) if id else None
             form = self.form_class(request.POST,request.FILES, instance=customer)
             if form.is_valid():
                 user = form.save()
                 if cartdata := request.POST.get('cartData'):
+                    user.backend = 'django.contrib.auth.backends.ModelBackend'
                     handle_cart_data(user, cartdata)  
                     if request.GET.get('redirect'):
                         order_id = updateto_Order(user)
@@ -146,8 +147,8 @@ class CustomerRegistrationUpdateView(View):
                 print(form.errors)
                 action = '' if id is None else 'Update Profile'
                 return render(request, self.template_name, {"form": form,'action':action})
-        except Exception as e:
-            print('Register Failed', e)        
+        # except Exception as e:
+        #     print('Register Failed', e)        
 
 class LoginView(View):
     template_name = 'catloads_web/shop-my-account.html'
@@ -165,6 +166,8 @@ class LoginView(View):
             password = request.POST.get('password')
             user = authenticate(request,username=username, password=password)
             if  user is not None and user.usertype==2:
+                user.backend = 'django.contrib.auth.backends.ModelBackend'
+
                 if cartdata := request.POST.get('cartData'):
                     handle_cart_data(user, cartdata)  
                     if request.GET.get('redirect'):
