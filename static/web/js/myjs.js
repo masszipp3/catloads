@@ -259,7 +259,6 @@ $('#login-form, #registration-form').submit(function(e) {
             value: cartData
         }).appendTo(this); // Append cart data to the form
     }
-    localStorage.removeItem('catloads_cartdata');
     this.submit(); // Submit the form
 });
 
@@ -272,6 +271,8 @@ function validate_orderdata(){
     var city = $('#city').val();
     var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Simple email regex pattern
     var mobilePattern = /^[0-9]{10}$/; // Regex pattern for 10-digit mobile number
+    var targetOffset = errobox.offset().top;
+    errobox.empty()
 
     // Validate Email
     if (!emailPattern.test(email)) {
@@ -285,6 +286,7 @@ function validate_orderdata(){
         errobox.append(`<div class="alert alert-warning">Enter a Valid Number</div>`)
         console.log('mobile')
         status= false
+        // $('html, body').animate({ scrollTop: targetOffset }, 'slow');
     }
 
     // Validate City
@@ -299,6 +301,11 @@ function validate_orderdata(){
         errobox.append(`<div class="alert alert-warning">Enter a Valid Name</div>`)
 
         status= false
+        // $('html, body').animate({ scrollTop: targetOffset }, 'slow');
+
+    }
+    if (!status){
+        $('html, body').animate({ scrollTop: targetOffset }, 'fast');
 
     }
     return status
