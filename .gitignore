@@ -27,6 +27,7 @@ venv/
 .hypothesis/
 
 db.sqlite3
+media/
 
 # Django stuff:
 *.log

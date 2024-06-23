@@ -39,7 +39,7 @@ def decode_base64_to_id(encoded_id):
     # Convert bytes back to string and then to integer
     return int(id_bytes.decode('utf-8'))
 
-def handle_cart_data(user, cart_data_json):
+def handle_cart_data(user, cart_data_json,request):
     cart_data = json.loads(cart_data_json)
     print(cart_data)
     cart, _ = Cart.objects.get_or_create(user=user)
@@ -53,6 +53,7 @@ def handle_cart_data(user, cart_data_json):
                 'quantity': item['quantity'],
             }
         )
+        request.session['cartstatus'] = True
 
 def updateto_Order(user):
     try:
@@ -110,7 +111,7 @@ def direct_google_login(request):
     if cart := request.GET.get('cart'):
         cart_data = unquote(cart)
         user = request.user
-        handle_cart_data(user, cart_data)
+        handle_cart_data(user, cart_data,request)
         order_id = updateto_Order(user)
         return redirect(reverse('catloads_web:order_create', kwargs={'encoded_id': order_id}))
     return render(request,'catloads_web/redirect.html')
@@ -137,7 +138,7 @@ class CustomerRegistrationUpdateView(View):
                 user = form.save()
                 if cartdata := request.POST.get('cartData'):
                     user.backend = 'django.contrib.auth.backends.ModelBackend'
-                    handle_cart_data(user, cartdata)  
+                    handle_cart_data(user, cartdata,request)  
                     if request.GET.get('redirect'):
                         order_id = updateto_Order(user)
                         login(request,user)
@@ -169,7 +170,7 @@ class LoginView(View):
                 user.backend = 'django.contrib.auth.backends.ModelBackend'
 
                 if cartdata := request.POST.get('cartData'):
-                    handle_cart_data(user, cartdata)  
+                    handle_cart_data(user, cartdata,request)  
                     if request.GET.get('redirect'):
                         order_id = updateto_Order(user)
                         self.success_url = reverse('catloads_web:order_create', kwargs={'encoded_id': order_id})
@@ -253,7 +254,7 @@ class CartDataView(View):
             return JsonResponse({'Message':'user not logged in' ,'redirect_url':redirect_url})
         cart = request.POST['cart']
         # print(cart)
-        handle_cart_data(user,cart)
+        handle_cart_data(user,cart,request)
         order = updateto_Order(user)
         redirect_url = reverse('catloads_web:order_create', kwargs={'encoded_id': order})
         return JsonResponse({'Message':'Success','order': order,'redirect_url':redirect_url})

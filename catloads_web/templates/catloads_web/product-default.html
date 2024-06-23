@@ -84,7 +84,7 @@ swiper-container::part(bullet) { /* Assuming there's a part named 'bullet' for i
 			  <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
 				<div class="carousel-inner">
 				  {% for banner in banners %}
-				  <div class="carousel-item active">
+				  <div class="carousel-item {% if forloop.counter == 1 %}active{% endif %}">
 					<img src="{{ banner.image.url }}" class="d-block w-100" alt="...">
 				  </div>
 				  {% endfor %}

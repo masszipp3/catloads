@@ -615,7 +615,8 @@
 								<div class="col-md-12">
 									<div class="form-group m-b25">
 										<label class="label-title">Full Name</label>
-										<input name="name" id="name" required="" value="{{order.user.name}}"
+										
+										<input name="name" id="name" required="" {% if order.user.name %} value="{{order.user.name}}" {% endif %}
 											class="form-control">
 									</div>
 								</div>
@@ -637,7 +638,9 @@
 								<div class="col-md-12">
 									<div class="m-b25">
 										<label class="label-title">Town / City </label>
-										<input name="city" id="city" required class="form-control">
+										<input name="city" {% if order.user.city %}
+										value="{{ order.user.city }}"
+									{% endif %}  id="city" required class="form-control">
 		
 									</div>
 								</div>
@@ -646,7 +649,9 @@
 									<div class="form-group m-b25">
 										<label class="label-title">Phone *</label>
 										<input name="mobile" type="number" id="mobile"
-											value=" {% if order.user.phone %}{{order.user.phone}} {% endif %}" required=""
+										{% if order.user.phone %}
+										value="{{ order.user.phone }}"
+									{% endif %} required=""
 											class="form-control">
 									</div>
 								</div>
@@ -855,7 +860,12 @@
 	<script src="{% static 'web/js/dz.ajax.js' %}"></script><!-- AJAX -->
 	<script src="{% static 'web/js/custom.js' %}"></script><!-- CUSTOM JS -->
 	<script src="{% static 'web/js/myjs.js' %}"></script><!-- CUSTOM JS -->
-
+<script>
+	{% if request.session.cartstatus %}
+			localStorage.removeItem('catloads_cartdata');
+			{% endif %}
+       
+</script>
 	<!-- <script>
         document.addEventListener('DOMContentLoaded', function() {
             function removeBOMCharacter() {

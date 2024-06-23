@@ -26,7 +26,5 @@ class DashboardView(View):
 
 class LogoutView(View):
     def get(self, request):
-        # Log out the user
         logout(request)
-        # Redirect to home page or login page after logout
         return redirect(reverse('catloads_web:login'))            
