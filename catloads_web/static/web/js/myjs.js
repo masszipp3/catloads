@@ -20,7 +20,7 @@ $(document).ready(function(){
         var currency = $('#currency ').val()
         console.log(currency,razorpay_id,razorpay_key)
     
-        if (!validatation) {
+        if (validatation) {
             // var options = {
             //     "key": "YOUR_KEY_ID", // Enter the Key ID generated from the Dashboard
             //     "amount": "50000", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
@@ -276,21 +276,24 @@ function validate_orderdata(){
     // Validate Email
     if (!emailPattern.test(email)) {
 	    errobox.append(`<div class="alert alert-warning">Enter a Valid Email</div>`)
+        status= false
+
     }
 
     // Validate Mobile
     if (!mobilePattern.test(mobile)) {
         errobox.append(`<div class="alert alert-warning">Enter a Valid Number</div>`)
+        console.log('mobile')
         status= false
     }
 
     // Validate City
-    if (city.length < 2) {
-        errobox.append(`<div class="alert alert-warning">Enter a Valid City</div>`)
+    // if (city.length < 2) {
+    //     errobox.append(`<div class="alert alert-warning">Enter a Valid City</div>`)
 
-        status= false
-        ; // Prevent form from submitting
-    }
+    //     status= false
+    //     ; // Prevent form from submitting
+    // }
 
     if (name.length < 2) {
         errobox.append(`<div class="alert alert-warning">Enter a Valid Name</div>`)
