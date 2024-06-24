@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import CustomUser,CartItem,Cart,OrderItem,Order,Product,ProductImages,ProductVideos,Category
+from .models import CustomUser,CartItem,Cart,OrderItem,Order,Product,ProductImages,ProductVideos,Category,ProductSale,ProductSaleItems
 
 # Register your models here.
 admin.site.register(CustomUser)
