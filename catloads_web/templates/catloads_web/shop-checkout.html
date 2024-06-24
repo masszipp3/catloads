@@ -752,13 +752,25 @@
 		
 									<div class="accordion-item">
 										<div class="accordion-header" id="heading3">
-											<div class="accordion-button collapsed custom-control custom-checkbox border-0"
+											<div class="accordion-button collapsed custom-control custom-checkbox border-0" style="align-items: center;"
 												data-bs-toggle="collapse" data-bs-target="#collapse3" role="navigation"
 												aria-expanded="true" aria-controls="collapse3">
 												<label class="form-check-label" for="flexRadioDefault4">
 													Razorpay
 												</label>
-												<img src="{% static 'web/images/shop/payment.jpg' %}" alt="/">
+												<style>
+													.div img{
+														margin: 0 !important;
+													}
+												</style>
+												<div class="div ms-1" style="display: flex;">
+													<img src="{% static 'web/images/master-card-icon.png' %}" alt="" style="height: 40px;width: 40px;">
+													<img src="{% static 'web/images/rupay-logo-icon.png' %}" alt="" style="height: 40px;width: 40px;">
+													<img src="{% static 'web/images/upi-icon.png' %}" alt="" style="height: 40px;width: 40px;">
+													<img src="{% static 'web/images/google-pay-acceptance-mark-icon.png' %}" alt="" style="height: 40px;width: 40px;padding-left: 1px;">
+													<img src="{% static 'web/images/visa-icon.png' %}" alt="" style="height: 40px;width: 40px;padding-left: 2px;">
+				
+												 </div>
 		
 											</div>
 										</div>
