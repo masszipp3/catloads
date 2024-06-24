@@ -1,5 +1,6 @@
 from django import forms
 from catloads_web.models import Category,Product,PromoCode,Banner,ProductSale
+from ckeditor.widgets import CKEditorWidget
 from django_ckeditor_5.widgets import CKEditor5Widget
 
 
