@@ -24,7 +24,7 @@ class ProductDetailView(DetailView):
         banners = Banner.objects.filter(is_deleted=False)
         product_images = product.products_images.filter(is_deleted=False).order_by('id')
         product_videos = product.productssale_videos.filter(is_deleted=False).order_by('id')
-        categories = product.get_all_categories()
+        categories = product.get_all_categories().distinct()
         context['banners'] = banners
         context['products_images'] = product_images
         context['product_discount'] = product.get_discount_percentage()
