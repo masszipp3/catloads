@@ -9,6 +9,7 @@ from django.db import models
 import datetime
 from django.db.models import F, Sum
 from django.utils.text import slugify
+from django_ckeditor_5.fields import CKEditor5Field
 
 class UserManager(BaseUserManager):
     use_in_migrations = True
@@ -139,8 +140,9 @@ class ProductSale(BaseModel):
     sale_id = models.CharField(max_length=255,null=True,blank=True)
     product = models.ForeignKey(Product, related_name='products_sale', on_delete=models.SET_NULL,null=True,blank=True)
     name = models.CharField(max_length=255,null=True)   
+    rating = models.DecimalField(max_digits=10,decimal_places=1,null=True,default=0)   
     slug = models.SlugField(max_length=255,null=False,unique=True)
-    description = models.TextField(blank=True, null=True)
+    description = CKEditor5Field('Text',blank=True, null=True)
     caption = models.TextField(blank=True, null=True)
     price = models.DecimalField(max_digits=10, decimal_places=2,default=0.00)
     discount = models.DecimalField(max_digits=10, decimal_places=2,default=0.00)

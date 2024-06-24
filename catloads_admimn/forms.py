@@ -1,5 +1,7 @@
 from django import forms
 from catloads_web.models import Category,Product,PromoCode,Banner,ProductSale
+from ckeditor.widgets import CKEditorWidget
+from django_ckeditor_5.widgets import CKEditor5Widget
 
 
 class CategoryForm(forms.ModelForm):
@@ -58,15 +60,17 @@ class BannerForm(forms.ModelForm):
         }
 
 class ProductSaleForm(forms.ModelForm):
+    description = forms.CharField(widget=CKEditor5Widget())
     class Meta:
         model = ProductSale
-        fields = ['name','description','caption','price','discount','thumbnail']
+        fields = ['name','description','caption','price','discount','thumbnail','rating']
         
         widgets = {
             'name': forms.TextInput(attrs={'class': 'mb-10', 'placeholder': 'Enter Sale name', 'required': True,'tabindex':"0",'aria-required':"true"}),
             'caption' : forms.Textarea(attrs={'class': 'mb-10', 'placeholder': 'Enter Caption', 'required': True,'tabindex':"0",'aria-required':"true"}),
             'price': forms.NumberInput(attrs={'class': 'mb-10', 'placeholder': 'Enter product Price', 'required': True,'tabindex':"0",'aria-required':"true"}),
+            'rating': forms.NumberInput(attrs={'class': 'mb-10', 'placeholder': 'Enter Rating Here', 'required': True,'tabindex':"0",'aria-required':"true"}),
             'discount' : forms.NumberInput(attrs={'class': 'mb-10', 'placeholder': 'Enter Discount', 'required': True,'tabindex':"0",'aria-required':"true"}),
             'thumbnail' : forms.FileInput(attrs={'id':"myFile" }),
-            'description':forms.Textarea(attrs={'class': 'mb-10', 'placeholder': 'Enter Discription', 'required': True,'tabindex':"0",'aria-required':"true"}),
+            # 'description':forms.Textarea(attrs={'class': 'mb-10', 'placeholder': 'Enter Discription', 'required': True,'tabindex':"0",'aria-required':"true"}),
         }        

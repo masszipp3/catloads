@@ -31,6 +31,7 @@ class SaleCreateView(UserPassesTestMixin,View):
             if sale :
                sale_items = sale.products_salemaster.all()
                context['sale_items'] = sale_items
+               context['description'] = sale.description
             return render(request, self.template_name,context)
         except Exception as e:
             print('Error Occured on Loading Sale Form')

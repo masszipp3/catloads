@@ -10,5 +10,8 @@ def encode_base64(value):
 
 @register.filter
 def round_amount(value):
-
     return round(float(value))
+
+@register.simple_tag
+def get_range(value):
+    return range(1,int(value))

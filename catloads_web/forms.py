@@ -2,6 +2,7 @@ from django import forms
 from catloads_web.models import CustomUser
 from django.contrib.auth.forms import UserChangeForm
 
+
 class RegisterForm(forms.ModelForm):
 
     class Meta:

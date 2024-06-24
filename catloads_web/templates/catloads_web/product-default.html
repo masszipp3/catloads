@@ -215,24 +215,16 @@ swiper-container::part(bullet) { /* Assuming there's a part named 'bullet' for i
 												<h4 class="title mb-1"><a>{{ products.name }}</a></h4>
 												<div class="review-num">
 													<ul class="dz-rating me-2">
-														<li class="star-fill">
+														{% get_range 6 as my_range %}
+														{% for i in my_range %}
+														<li class="star{% if i <= products.rating %}-fill{% endif %}">
 															<i class="flaticon-star-1"></i>
-														</li>										
-														<li class="star-fill">
-															<i class="flaticon-star-1"></i>
-														</li>
-														<li class="star-fill">
-															<i class="flaticon-star-1"></i>
-														</li>
-														<li class="star-fill">
-															<i class="flaticon-star-1"></i>
-														</li>
-														<li class="star-fill">
-															<i class="flaticon-star-1"></i>
-														</li>
+														</li>	
+														{% endfor %}
+																							
+														
 													</ul>
-													<span class="text-secondary me-2">4.0 Rating</span>
-													<a href="javascript:void(0);">Master Rating</a>
+													<span class="text-secondary me-2">{{products.rating}} Rating</span>
 												</div>
 											</div>
 										</div>
@@ -335,7 +327,7 @@ swiper-container::part(bullet) { /* Assuming there's a part named 'bullet' for i
 								<div class="detail-bx text-center">
 									<h5 class="title">Product Description</h5>
 									<p class="para-text">
-										{{products.description}}
+										{{products.description|safe	}}
 									</p>
 									
 									<!-- <ul class="feature-detail">
