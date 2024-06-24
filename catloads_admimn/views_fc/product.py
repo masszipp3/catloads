@@ -130,6 +130,7 @@ class ProductListView(UserPassesTestMixin,ListView):
     template_name = 'catloads_admin/product-list.html'
     context_object_name = 'products'
     paginate_by = 10
+    queryset = Product.objects.filter(is_deleted=False)
 
     def test_func(self):
         return self.request.user.is_superuser   
