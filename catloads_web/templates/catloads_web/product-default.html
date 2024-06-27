@@ -81,7 +81,7 @@ swiper-container::part(bullet) { /* Assuming there's a part named 'bullet' for i
 
 		  {% block content %}
 		  	<!-- Header End -->
-			  <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
+			  <div id="carouselExampleAutoplaying" style="margin-bottom: 30px;" class="carousel slide" data-bs-ride="carousel">
 				<div class="carousel-inner">
 				  {% for banner in banners %}
 				  <div class="carousel-item {% if forloop.counter == 1 %}active{% endif %}">
