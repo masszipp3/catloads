@@ -143,6 +143,8 @@ class ProductSale(BaseModel):
     rating = models.DecimalField(max_digits=10,decimal_places=1,null=True,default=0)   
     slug = models.SlugField(max_length=255,null=False,unique=True)
     description = CKEditor5Field('Text',blank=True, null=True)
+    sale_tag = models.CharField(max_length=255,default='LIMITED SALE')
+    sale_tag_color = models.CharField(max_length=255,null=True,default='#FF0000')
     caption = models.TextField(blank=True, null=True)
     price = models.DecimalField(max_digits=10, decimal_places=2,default=0.00)
     discount = models.DecimalField(max_digits=10, decimal_places=2,default=0.00)

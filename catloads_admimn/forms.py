@@ -62,10 +62,12 @@ class ProductSaleForm(forms.ModelForm):
     description = forms.CharField(widget=CKEditor5Widget())
     class Meta:
         model = ProductSale
-        fields = ['name','description','caption','price','discount','thumbnail','rating']
+        fields = ['name','description','caption','price','discount','thumbnail','rating','sale_tag','sale_tag_color']
         
         widgets = {
             'name': forms.TextInput(attrs={'class': 'mb-10', 'placeholder': 'Enter Sale name', 'required': True,'tabindex':"0",'aria-required':"true"}),
+            'sale_tag': forms.TextInput(attrs={'class': 'mb-10', 'placeholder': 'Enter Sale Tag','tabindex':"0",'aria-required':"true"}),
+            'sale_tag_color': forms.TextInput(attrs={'class': 'mb-10', 'placeholder': 'Enter Sale Tag','tabindex':"0",'aria-required':"true"}),
             'caption' : forms.Textarea(attrs={'class': 'mb-10', 'placeholder': 'Enter Caption', 'required': True,'tabindex':"0",'aria-required':"true"}),
             'price': forms.NumberInput(attrs={'class': 'mb-10', 'placeholder': 'Enter product Price', 'required': True,'tabindex':"0",'aria-required':"true"}),
             'rating': forms.NumberInput(attrs={'class': 'mb-10', 'placeholder': 'Enter Rating Here', 'required': True,'tabindex':"0",'aria-required':"true"}),
