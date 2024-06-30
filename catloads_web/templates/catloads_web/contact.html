@@ -1,4 +1,4 @@
-﻿{% extends 'catloads_web/index.html' %}
+{% extends 'catloads_web/index.html' %}
 {% load custom_filter %}
  
 {% block header %}
@@ -9,11 +9,11 @@
 		<div class="dz-bnr-inr d-none d-md-block" style="background-color:rgb(184, 102, 207);">
 			<div class="container">
 				<div class="dz-bnr-inr-entry">
-					<h1>My Orders</h1>
+					<h1>Privacy Policy</h1>
 					<nav aria-label="breadcrumb " class="breadcrumb-row">
 						<ul class="breadcrumb">
 							<li class="breadcrumb-item"><a href="{% url 'catloads_web:dashboard' %}"> Home</a></li>
-							<li class="breadcrumb-item">My Orders</li>
+							<li class="breadcrumb-item">Contact Us</li>
 						</ul>
 					</nav>
 				</div>
@@ -25,7 +25,7 @@
 				<nav aria-label="breadcrumb" class="breadcrumb-row" style="display: flex; justify-content: center;">
 					<ul class="breadcrumb pt-2">
 						<li class="breadcrumb-item"><a href="{% url 'catloads_web:dashboard' %}"> Home</a></li>
-						<li class="breadcrumb-item">My Orders</li>
+						<li class="breadcrumb-item"> Contact Us</li>
 					</ul>
 				</nav>
 			</div>
@@ -40,45 +40,25 @@
 						<div class="dz-tabs style-2 nav-full">
 							<ul class="nav nav-pills">
 								<li class="nav-item"><a class="nav-link btn btn-primary" href="{% url 'catloads_web:product_dashboard' %}">Dashboard</a></li>
-								<li class="nav-item"><a class="nav-link btn btn-primary active" href="{% url 'catloads_web:orders' %}">Orders</a></li>
+								<li class="nav-item"><a class="nav-link btn btn-primary " href="{% url 'catloads_web:orders' %}">Orders</a></li>
 								<li class="nav-item"><a class="nav-link btn btn-primary" href="{% url 'catloads_web:downloads' %}">Downloads</a></li>
 								<li class="nav-item"><a class="nav-link btn btn-primary" href="{% url 'catloads_web:edit_account' %}">Account details</a></li>
 								<li class="nav-item"><a class="nav-link btn btn-primary" href="{% url 'catloads_web:privacy_policy' %}">Privacy Policy</a></li>
-								<li class="nav-item"><a class="nav-link btn btn-primary" href="{% url 'catloads_web:customer_contact' %}">Contact Us</a></li>
+								<li class="nav-item"><a class="nav-link btn btn-primary active" href="{% url 'catloads_web:customer_contact' %}">Contact Us</a></li>
 								<li class="nav-item"><a class="nav-link btn btn-primary" href="{% url 'catloads_web:logout' %}">Log out</a></li>
 							</ul>
 						</div>
 					</div>
 					<div class="col-lg-9">
 						<div class="card-container">
-							<div class="table-responsive my-account-content">
-								<table class="table check-tbl style-1 table-responsive-md">
-									<thead>
-									<tr>
-										<th>Order</th>
-										<th>Date</th>
-										<th>Status</th>
-										<th>Total</th>
-										<th class="text-end">Actions</th>
-									</tr>
-									</thead>
-									<tbody>
-										{% for order in orders %}
-										
-										<tr>
-											<td class="product-item-name text-primary">{{order.order_id}}</td>
-											<td class="product-item-date">{{order.created_on}}</td>
-											<td class="product-item-Status"> {{ order.get_status_display }}</td>
-											<td class="product-item-price">₹{{order.total_price}} for {{order.get_orderitemcount}} items</td>
-											{% if order.order_status == 2 %}
-											<td class="product-item-totle"><a class="btn btn-sm btn-success" href="{% url 'catloads_web:downloads' %}?order_id={{order.id}}">View</a></td>
-											{% else %}
-											<td class="product-item-totle"><a class="btn btn-sm btn-warning" href="{% url 'catloads_web:order_create' order.id|encode_base64 %}">Complete Order</a></td>
-											{% endif %}
-										</tr>
-										{% endfor %}
-									</tbody>
-								</table>
+                            <style>
+                                ol{
+                                    margin: 10px;
+                                }
+                              
+                            </style>
+							<div class="table-responsive my-account-content p-2" style="height:450px !important; overflow-y: scroll;">
+                               <h4 class="p-4">For support or any queries, please contact us at <br> <a href="mailto:support@catloads.com" style="color: red !important;">support@catloads.com</a>. We look forward to assisting you!</h4>
 							</div>
 						</div>
 					</div>

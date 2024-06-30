@@ -85,6 +85,20 @@ class CustomerDahsboard(TemplateView):
 
     def get_context_data(self, **kwargs):
         return super().get_context_data(**kwargs)
+    
+@method_decorator(custom_login_required(login_url='catloads_web:login'), name='dispatch')
+class CustomerPrivacyPolicy(TemplateView):
+    template_name = 'catloads_web/privacy_policy.html'
+
+    def get_context_data(self, **kwargs):
+        return super().get_context_data(**kwargs)
+
+@method_decorator(custom_login_required(login_url='catloads_web:login'), name='dispatch')
+class CustomerContact(TemplateView):
+    template_name = 'catloads_web/contact.html'
+
+    def get_context_data(self, **kwargs):
+        return super().get_context_data(**kwargs)
 
 # @method_decorator(custom_login_required(login_url='/login/'), name='dispatch')
 # class CustomerDowloads(TemplateView):
@@ -157,6 +171,8 @@ class LoginView(View):
 
     def get(self,request):
         try:
+            if request.user.is_authenticated:
+                return redirect(self.success_url)
             return render(request,self.template_name)
         except Exception as e:
             print("Error in Login view : ",e)

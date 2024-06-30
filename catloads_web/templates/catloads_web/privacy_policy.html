@@ -1,0 +1,292 @@
+{% extends 'catloads_web/index.html' %}
+{% load custom_filter %}
+ 
+{% block header %}
+{% endblock %}
+{% block content %}
+	<div class="page-content bg-light">
+		<!--Banner Start-->
+		<div class="dz-bnr-inr d-none d-md-block" style="background-color:rgb(184, 102, 207);">
+			<div class="container">
+				<div class="dz-bnr-inr-entry">
+					<h1>Privacy Policy</h1>
+					<nav aria-label="breadcrumb " class="breadcrumb-row">
+						<ul class="breadcrumb">
+							<li class="breadcrumb-item"><a href="{% url 'catloads_web:dashboard' %}"> Home</a></li>
+							<li class="breadcrumb-item">Privacy Policy</li>
+						</ul>
+					</nav>
+				</div>
+			</div>
+		</div>
+
+		<div class="mob_block d-block d-md-none" style="background-color:rgb(184, 102, 207);">
+			<div class="dz-bnr-inr-entry">
+				<nav aria-label="breadcrumb" class="breadcrumb-row" style="display: flex; justify-content: center;">
+					<ul class="breadcrumb pt-2">
+						<li class="breadcrumb-item"><a href="{% url 'catloads_web:dashboard' %}"> Home</a></li>
+						<li class="breadcrumb-item"> Privacy Policy</li>
+					</ul>
+				</nav>
+			</div>
+		</div>
+		<!--Banner End-->
+
+		<!-- inner page banner End-->
+		<div class="content-inner-1">
+			<div class="container-md">
+				<div class="row dashboard-wrapper">
+					<div class="col-lg-3">
+						<div class="dz-tabs style-2 nav-full">
+							<ul class="nav nav-pills">
+								<li class="nav-item"><a class="nav-link btn btn-primary" href="{% url 'catloads_web:product_dashboard' %}">Dashboard</a></li>
+								<li class="nav-item"><a class="nav-link btn btn-primary " href="{% url 'catloads_web:orders' %}">Orders</a></li>
+								<li class="nav-item"><a class="nav-link btn btn-primary" href="{% url 'catloads_web:downloads' %}">Downloads</a></li>
+								<li class="nav-item"><a class="nav-link btn btn-primary" href="{% url 'catloads_web:edit_account' %}">Account details</a></li>
+								<li class="nav-item"><a class="nav-link btn btn-primary active" href="{% url 'catloads_web:edit_account' %}">Privacy Policy</a></li>
+								<li class="nav-item"><a class="nav-link btn btn-primary" href="{% url 'catloads_web:logout' %}">Log out</a></li>
+							</ul>
+						</div>
+					</div>
+					<div class="col-lg-9">
+						<div class="card-container">
+                            <style>
+                                ol{
+                                    margin: 10px;
+                                }
+                              
+                            </style>
+							<div class="table-responsive my-account-content p-2" style="height:450px !important; overflow-y: scroll;">
+                                <p style="font-size: 15px !important;">
+                                    <ol style="font-size: inherit;">
+                                        <li><strong> Introduction</strong></li>
+                                    </ol>
+                                    <p>Catloads is committed to protecting the privacy of our users. This Privacy Policy explains how we
+                                        collect, use, disclose, and safeguard your information when you visit our website and use our
+                                        services.</p>
+                                    <ol start="2">
+                                        <li><strong> Information We Collect</strong></li>
+                                    </ol>
+                                    <p>We collect the following information from users:</p>
+                                    <ul>
+                                        <li><strong>Contact Information:</strong> Name, Email address, Phone number (optional), Country.
+                                        </li>
+                                        <li><strong>Payment Information:</strong> We do not collect or store any credit card or bank
+                                            details. All payments are processed securely through our payment gateway, Razorpay.</li>
+                                        <li><strong>Browsing Data:</strong> We collect information about your browsing activity on our
+                                            website, such as pages viewed and products searched for.</li>
+                                    </ul>
+                                    <ol start="3">
+                                        <li><strong> How We Use Your Information</strong></li>
+                                    </ol>
+                                    <p>We use the information we collect for the following purposes:</p>
+                                    <ul>
+                                        <li><strong>Processing Orders and Delivering Products:</strong> We use your contact information
+                                            to process your orders, deliver your digital products, and provide download instructions and
+                                            tutorials if applicable. We may also store your purchase history for record-keeping
+                                            purposes.</li>
+                                        <li><strong>Sending Marketing Communications (with opt-out options):</strong> We may use your
+                                            email address to send you marketing communications about our products and services. You can
+                                            always unsubscribe from these emails by clicking the unsubscribe link at the bottom of any
+                                            marketing email.</li>
+                                        <li><strong>Improving Your Website and Product Offerings:</strong> We use browsing data to
+                                            understand your interests and preferences and improve our website and product offerings.
+                                        </li>
+                                        <li><strong>Analytics:</strong> We use Google Analytics to analyze website traffic and user
+                                            behavior. This information is anonymized and does not identify individual users.</li>
+                                    </ul>
+                                    <ol start="4">
+                                        <li><strong> Information Sharing</strong></li>
+                                    </ol>
+                                    <p>We share your information with the following third-party service providers:</p>
+                                    <ul>
+                                        <li><strong>Payment Processors:</strong> Razorpay is our secure payment gateway responsible for
+                                            processing your payments.</li>
+                                        <li><strong>Analytics Providers:</strong> We use Google Analytics to analyze website traffic.
+                                           
+                                        </li>
+                                    </ul>
+                                    <p>We only share the minimum amount of information necessary with these providers and have
+                                        contractual agreements with them to ensure they protect your data according to our standards and
+                                        relevant privacy regulations.</p>
+                                    <ol start="5">
+                                        <li><strong> Data Security</strong></li>
+                                    </ol>
+                                    <p>We take the security of your data very seriously. We use the following measures to protect your
+                                        information:</p>
+                                    <ul>
+                                        <li><strong>Secure Servers:</strong> Our website is hosted on secure servers with firewalls and
+                                            intrusion detection systems to prevent unauthorized access.</li>
+                                        <li><strong>Encryption:</strong> We encrypt sensitive information in transit (using HTTPS)</li>
+                                        <li><strong>Data Access Restrictions:</strong> We limit access to customer data within our
+                                            organization on a "need-to-know" basis.</li>
+                                        <li><strong>Strong Password Policies:</strong> We enforce strong password policies for all user
+                                            accounts.</li>
+                                    </ul>
+                                    <ol start="6">
+                                        <li><strong> Customer Rights</strong></li>
+                                    </ol>
+                                    <p>You have the following rights regarding your data:</p>
+                                    <ul>
+                                        <li><strong>Access:</strong> You have the right to access your personal information.</li>
+                                        <li><strong>Correction:</strong> You have the right to correct any inaccurate information we
+                                            hold about you.</li>
+                                        <li><strong>Deletion:</strong> You have the right to request that we delete your personal
+                                            information (subject to applicable laws).</li>
+                                    </ul>
+                                    <p>To exercise any of these rights, please contact us using the information provided below.</p>
+                                    <ol start="7">
+                                        <li><strong> Children's Privacy</strong></li>
+                                    </ol>
+                                    <p>Our website and services are not directed towards children under the age of 13. We do not
+                                        knowingly collect personal information from children under 13. If you are a parent or guardian
+                                        and you believe that your child has provided us with personal information, please contact us. We
+                                        will take steps to delete the information from our systems.</p>
+                                    <ol start="8">
+                                        <li><strong> Changes to This Policy</strong></li>
+                                    </ol>
+                                    <p>We reserve the right to update this Privacy Policy at any time. We will notify you of any
+                                        significant changes by posting the new Privacy Policy on our website.</p>
+                                    <ol start="9">
+                                        <li><strong> Contact Us</strong></li>
+                                    </ol>
+                                    <p>If you have any questions about this Privacy Policy, please contact us.</p>
+                                
+                                    <h5><strong>Refund Policy</strong></h5>
+                                    <ol>
+                                        <li><strong> Introduction</strong></li>
+                                    </ol>
+                                    <p>Due to the digital nature of our products, we generally do not offer refunds. However, we will
+                                        consider exceptions on a case-by-case basis under specific circumstances we outline (explained
+                                        below).</p>
+                                    <ol start="2">
+                                        <li><strong> Refundable Products</strong></li>
+                                    </ol>
+                                    <p>We will only provide refunds for products we explicitly list as refundable. For example, if we
+                                        have a guide for sale with a money-back guarantee, we will offer a 100% refund if the guide
+                                        demonstrably does not function as described. In such cases, customers will need to submit the
+                                        required information to prove the guide is not working after following the instructions.</p>
+                                    <ol start="3">
+                                        <li><strong> How to Request a Refund</strong></li>
+                                    </ol>
+                                    <p>If we offer a refund for a specific product you purchased and you believe you meet the criteria,
+                                        please contact us at [your email address] within 90 days of your purchase. Include your order
+                                        number and a detailed explanation of why you are requesting a refund, along with any necessary
+                                        supporting evidence (as outlined in point 2).</p>
+                                    <ol start="4">
+                                        <li><strong> Refund Process</strong></li>
+                                    </ol>
+                                    <p>We will review your request and respond to you within 2&nbsp; business days. If your refund is
+                                        approved, we will process the refund using the original payment method.</p>
+                                    <p><strong>Please note:</strong></p>
+                                    <ul>
+                                        <li>This policy applies to all purchases made on the Catloads website.</li>
+                                        <li>We reserve the right to deny refunds if we believe the request is fraudulent or abusive.
+                                        </li>
+                                    </ul>
+                                    <h5><strong>Catloads End-User License Agreement (EULA)</strong></h5>
+                                    <ol>
+                                        <li><strong> Introduction</strong></li>
+                                    </ol>
+                                    <p>This End-User License Agreement ("EULA") is a legal agreement between you ("Licensee") and
+                                        Catloads ("Licensor") governing your use of the digital products you purchase or download from
+                                        the Catloads website ("Products"). By downloading or purchasing a Product, you agree to be bound
+                                        by the terms of this EULA. If you do not agree to the terms of this EULA, you may not download
+                                        or purchase any Products.</p>
+                                    <ol start="2">
+                                        <li><strong> Grant of License</strong></li>
+                                    </ol>
+                                    <p>Licensor grants you a non-exclusive, non-transferable license to use the Products for your
+                                        <strong>personal use only</strong>. This means you may:</p>
+                                    <ul>
+                                        <li>Install and use the Products on a single computer or device.</li>
+                                        <li>Access and use the Products for your own personal learning and development.</li>
+                                        <li><strong>Share your work created using the Products on social media platforms.</strong></li>
+                                    </ul>
+                                    <ol start="3">
+                                        <li><strong> Restrictions on Use</strong></li>
+                                    </ol>
+                                    <p>You are expressly prohibited from:</p>
+                                    <ul>
+                                        <li>Sharing or reselling the Products, even if offered for free or as a giveaway.</li>
+                                        <li>Modifying or creating derivative works of the Products, <strong>except for the final
+                                                creative work you produce using the Products.</strong></li>
+                                        <li>Distributing or publicly displaying the Products for any commercial purpose.</li>
+                                        <li>Removing or altering any copyright or trademark notices contained within the Products.</li>
+                                        <li>Reverse engineering, decompiling, or disassembling the Products.</li>
+                                    </ul>
+                                    <ol start="4">
+                                        <li><strong> Commercial Use</strong></li>
+                                    </ol>
+                                    <p>If a Product is intended for commercial use, it will be explicitly mentioned in the product
+                                        description and a separate Commercial Use License will be provided.</p>
+                                    <ol start="5">
+                                        <li><strong> Copyright and Ownership</strong></li>
+                                    </ol>
+                                    <p>All intellectual property rights in and to the Products, including but not limited to copyrights,
+                                        trademarks, and patents, are the exclusive property of Licensor or its licensors. You do not
+                                        acquire any ownership rights in the Products by downloading or purchasing them.</p>
+                                    <ol start="6">
+                                        <li><strong> Disclaimer of Warranties</strong></li>
+                                    </ol>
+                                    <p>The Products are provided "as is" and without warranties of any kind, express or implied.
+                                        Licensor disclaims all warranties, including but not limited to, the implied warranties of
+                                        merchantability, fitness for a particular purpose, and non-infringement. Licensor does not
+                                        warrant that the Products will function uninterrupted or error-free, that defects will be
+                                        corrected, or that the Products are free of viruses or other harmful components.</p>
+                                    <ol start="7">
+                                        <li><strong> Limitation of Liability</strong></li>
+                                    </ol>
+                                    <p>In no event shall Licensor be liable for any direct, indirect, incidental, special,
+                                        consequential, or punitive damages arising out of or in connection with the use of the Products,
+                                        even if Licensor has been advised of the possibility of such damages.</p>
+                                    <ol start="8">
+                                        <li><strong> Term and Termination</strong></li>
+                                    </ol>
+                                    <p>This EULA will be effective upon your download or purchase of a Product and will remain in effect
+                                        until terminated. You may terminate this EULA by uninstalling or deleting the Products from your
+                                        computer or device. Licensor may terminate this EULA at any time for any reason, with or without
+                                        notice. Upon termination, you must uninstall or delete the Products from your computer or
+                                        device.</p>
+                                    <ol start="9">
+                                        <li><strong> Governing Law</strong></li>
+                                    </ol>
+                                    <p>This EULA shall be governed by and construed in accordance with the laws of India.</p>
+                                    <ol start="10">
+                                        <li><strong> Entire Agreement</strong></li>
+                                    </ol>
+                                    <p>This EULA constitutes the entire agreement between the parties with respect to the subject matter
+                                        hereof and supersedes all prior or contemporaneous communications, representations, or
+                                        agreements, whether oral or written.</p>
+                                    <ol start="11">
+                                        <li><strong> Severability</strong></li>
+                                    </ol>
+                                    <p>If any provision of this EULA is held to be invalid or unenforceable, such provision shall be
+                                        struck and the remaining provisions shall remain in full force and effect.</p>
+                                    <ol start="12">
+                                        <li><strong> Waiver</strong></li>
+                                    </ol>
+                                    <p>No waiver by Licensor of any breach of this EULA shall be deemed a waiver of any subsequent
+                                        breach.</p>
+                                    <ol start="13">
+                                        <li><strong> Contact Us</strong></li>
+                                    </ol>
+                                    <p>If you have any questions about this EULA, please contact us at <a href="mailto:support@catloads.com">support@catloads.com</a>.</p>
+                                    <p>This EULA clarifies that users can share their work created using the Products on social media
+                                        platforms, but they cannot share or distribute the Products themselves. It also allows for the
+                                        creation of derivative works, but only in the form of the final creative output you produce
+                                        (e.g., an edited photo using a Catloads filter).</p>
+                                    </p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+
+	<!-- Footer -->
+	{% endblock %}
+	{% block footer %}
+	{% endblock %}

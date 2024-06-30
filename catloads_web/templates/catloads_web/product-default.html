@@ -231,7 +231,7 @@ swiper-container::part(bullet) { /* Assuming there's a part named 'bullet' for i
 
 										{% csrf_token %}
 										
-												<a data-id="{{products.id}}"  data-url="{% url 'catloads_web:cartdata' %}" data-name="{{products.name}}" data-image="{{products.thumbnail.url}}" data-producturl="{{products.slug}}"  data-price="{{products.price}}"  class="btn btn-success w-100 cart_btn ms-2 d-none d-md-block">Buy Now</a>
+												<a data-id="{{products.id}}" style="font-family: 'Lufga' ,sans-serif !important;"  data-url="{% url 'catloads_web:cartdata' %}" data-name="{{products.name}}" data-image="{{products.thumbnail.url}}" data-producturl="{{products.slug}}"  data-price="{{products.price}}"  class="btn btn-success w-100 cart_btn ms-2 d-none d-md-block">Buy Now</a>
 												<!-- <a href="{% url 'catloads_web:carts' %}"  class="btn btn-secondary w-100 cart_btn2 mt-2" style="display: none;">Checkout</a> -->
 												
 											
@@ -489,7 +489,7 @@ swiper-container::part(bullet) { /* Assuming there's a part named 'bullet' for i
 	
 		</div>
 		<div class="col-6">
-			<a data-id="{{products.id}}" data-url="{% url 'catloads_web:cartdata' %}" data-name="{{products.name}}" data-image="{{products.thumbnail.url}}" data-producturl="{{products.slug}}"  data-price="{{products.price}}"  class="btn btn-success w-100 cart_btn ms-2">Buy Now</a>
+			<a data-id="{{products.id}}" style="font-family: 'Lufga' ,sans-serif !important;"  data-url="{% url 'catloads_web:cartdata' %}" data-name="{{products.name}}" data-image="{{products.thumbnail.url}}" data-producturl="{{products.slug}}"  data-price="{{products.price}}"  class="btn btn-success w-100 cart_btn ms-2">Buy Now</a>
 	
 		</div>
 	</div>
