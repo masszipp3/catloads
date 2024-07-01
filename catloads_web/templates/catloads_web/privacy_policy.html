@@ -49,6 +49,7 @@
 								<li class="nav-item"><a class="nav-link btn btn-primary active" href="{% url 'catloads_web:privacy_policy' %}">Privacy Policy</a></li>
 								<li class="nav-item"><a class="nav-link btn btn-primary" href="{% url 'catloads_web:terms_and_condition' %}">Terms & Condition</a></li>
 								<li class="nav-item"><a class="nav-link btn btn-primary" href="{% url 'catloads_web:customer_contact' %}">Contact Us</a></li>
+								<li class="nav-item"><a class="nav-link btn btn-primary " href="{% url 'catloads_web:about_us' %}">About Us</a></li>
                                 {% if request.user.is_authenticated %}
 								<li class="nav-item"><a class="nav-link btn btn-primary" href="{% url 'catloads_web:logout' %}">Log out</a></li>
                                 {% else %}

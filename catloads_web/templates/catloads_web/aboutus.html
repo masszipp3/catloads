@@ -9,11 +9,11 @@
 		<div class="dz-bnr-inr d-none d-md-block" style="background-color:rgb(184, 102, 207);">
 			<div class="container">
 				<div class="dz-bnr-inr-entry">
-					<h1>Privacy Policy</h1>
+					<h1>Terms & Condition</h1>
 					<nav aria-label="breadcrumb " class="breadcrumb-row">
 						<ul class="breadcrumb">
 							<li class="breadcrumb-item"><a href="{% url 'catloads_web:dashboard' %}"> Home</a></li>
-							<li class="breadcrumb-item">Contact Us</li>
+							<li class="breadcrumb-item">Terms & Condition</li>
 						</ul>
 					</nav>
 				</div>
@@ -25,7 +25,7 @@
 				<nav aria-label="breadcrumb" class="breadcrumb-row" style="display: flex; justify-content: center;">
 					<ul class="breadcrumb pt-2">
 						<li class="breadcrumb-item"><a href="{% url 'catloads_web:dashboard' %}"> Home</a></li>
-						<li class="breadcrumb-item"> Contact Us</li>
+						<li class="breadcrumb-item"> Terms & Condition</li>
 					</ul>
 				</nav>
 			</div>
@@ -39,17 +39,17 @@
 					<div class="col-lg-3">
 						<div class="dz-tabs style-2 nav-full">
 							<ul class="nav nav-pills">
+                                <ul class="nav nav-pills">
                                 {% if request.user.is_authenticated %}
 								<li class="nav-item"><a class="nav-link btn btn-primary" href="{% url 'catloads_web:product_dashboard' %}">Dashboard</a></li>
 								<li class="nav-item"><a class="nav-link btn btn-primary " href="{% url 'catloads_web:orders' %}">Orders</a></li>
 								<li class="nav-item"><a class="nav-link btn btn-primary" href="{% url 'catloads_web:downloads' %}">Downloads</a></li>
 								<li class="nav-item"><a class="nav-link btn btn-primary" href="{% url 'catloads_web:edit_account' %}">Account details</a></li>
                                 {% endif %}
-								<li class="nav-item"><a class="nav-link btn btn-primary" href="{% url 'catloads_web:privacy_policy' %}">Privacy Policy</a></li>
+								<li class="nav-item"><a class="nav-link btn btn-primary " href="{% url 'catloads_web:privacy_policy' %}">Privacy Policy</a></li>
 								<li class="nav-item"><a class="nav-link btn btn-primary" href="{% url 'catloads_web:terms_and_condition' %}">Terms & Condition</a></li>
-
-								<li class="nav-item"><a class="nav-link btn btn-primary active" href="{% url 'catloads_web:customer_contact' %}">Contact Us</a></li>
-								<li class="nav-item"><a class="nav-link btn btn-primary " href="{% url 'catloads_web:about_us' %}">About Us</a></li>
+								<li class="nav-item"><a class="nav-link btn btn-primary " href="{% url 'catloads_web:customer_contact' %}">Contact Us</a></li>
+								<li class="nav-item"><a class="nav-link btn btn-primary active" href="{% url 'catloads_web:about_us' %}">About Us</a></li>
 
                                 {% if request.user.is_authenticated %}
 								<li class="nav-item"><a class="nav-link btn btn-primary" href="{% url 'catloads_web:logout' %}">Log out</a></li>
@@ -57,7 +57,6 @@
 								<li class="nav-item"><a class="nav-link btn btn-primary" href="{% url 'catloads_web:login' %}">Log in</a></li>
 
                                 {% endif %}
-
 							</ul>
 						</div>
 					</div>
@@ -70,7 +69,9 @@
                               
                             </style>
 							<div class="table-responsive my-account-content p-2" style="height:450px !important; overflow-y: scroll;">
-                               <h4 class="p-4">For support or any queries, please contact us at <br> <a href="mailto:support@catloads.com" style="color: red !important;">support@catloads.com</a>. We look forward to assisting you!</h4>
+                               <p class="p-2">
+                                The Catloads Crew: Passionate About Empowering You At Catloads, we're a small, driven team fueled by a love for learning and a desire to make a difference. <br> We combine our diverse expertise and market research to create high-quality, affordable digital products that address your specific needs. Education at Your Fingertips We believe that education shouldn't come at a premium. <br> That's why we offer a wide range of digital products – ebooks, templates, courses, and more – at accessible prices. Our goal is to empower individuals with the knowledge and tools they need to thrive. Unique Intelligence, Exceptional Value Our team brings a unique blend of intelligence and creativity to the table. <br> We're constantly researching market trends and customer needs to ensure our products are relevant and impactful. By combining affordability with exceptional quality, we strive to be your one-stop shop for digital resources that fuel your success. Empower Yourself Today! Browse our extensive collection of digital products and discover how Catloads can help you achieve your goals.
+                               </p>
 							</div>
 						</div>
 					</div>

@@ -106,6 +106,12 @@ class CustomerTerms(TemplateView):
 
     def get_context_data(self, **kwargs):
         return super().get_context_data(**kwargs)
+
+class CustomerAbout(TemplateView):
+    template_name = 'catloads_web/aboutus.html'
+
+    def get_context_data(self, **kwargs):
+        return super().get_context_data(**kwargs)        
 # @method_decorator(custom_login_required(login_url='/login/'), name='dispatch')
 # class CustomerDowloads(TemplateView):
 #     template_name = 'catloads_web/account-downloads.html'
