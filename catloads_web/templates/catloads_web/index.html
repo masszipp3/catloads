@@ -662,16 +662,34 @@
 		<footer class="site-footer style-1">
 
 			<!-- Footer Top End -->
+<style>
+	.styuuu a{
+		color: rgb(241, 116, 116);
+		text-decoration: underline;
+		text-underline-offset:3px
+	}
+	.styuuu a:hover{
+		color: rgb(225, 21, 10);
+		text-decoration: underline;
+		text-underline-offset:3px
+	}
 
+</style>
 			<!-- Footer Bottom -->
 			<div class="footer-bottom">
 				<div class="container">
 					<div class="row fb-inner wow fadeInUp" data-wow-delay="0.1s">
-						<div class="col-lg-6 col-md-12 text-start">
-							<p class="copyright-text">© <span class="current-year">2024</span> <a style="color: #9d38bd !important;" href="">Catloads</a>
+						<div class="col-lg-4 col-md-12 text-start mt-2 styuuu">
+							<a href="{% url 'catloads_web:privacy_policy' %}" class="copyright-text mt-2 me-1">Privacy Policy</a>
+							<a href="{% url 'catloads_web:terms_and_condition' %}" class="copyright-text mt-2 me-1 ">Terms & Conditions</a>
+							<a href="{% url 'catloads_web:customer_contact' %}" class="copyright-text mt-2 ">Contact us</a>
+							
+						</div>
+						<div class="col-lg-4 col-md-12 text-start">
+							<p class="copyright-text mt-2">© <span class="current-year">2024</span> <a style="color: #9d38bd !important;" href="">Catloads</a>
 								All Rights Reserved.</p>
 						</div>
-						<div class="col-lg-6 col-md-12 text-end">
+						<div class="col-lg-4 col-md-12 text-end">
 							<div
 								class="d-flex align-items-center justify-content-center justify-content-md-center justify-content-xl-end">
 								<span class="me-3">We Accept: </span>

@@ -86,20 +86,26 @@ class CustomerDahsboard(TemplateView):
     def get_context_data(self, **kwargs):
         return super().get_context_data(**kwargs)
     
-@method_decorator(custom_login_required(login_url='catloads_web:login'), name='dispatch')
+# @method_decorator(custom_login_required(login_url='catloads_web:login'), name='dispatch')
 class CustomerPrivacyPolicy(TemplateView):
     template_name = 'catloads_web/privacy_policy.html'
 
     def get_context_data(self, **kwargs):
         return super().get_context_data(**kwargs)
 
-@method_decorator(custom_login_required(login_url='catloads_web:login'), name='dispatch')
+# @method_decorator(custom_login_required(login_url='catloads_web:login'), name='dispatch')
 class CustomerContact(TemplateView):
     template_name = 'catloads_web/contact.html'
 
     def get_context_data(self, **kwargs):
         return super().get_context_data(**kwargs)
 
+
+class CustomerTerms(TemplateView):
+    template_name = 'catloads_web/terms_and_codition.html'
+
+    def get_context_data(self, **kwargs):
+        return super().get_context_data(**kwargs)
 # @method_decorator(custom_login_required(login_url='/login/'), name='dispatch')
 # class CustomerDowloads(TemplateView):
 #     template_name = 'catloads_web/account-downloads.html'

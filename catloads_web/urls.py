@@ -25,6 +25,7 @@ urlpatterns=[
     path('customer/edit',customer.AccountUpdateView.as_view(),name='edit_account'),
     path('customer/search',customer.ProductListView.as_view(),name='productsearch'),
     path('privacy_policy',customer.CustomerPrivacyPolicy.as_view(),name='privacy_policy'),
+    path('terms_and_condition',customer.CustomerTerms.as_view(),name='terms_and_condition'),
     path('contact',customer.CustomerContact.as_view(),name='customer_contact'),
     path('login/redirect',customer.direct_google_login,name='login_redirect'),
 

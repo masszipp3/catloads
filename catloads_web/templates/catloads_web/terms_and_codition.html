@@ -1,0 +1,136 @@
+{% extends 'catloads_web/index.html' %}
+{% load custom_filter %}
+ 
+{% block header %}
+{% endblock %}
+{% block content %}
+	<div class="page-content bg-light">
+		<!--Banner Start-->
+		<div class="dz-bnr-inr d-none d-md-block" style="background-color:rgb(184, 102, 207);">
+			<div class="container">
+				<div class="dz-bnr-inr-entry">
+					<h1>Terms & Condition</h1>
+					<nav aria-label="breadcrumb " class="breadcrumb-row">
+						<ul class="breadcrumb">
+							<li class="breadcrumb-item"><a href="{% url 'catloads_web:dashboard' %}"> Home</a></li>
+							<li class="breadcrumb-item">Terms & Condition</li>
+						</ul>
+					</nav>
+				</div>
+			</div>
+		</div>
+
+		<div class="mob_block d-block d-md-none" style="background-color:rgb(184, 102, 207);">
+			<div class="dz-bnr-inr-entry">
+				<nav aria-label="breadcrumb" class="breadcrumb-row" style="display: flex; justify-content: center;">
+					<ul class="breadcrumb pt-2">
+						<li class="breadcrumb-item"><a href="{% url 'catloads_web:dashboard' %}"> Home</a></li>
+						<li class="breadcrumb-item"> Terms & Condition</li>
+					</ul>
+				</nav>
+			</div>
+		</div>
+		<!--Banner End-->
+
+		<!-- inner page banner End-->
+		<div class="content-inner-1">
+			<div class="container-md">
+				<div class="row dashboard-wrapper">
+					<div class="col-lg-3">
+						<div class="dz-tabs style-2 nav-full">
+							<ul class="nav nav-pills">
+                                <ul class="nav nav-pills">
+                                {% if request.user.is_authenticated %}
+								<li class="nav-item"><a class="nav-link btn btn-primary" href="{% url 'catloads_web:product_dashboard' %}">Dashboard</a></li>
+								<li class="nav-item"><a class="nav-link btn btn-primary " href="{% url 'catloads_web:orders' %}">Orders</a></li>
+								<li class="nav-item"><a class="nav-link btn btn-primary" href="{% url 'catloads_web:downloads' %}">Downloads</a></li>
+								<li class="nav-item"><a class="nav-link btn btn-primary" href="{% url 'catloads_web:edit_account' %}">Account details</a></li>
+                                {% endif %}
+								<li class="nav-item"><a class="nav-link btn btn-primary " href="{% url 'catloads_web:privacy_policy' %}">Privacy Policy</a></li>
+								<li class="nav-item"><a class="nav-link btn btn-primary active" href="{% url 'catloads_web:terms_and_condition' %}">Terms & Condition</a></li>
+								<li class="nav-item"><a class="nav-link btn btn-primary " href="{% url 'catloads_web:customer_contact' %}">Contact Us</a></li>
+
+                                {% if request.user.is_authenticated %}
+								<li class="nav-item"><a class="nav-link btn btn-primary" href="{% url 'catloads_web:logout' %}">Log out</a></li>
+                                {% else %}
+								<li class="nav-item"><a class="nav-link btn btn-primary" href="{% url 'catloads_web:login' %}">Log in</a></li>
+
+                                {% endif %}
+							</ul>
+						</div>
+					</div>
+					<div class="col-lg-9">
+						<div class="card-container">
+                            <style>
+                                ol{
+                                    margin: 10px;
+                                }
+                              
+                            </style>
+							<div class="table-responsive my-account-content p-2" style="height:450px !important; overflow-y: scroll;">
+                               <p class="p-2">
+                                <h4 class="m-2"> Welcome to Catloads! </h4>
+
+These Terms and Conditions ("Terms") govern your access to and use of the Catloads website (the "Website") and the digital products you purchase or download from the Website (the "Products"). By accessing or using the Website or Products, you agree to be bound by these Terms. If you do not agree to all of these Terms, you may not access or use the Website or Products. <br>
+
+ <h4 class="mt-1">1. Use of the Website and Products</h4>
+
+You must be at least 13 years old to use the Website and Products.
+You agree to use the Website and Products only for lawful purposes and in accordance with these Terms.
+You agree not to use the Website or Products in any way that could damage, disable, overburden, or impair the Website or Products, or interfere with any other user's enjoyment of the Website or Products.
+You agree not to attempt to gain unauthorized access to the Website or Products, or any computer systems or networks connected to the Website.
+
+<h4 class="mt-1">2. Information We Collect</h4>
+
+We collect information about you in accordance with our Privacy Policy. Please see our Privacy Policy for details. <br>
+
+<h4 class="mt-1">3. Intellectual Property</h4>
+
+The Website and Products contain intellectual property owned by Catloads, including trademarks, copyrights, and trade secrets. You agree not to modify, reproduce, distribute, or create derivative works of the Website or Products without the express written permission of Catloads. <br>
+
+<h4 class="mt-1">4. Disclaimers</h4>
+
+The Website and Products are provided "as is" and without warranties of any kind, express or implied. Catloads disclaims all warranties, including, but not limited to, the implied warranties of merchantability, fitness for a particular purpose, and non-infringement.
+Catloads does not warrant that the Website or Products will be uninterrupted or error-free, that defects will be corrected, or that the Website or Products are free of viruses or other harmful components.
+
+<h4 class="mt-1">5. Limitation of Liability</h4>
+
+Catloads shall not be liable for any damages arising out of your use of the Website or Products, including, but not limited to, direct, indirect, incidental, consequential, or punitive damages.
+
+<h4 class="mt-1">6. Term and Termination</h4>
+
+These Terms will remain in full force and effect so long as you are a user of the Website or Products. Catloads may terminate these Terms at any time for any reason, with or without notice. You may also terminate these Terms by stopping your use of the Website and Products.
+
+<h4 class="mt-1">7. Dispute Resolution</h4>
+
+Any dispute arising out of or relating to these Terms will be governed by and construed in accordance with the laws of [your jurisdiction], without regard to its conflict of law provisions.
+
+<h4 class="mt-1">8. Entire Agreement</h4>
+
+These Terms constitute the entire agreement between you and Catloads regarding your use of the Website and Products.
+
+<h4 class="mt-4">9. Severability
+</h4>
+If any provision of these Terms is held to be invalid or unenforceable, such provision shall be struck and the remaining provisions shall remain in full force and effect.
+
+<h4 class="mt-1">10. Governing Law</h4>
+
+These Terms will be governed by and construed in accordance with the laws of [your jurisdiction], without regard to its conflict of law provisions.
+
+<h4 class="mt-1">11. Contact Us</h4>
+
+If you have any questions about these Terms, please contact us at <a href="mailto:support@catloads.com">support@catloads.comX</a>
+                               </p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+
+	<!-- Footer -->
+	{% endblock %}
+	{% block footer %}
+	{% endblock %}

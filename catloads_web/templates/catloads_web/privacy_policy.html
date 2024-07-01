@@ -39,12 +39,22 @@
 					<div class="col-lg-3">
 						<div class="dz-tabs style-2 nav-full">
 							<ul class="nav nav-pills">
+                                <ul class="nav nav-pills">
+                                {% if request.user.is_authenticated %}
 								<li class="nav-item"><a class="nav-link btn btn-primary" href="{% url 'catloads_web:product_dashboard' %}">Dashboard</a></li>
 								<li class="nav-item"><a class="nav-link btn btn-primary " href="{% url 'catloads_web:orders' %}">Orders</a></li>
 								<li class="nav-item"><a class="nav-link btn btn-primary" href="{% url 'catloads_web:downloads' %}">Downloads</a></li>
 								<li class="nav-item"><a class="nav-link btn btn-primary" href="{% url 'catloads_web:edit_account' %}">Account details</a></li>
-								<li class="nav-item"><a class="nav-link btn btn-primary active" href="{% url 'catloads_web:edit_account' %}">Privacy Policy</a></li>
+                                {% endif %}
+								<li class="nav-item"><a class="nav-link btn btn-primary active" href="{% url 'catloads_web:privacy_policy' %}">Privacy Policy</a></li>
+								<li class="nav-item"><a class="nav-link btn btn-primary" href="{% url 'catloads_web:terms_and_condition' %}">Terms & Condition</a></li>
+								<li class="nav-item"><a class="nav-link btn btn-primary" href="{% url 'catloads_web:customer_contact' %}">Contact Us</a></li>
+                                {% if request.user.is_authenticated %}
 								<li class="nav-item"><a class="nav-link btn btn-primary" href="{% url 'catloads_web:logout' %}">Log out</a></li>
+                                {% else %}
+								<li class="nav-item"><a class="nav-link btn btn-primary" href="{% url 'catloads_web:login' %}">Log in</a></li>
+
+                                {% endif %}
 							</ul>
 						</div>
 					</div>
