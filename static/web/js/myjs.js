@@ -187,8 +187,8 @@ $(document).ready(function(){
 
         let existingProduct = cart.items.find(item => item.product === productId);
         if (existingProduct) {
-            existingProduct.quantity += quantity;
-            existingProduct.subtotal += productPrice * quantity;
+            // existingProduct.quantity += quantity;
+            // existingProduct.subtotal += productPrice * quantity;
         } else {
             cart.items.push(productObj);
         }
