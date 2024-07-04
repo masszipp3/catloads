@@ -58,7 +58,7 @@ def handle_cart_data(user, cart_data_json,request):
 def updateto_Order(user):
     try:
         with transaction.atomic():
-            cart = Cart.objects.get(user=user)
+            cart,_ = Cart.objects.get_or_create(user=user)
             order = Order.objects.create(user=user)  # Properly unpack the tuple
 
             cartitems = cart.items.all()
@@ -75,7 +75,6 @@ def updateto_Order(user):
                     )
                 cart.delete()  
                 return encode_id_to_base64(order.id)
-
     except Exception as e:
         print(e)
 

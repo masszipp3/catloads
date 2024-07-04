@@ -266,6 +266,12 @@
                                 <span class="body-title">Total price:</span>
                                 <span class="body-title tf-color-1">{{order.total_price}}</span>
                             </li>
+                            <li class="divider"></li>
+
+                            <li class="cart-totals-item">
+                                <span class="body-title">Order Status</span>
+                                <span class="body-title text-success" >{{order.get_order_status_display}}</span>
+                            </li>
                           
                         </ul>
                     </div>
@@ -298,7 +304,22 @@
                 
                 <div class="wg-box mb-20 gap10">
                     <div class="body-title">Payment Details</div>
-                    <div class="body-text">{{order.get_payment_method_display}} , {{ order.payment.transaction_id }}</div>
+                    <div class="body-text">{{order.get_payment_method_display}} , {{ order.payment.transaction_id }},{{ order.razorpay_id }}</div>
+                </div>
+                <div class="wg-box mb-20 gap10">
+                    <div class="body-title">Update Status</div>
+                    <div class="body-text">
+                        {% if order.order_status == 1 or order.order_status == 3 %}
+                        <a href="{% url 'catloadsadmin:order_update' order.id %}?status=2" class="btn btn-success">Complete</a>
+                        {% endif %}
+                        {% if order.order_status == 2 or order.order_status == 3  %}
+                        <a href="{% url 'catloadsadmin:order_update' order.id %}?status=1" class="btn btn-warning">Pending</a>
+                        {% endif %}
+                        {% if order.order_status != 3 %}
+                        <a href="{% url 'catloadsadmin:order_update' order.id %}?status=3" class="btn btn-danger">Cancel</a>
+                        {% endif %}
+
+                    </div>
                 </div>
                 <div class="wg-box gap10">
                     <div class="body-title">Invoice</div>

@@ -209,7 +209,7 @@ class Order(BaseModel):
     tax = models.DecimalField(max_digits=10,decimal_places=2,default=0.00)
     discount = models.DecimalField(max_digits=10,decimal_places=2,default=0.00)
     total_price = models.DecimalField(max_digits=10,decimal_places=2,default=0.00)
-    payment_method = models.IntegerField(choices=PAYMENT_TYPE,null=True,blank=True)
+    payment_method = models.IntegerField(choices=PAYMENT_TYPE,null=True,blank=True,default=1)
     order_status = models.IntegerField(choices=ORDER_STATUS,null=True,blank=True,default=1)
     order_id  = models.CharField(max_length=255,null=True)
     razorpay_id = models.CharField(max_length=200,null=True,blank=True)

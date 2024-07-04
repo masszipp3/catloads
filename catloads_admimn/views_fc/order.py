@@ -47,6 +47,24 @@ class OrderDetailView(UserPassesTestMixin,DetailView):
         return context
 
 @method_decorator(login_required, name='dispatch')
+class OrderUpdateView(UserPassesTestMixin,View):  
+    def test_func(self):
+        return self.request.user.is_superuser   
+    
+    def handle_no_permission(self):
+        return HttpResponseRedirect(reverse('catloadsadmin:login'))
+    def get(self,request ,id):
+        try:
+            status = request.GET.get('status')
+            order = Order.objects.get(id=id)
+            if status:
+                order.order_status = status
+                order.save()
+            return redirect(reverse('catloadsadmin:order_detail', kwargs={'pk': id}) )    
+        except Order.DoesNotExist:
+            return redirect('catloadsadmin:orderlist')
+
+@method_decorator(login_required, name='dispatch')
 class OrderSoftDeleteView(UserPassesTestMixin,View):
     success_url = reverse_lazy('catloadsadmin:orderlist')
     def test_func(self):
