@@ -22,6 +22,7 @@ urlpatterns=[
     path('customer/cartdata',customer.CartDataView.as_view(),name='cartdata'),
     path('customer/downloads',customer.CustomerDowloads.as_view(),name='downloads'),
     path('customer/orders',customer.CustomerOrders.as_view(),name='orders'),
+    path('download',customer.DropboxDownloadView.as_view(),name='download'),
     path('customer/edit',customer.AccountUpdateView.as_view(),name='edit_account'),
     path('customer/search',customer.ProductListView.as_view(),name='productsearch'),
     path('privacy_policy',customer.CustomerPrivacyPolicy.as_view(),name='privacy_policy'),

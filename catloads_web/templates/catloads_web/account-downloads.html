@@ -78,11 +78,12 @@
 											<!-- <td class="product-item-price">March 21, 2024</td> -->
 											<td class="product-item-Status">{{product.product.product_size}} {{product.product.get_unit_display}}</td>
 
-											<td class="product-item-totle"><a class="btn btn-sm btn-secondary" href="{{product.product.download_link}}">Download</a></td>
+											<td class="product-item-totle"><a class="btn btn-sm btn-secondary"  href="{% url 'catloads_web:download' %}?pid={{product.product.id}}">Download</button></td>
 										</tr>
 										{% endfor %}
 					
 									</tbody>
+
 								</table>
 							</div>
 						</div>

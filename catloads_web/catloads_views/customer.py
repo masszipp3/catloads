@@ -22,6 +22,8 @@ from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from allauth.socialaccount.models import SocialApp
 from django.contrib import messages
 from catloads_web.decorator import custom_login_required
+from django.http import HttpResponseRedirect
+from django.views.decorators.clickjacking import xframe_options_exempt
 
 def encode_id_to_base64(id):
     # Convert integer ID to bytes
@@ -84,6 +86,19 @@ class CustomerDahsboard(TemplateView):
 
     def get_context_data(self, **kwargs):
         return super().get_context_data(**kwargs)
+    
+
+
+@method_decorator(custom_login_required(login_url='catloads_web:login'), name='dispatch')
+@method_decorator(xframe_options_exempt, name='dispatch')
+class DropboxDownloadView(View):
+    def get(self, request, *args, **kwargs):
+        product_id = request.GET.get('pid')
+        product = Product.objects.get(id=product_id)
+        file_url = product.download_link
+        response = HttpResponseRedirect(file_url)
+        response['Content-Disposition'] = 'attachment; filename="desired_filename.ext"'
+        return response  
     
 # @method_decorator(custom_login_required(login_url='catloads_web:login'), name='dispatch')
 class CustomerPrivacyPolicy(TemplateView):

@@ -358,6 +358,7 @@ $('#checkout_btn').on('click',function(){
 })
 });
 
+
 function order_post(url,cart){
     if (cart.items.length>=1){
         let csrftoken = $('[name=csrfmiddlewaretoken]').val();
@@ -366,6 +367,8 @@ function order_post(url,cart){
             headers: {'X-CSRFToken': csrftoken},
             url: url,
             data: {'cart':JSON.stringify(cart)},
+    
+        
             success: function(response) {
                 if (response.Message=='Success'){
                     if (response.redirect_url) {
@@ -387,7 +390,7 @@ function order_post(url,cart){
     }
 }
    
-
+    
 
 
 function updateCartTotal(cart) {

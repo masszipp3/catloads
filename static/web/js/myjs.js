@@ -358,6 +358,29 @@ $('#checkout_btn').on('click',function(){
 })
 });
 
+$('.download_btn').on('click',function(){
+    var dataUrl = $(this).data('url')
+    console.log('hhh')
+
+    // Fetch the file from the URL specified in the data-url attribute
+    fetch(dataUrl)
+        .then(response => response.blob())  // Convert the response to a Blob
+        .then(blob => {
+            // Create a URL for the Blob
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');  // Create a <a> element
+            a.href = url;  // Set the href to the Blob URL
+            // a.download = 'desired_filename_here.txt';  // Set a specific filename for the download
+            document.body.appendChild(a);  // Append the <a> to the document
+            a.click();  // Programmatically click the <a> to start the download
+
+            // Clean up by revoking the Blob URL and removing the <a>
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        })
+        .catch(error => console.error('Error downloading the file:', error));
+});
+
 function order_post(url,cart){
     if (cart.items.length>=1){
         let csrftoken = $('[name=csrfmiddlewaretoken]').val();
@@ -387,7 +410,7 @@ function order_post(url,cart){
     }
 }
    
-
+    
 
 
 function updateCartTotal(cart) {
