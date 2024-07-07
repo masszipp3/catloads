@@ -3,7 +3,39 @@
 {% block header %}
 {% endblock %}
 {% block content %}
-	
+<style>
+
+
+.loader2 {
+  width: 60px;
+  aspect-ratio: 1;
+  border: 15px solid #ddd;
+  border-radius: 50%;
+  /* position: relative; */
+  position: fixed;
+  top:50%;
+  left: 50%;
+  transform: rotate(45deg);
+}
+.loader2::before {
+  content: "";
+  position: fixed;
+  top:50%;
+  left: 50%;
+  inset: -15px;
+  border-radius: 50%;
+  border: 15px solid #514b82;
+  animation: l18 2s infinite linear;
+}
+@keyframes l18 {
+    0%   {clip-path:polygon(50% 50%,0 0,0    0,0    0   ,0    0   ,0    0   )}
+    25%  {clip-path:polygon(50% 50%,0 0,100% 0,100% 0   ,100% 0   ,100% 0   )}
+    50%  {clip-path:polygon(50% 50%,0 0,100% 0,100% 100%,100% 100%,100% 100%)}
+    75%  {clip-path:polygon(50% 50%,0 0,100% 0,100% 100%,0    100%,0    100%)}
+    100% {clip-path:polygon(50% 50%,0 0,100% 0,100% 100%,0    100%,0    0   )}
+}
+</style>
+ <div class="loader2" style="display: none;"></div> 
 	<div class="page-content bg-light">
 		<!--Banner Start-->
 		<div class="dz-bnr-inr d-none d-md-block"  style="background-color:rgb(184, 102, 207);">
@@ -78,7 +110,7 @@
 											<!-- <td class="product-item-price">March 21, 2024</td> -->
 											<td class="product-item-Status">{{product.product.product_size}} {{product.product.get_unit_display}}</td>
 
-											<td class="product-item-totle"><a class="btn btn-sm btn-secondary"  href="{% url 'catloads_web:download' %}?pid={{product.product.id}}">Download</button></td>
+											<td class="product-item-totle"><a class="btn btn-sm btn-secondary download_btn" data-url="{{product.product.download_link}}">Download</button></td>
 										</tr>
 										{% endfor %}
 					
@@ -91,8 +123,37 @@
 				</div>
 			</div>
 		</div>
+		<div style="display:none;" id="iframeContainer"></div>
 		
 	</div>
 	{% endblock %}
 	{% block footer %}
+	<script>
+		$(document).ready(function() {
+			$('.download_btn').click(function() {
+				$('.loader2').show()
+				var iframe = $('<iframe>', {
+					src: $(this).data('url'),
+					id: 'hiddenDownloader',
+					css: {
+						display: 'none'
+					},
+					
+				})
+				iframe.appendTo('#iframeContainer'); // Append the iframe to a container
+			// that is hidden by default
+			setTimeout(function() {
+            $('.loader2').hide();  // Hide loading indicator after a set time
+            console.log("Assuming file download has started or failed.");
+        }, 2000); 
+
+		
+				// Optional: Remove the iframe after some time to clean up
+				setTimeout(function() {
+					iframe.remove();
+					console.log("Iframe removed after timeout.");
+				}, 60000); // Remove after 60 seconds
+			});
+		});
+		</script>
 	{% endblock %}
