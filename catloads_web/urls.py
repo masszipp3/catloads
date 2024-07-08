@@ -30,6 +30,8 @@ urlpatterns=[
     path('about_us',customer.CustomerAbout.as_view(),name='about_us'),
     path('contact',customer.CustomerContact.as_view(),name='customer_contact'),
     path('login/redirect',customer.direct_google_login,name='login_redirect'),
+    path('payment/failure',order.VerifyPaymentView.as_view(),name='payment_verify'),
+
 
 
 

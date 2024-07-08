@@ -268,7 +268,8 @@ class Payment(BaseModel):
     )
     order = models.OneToOneField(Order, related_name='payment', on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=10, decimal_places=2,default=0.00)
-    transaction_id = models.CharField(max_length=255)
+    reason = models.TextField(max_length=255,null=True)
+    transaction_id = models.CharField(max_length=255,null=True)
     signature = models.CharField(max_length=255,null=True)
     payment_method = models.CharField(max_length=50,null=True)  # E.g., 'PayPal', 'Credit card', 'Stripe'
     status = models.CharField(max_length=50,choices=PAYMENT_STATUS,default=1)  # E.g., 'Pending', 'Completed', 'Failed'

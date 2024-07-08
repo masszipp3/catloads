@@ -1241,53 +1241,53 @@ jQuery(window).on('scroll', function () {
 
 
 
-var options = {
-    "key": razorpay_key, // Enter the Key ID generated from the Dashboard
-    "amount": total_price*100, // Convert to paise. Amount is in currency subunits. Default currency is INR.
-    "currency": currency,
-    "name": "Catloads",
-    "description": "Description",
-    "order_id": razorpay_id, // This is a sample Order ID. Pass the `id` obtained in the previous step
-    "handler": function (response) {
-        // Prepare data for AJAX request
-        var paymentData = {
-            'razorpay_payment_id': response.razorpay_payment_id,
-            'razorpay_order_id': response.razorpay_order_id,
-            'razorpay_signature': response.razorpay_signature,
-            'user': user_id,
-            'city': city,
-            'country': country,
-            'promocode': promocode,
-            'total_price': total_price,
-            'order_id': order_id,
-            'phone': phone,
-            'discount': total_discount
-        };
+// var options = {
+//     "key": razorpay_key, // Enter the Key ID generated from the Dashboard
+//     "amount": total_price*100, // Convert to paise. Amount is in currency subunits. Default currency is INR.
+//     "currency": currency,
+//     "name": "Catloads",
+//     "description": "Description",
+//     "order_id": razorpay_id, // This is a sample Order ID. Pass the `id` obtained in the previous step
+//     "handler": function (response) {
+//         // Prepare data for AJAX request
+//         var paymentData = {
+//             'razorpay_payment_id': response.razorpay_payment_id,
+//             'razorpay_order_id': response.razorpay_order_id,
+//             'razorpay_signature': response.razorpay_signature,
+//             'user': user_id,
+//             'city': city,
+//             'country': country,
+//             'promocode': promocode,
+//             'total_price': total_price,
+//             'order_id': order_id,
+//             'phone': phone,
+//             'discount': total_discount
+//         };
 
-        $.ajax({
-            type: 'POST',
-            headers: {'X-CSRFToken': csrftoken},
-            url: url,
-            data: paymentData,
-            success: function(response) {
-                if (response.Message === 'Success') {
-                    if (response.redirect_url) {
-                        window.location.href = response.redirect_url; 
-                    }
-                }
-            },
-            error: function(xhr) {
-                console.error(xhr.responseText);
-                // resetFields();
-            }
-        });
-    },
-    "prefill": {
-        "name": $('#name').val(),
-        "email": $('#email').val(),
-        "contact":$('#mobile').val()
-    },
-    "theme": {
-        "color": "#F37254"
-    }
-};
+//         $.ajax({
+//             type: 'POST',
+//             headers: {'X-CSRFToken': csrftoken},
+//             url: url,
+//             data: paymentData,
+//             success: function(response) {
+//                 if (response.Message === 'Success') {
+//                     if (response.redirect_url) {
+//                         window.location.href = response.redirect_url; 
+//                     }
+//                 }
+//             },
+//             error: function(xhr) {
+//                 console.error(xhr.responseText);
+//                 // resetFields();
+//             }
+//         });
+//     },
+//     "prefill": {
+//         "name": $('#name').val(),
+//         "email": $('#email').val(),
+//         "contact":$('#mobile').val()
+//     },
+//     "theme": {
+//         "color": "#F37254"
+//     }
+// };

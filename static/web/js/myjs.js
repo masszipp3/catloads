@@ -96,13 +96,11 @@ $(document).ready(function(){
             try {
                 var rzp1 = new Razorpay(options);
                 rzp1.on('payment.failed', function (response){
-                    alert("Payment Failed...!")
-                    window.location.href = '/customer/orders'
-
+                    window.location.href = '/payment/failure?order_id='+order_id+'&payment_id='+response.error.metadata.payment_id+'&signature='+response.error.metadata.razorpay_signature;
             });
                 rzp1.open();
             } catch (e) {
-                alert("Razorpay Checkout script failed to load. Please try again in another browser or contact support.");
+                alert("Razorpay Checkout failed to load. Please try again in another browser or contact support.");
                 console.error("Razorpay Checkout error: ", e);
             }
         }
@@ -358,28 +356,6 @@ $('#checkout_btn').on('click',function(){
 })
 });
 
-$('.download_btn').on('click',function(){
-    var dataUrl = $(this).data('url')
-    console.log('hhh')
-
-    // Fetch the file from the URL specified in the data-url attribute
-    fetch(dataUrl)
-        .then(response => response.blob())  // Convert the response to a Blob
-        .then(blob => {
-            // Create a URL for the Blob
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');  // Create a <a> element
-            a.href = url;  // Set the href to the Blob URL
-            // a.download = 'desired_filename_here.txt';  // Set a specific filename for the download
-            document.body.appendChild(a);  // Append the <a> to the document
-            a.click();  // Programmatically click the <a> to start the download
-
-            // Clean up by revoking the Blob URL and removing the <a>
-            window.URL.revokeObjectURL(url);
-            document.body.removeChild(a);
-        })
-        .catch(error => console.error('Error downloading the file:', error));
-});
 
 function order_post(url,cart){
     if (cart.items.length>=1){
@@ -389,6 +365,8 @@ function order_post(url,cart){
             headers: {'X-CSRFToken': csrftoken},
             url: url,
             data: {'cart':JSON.stringify(cart)},
+    
+        
             success: function(response) {
                 if (response.Message=='Success'){
                     if (response.redirect_url) {

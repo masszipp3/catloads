@@ -96,13 +96,11 @@ $(document).ready(function(){
             try {
                 var rzp1 = new Razorpay(options);
                 rzp1.on('payment.failed', function (response){
-                    alert("Payment Failed...!")
-                    window.location.href = '/customer/orders'
-
+                    window.location.href = '/payment/failure?order_id='+order_id+'&payment_id='+response.error.metadata.payment_id+'&signature='+response.error.metadata.razorpay_signature;
             });
                 rzp1.open();
             } catch (e) {
-                alert("Razorpay Checkout script failed to load. Please try again in another browser or contact support.");
+                alert("Razorpay Checkout failed to load. Please try again in another browser or contact support.");
                 console.error("Razorpay Checkout error: ", e);
             }
         }

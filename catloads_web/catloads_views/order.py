@@ -1,3 +1,4 @@
+import contextlib
 from django.shortcuts import render,get_object_or_404,redirect
 from django.urls import reverse_lazy,reverse
 from django.views import View
@@ -6,10 +7,10 @@ from catloads_admimn.forms import CategoryForm,ProductForm
 from django.views.generic.list import ListView
 from django.views.generic.edit import UpdateView
 from django.db.models import Count, Q
-from django.http import JsonResponse   
+from django.http import JsonResponse
 from django.views.generic import DetailView,TemplateView
 from django.contrib.auth.decorators import login_required
-from django.utils.decorators import method_decorator 
+from django.utils.decorators import method_decorator
 from django.http import HttpResponseRedirect
 import base64
 from .customer import decode_base64_to_id,handle_cart_data,updateto_Order
@@ -41,7 +42,7 @@ class OrderCreate(View):
                 return HttpResponseRedirect(reverse('catloads_web:order_create', kwargs={'encoded_id': order_id}))
             print(request.user.pk)
             order_id = decode_base64_to_id(encoded_id)
-            order = Order.objects.get(user=request.user,is_deleted =False,id=order_id,order_status=1)
+            order = Order.objects.get(user=request.user,is_deleted =False,id=order_id,order_status__in=[1,3])
             orderitems  = order.items.all()
             total_amount = order.get_order_total()*100
 
@@ -98,7 +99,7 @@ class OrderConfirmView(View):
             payment_id = request.POST.get('razorpay_payment_id')
             print(payment_id)
             payment_order_id = request.POST.get('razorpay_order_id')
-            payment_signature_id = request.POST.get('razorpay_signature')
+            payment_signature_id = request.POST.get('razorpay_signature',None)
             order = Order.objects.get(id=order_id)
             if promocode is not None:
                 order.promocode_id = promocode
@@ -112,10 +113,41 @@ class OrderConfirmView(View):
             order.save()
             order.user.save()
             if payment_id:
-                Payment.objects.create(order=order,transaction_id=payment_id,signature=payment_signature_id,amount=order.total_price)
+                Payment.objects.create(order=order,transaction_id=payment_id,signature=payment_signature_id,amount=order.total_price,status=2)
             redirect_url = reverse('catloads_web:downloads') 
             return JsonResponse({'Message':'Success','redirect_url':redirect_url})
         except (Exception, Exception) as e:
             return  JsonResponse({'Message':'Failed','Reason':str(e)})
         
+
+class VerifyPaymentView(View):
+    def get(self,request):
+        payment_id = request.GET.get('payment_id',None)
+        orderid = request.GET.get('order_id',None)
+        signature = request.GET.get('signature',None)
+        if payment_id:
+            with contextlib.suppress(Exception):
+                return self._extracted_from_get_(orderid, payment_id, signature)
+        return redirect('catloads_web:orders')
+
+    def _extracted_from_get_(self, orderid, payment_id):
+        instance = get_object_or_404(Order, pk=orderid)
+        client = razorpay.Client(auth=(RAZOR_PAY_KEY,RAZOR_PAY_SECRET))
+        paymemnt = client.payment.fetch(payment_id)
+        payment_instance = Payment.objects.create(order=instance
+                                                ,amount=paymemnt.get('amount')/100 if paymemnt.get('amount') else 0,
+                                                transaction_id=payment_id,reason = paymemnt.get('error_reason',None))
+        payment_instance.status = 2 if paymemnt.get('status') == 'captured' else 3
+        payment_instance.save()
+        instance.order_status = 2 if paymemnt.get('status') == 'captured' else 3
+        instance.save()
+        return redirect('catloads_web:downloads')
+
+
+
+
+
+                
+            
+
 
