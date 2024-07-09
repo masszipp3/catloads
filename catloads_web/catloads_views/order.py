@@ -126,6 +126,7 @@ class VerifyPaymentView(View):
         orderid = request.GET.get('order_id',None)
         signature = request.GET.get('signature',None)
         if payment_id:
+            with contextlib.suppress(Exception):
                 return self._extracted_from_get_(orderid, payment_id)
         return redirect('catloads_web:orders')
 
@@ -140,7 +141,7 @@ class VerifyPaymentView(View):
         payment_instance.save()
         instance.order_status = 2 if paymemnt.get('status') == 'captured' else 3
         instance.save()
-        return redirect('catloads_web:downloads')
+        return redirect('catloads_web:downloads') if paymemnt.get('status') == 'captured' else redirect('catloads_web:orders')
 
 
 
