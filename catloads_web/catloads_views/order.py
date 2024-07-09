@@ -126,7 +126,6 @@ class VerifyPaymentView(View):
         orderid = request.GET.get('order_id',None)
         signature = request.GET.get('signature',None)
         if payment_id:
-            with contextlib.suppress(Exception):
                 return self._extracted_from_get_(orderid, payment_id, signature)
         return redirect('catloads_web:orders')
 
