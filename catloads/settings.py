@@ -147,7 +147,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 
-SECURE_CROSS_ORIGIN_OPENER_POLICY = "same-origin-allow-popups"
+# SECURE_CROSS_ORIGIN_OPENER_POLICY = "same-origin-allow-popups"
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',

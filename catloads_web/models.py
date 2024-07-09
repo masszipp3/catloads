@@ -266,7 +266,7 @@ class Payment(BaseModel):
         (1, "Pending"),
         (2, "Completed"),
     )
-    order = models.OneToOneField(Order, related_name='payment', on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, related_name='payment', on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=10, decimal_places=2,default=0.00)
     reason = models.TextField(max_length=255,null=True)
     transaction_id = models.CharField(max_length=255,null=True)
