@@ -47,6 +47,36 @@ swiper-container {
     }
 
     swiper-slide img {
+      display: block;
+      width: 100%;
+      /* height: 100%; */
+      aspect-ratio: 1 / 1;
+      object-fit:fill;
+	  margin-bottom: 40px;
+	  overflow-clip-margin: content-box;
+    	overflow: clip;
+		vertical-align: middle;
+		max-width: 100%;
+		border-radius: 18px;
+    }
+
+swiper-container {
+      width: 100%;
+      height: 100%;
+    }
+
+    swiper-slide {
+      text-align: center;
+      font-size: 18px;
+      background: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+	  padding-top: 20px;
+
+    }
+
+    swiper-slide img {
       /* display: block; */
       width: 100%;
       /* height: 100%;? */
@@ -117,7 +147,18 @@ swiper-container::part(bullet) { /* Assuming there's a part named 'bullet' for i
 
 					</div>
 					<div class="col-xl-5 col-md-5 col-12">
-						<swiper-container class="mySwiper d-block d-md-none" pagination="true" pagination-dynamic-bullets="true" >
+
+						<swiper-container class="mySwiper d-block d-md-none" space-between="30" pagination="true" pagination-clickable="true">
+							<swiper-slide><img src="{{ products.thumbnail.url }}"  alt="image"></swiper-slide>
+							{% for product in products_images %}
+							<swiper-slide><img src="{{ product.image.url }}" alt="image"></swiper-slide>
+							{% endfor %}
+							{% for product in product_videos %}
+							<swiper-slide><video src="{{ product.video.url }}" autoplay muted loop style="width: 100%;" alt="image"></video></swiper-slide>
+							{% endfor %}
+						  </swiper-container>
+
+						<!-- <swiper-container class="mySwiper d-block d-md-none" pagination="true" pagination-dynamic-bullets="true" >
 							<swiper-slide><img src="{{ products.thumbnail.url }}"  alt="image"></swiper-slide>
 							{% for product in products_images %}
 
@@ -128,7 +169,7 @@ swiper-container::part(bullet) { /* Assuming there's a part named 'bullet' for i
 							<swiper-slide><video src="{{ product.video.url }}" autoplay muted  style="width: 100%;" alt="image"></video></swiper-slide>
 							{% endfor %}
 							
-						</swiper-container>
+						</swiper-container> -->
 						
 						
 						<div class="dz-product-detail sticky-top d-none d-md-block" >

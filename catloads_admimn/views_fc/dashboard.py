@@ -39,9 +39,9 @@ class DashboardView(UserPassesTestMixin, View):
                 sales = Order.objects.filter(created_on__date__gte=start_date, created_on__date__lte=end_date, order_status=2)
                 income = sales.aggregate(total_income=Sum('total_price'))['total_income'] or Decimal(0.00)
                 return sales.count(), income
-            for month in range(1, today.month + 1):  # Loop through each month up to the current month
+            for month in range(1, today.month + 1):  
                 first_day = date(today.year, month, 1)
-                last_day = first_day.replace(day=28) + timedelta(days=4)  # this will always give the last day of the month
+                last_day = first_day.replace(day=28) + timedelta(days=4)  
                 last_day = last_day - timedelta(days=last_day.day - 1)
                 _, monthly_income = get_sales_data(first_day, last_day)
                 months_data.append((first_day.strftime('%B'), monthly_income))
@@ -66,6 +66,8 @@ class DashboardView(UserPassesTestMixin, View):
                 'todays_income': todays_income,
                 'todays_sale': todays_count,
                 'month_sale':month_count,
+                'current_monthsale':current_month_count,
+                'current_monthincome':current_month_income,
                 'month_income':month_income,
                 'today_income_percentage': calculate_percentage(todays_income, yesterdays_income),
                 'month_income_percentage': calculate_percentage(current_month_income, last_month_income),
