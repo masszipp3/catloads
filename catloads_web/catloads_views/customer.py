@@ -365,6 +365,7 @@ class ForgetpasswordView(View):
             user = CustomUser.objects.filter(email=email).first()
             if user is None:
                 message = 'User not exists'
+                return render(request,self.template_name,{"msg":message})    
             else:
                 self.send_resetmail(user, request)
                 message =''
