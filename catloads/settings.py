@@ -176,6 +176,9 @@ RAZOR_PAY_SECRET = "eCRinwb8kkxDsH5u9ixPHLpi"
 LOGIN_REDIRECT_URL = '/login/redirect'
 
 
+PASSWORD_RESET_TIMEOUT = 7200
+
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/

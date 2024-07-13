@@ -31,6 +31,12 @@ urlpatterns=[
     path('contact',customer.CustomerContact.as_view(),name='customer_contact'),
     path('login/redirect',customer.direct_google_login,name='login_redirect'),
     path('payment/failure',order.VerifyPaymentView.as_view(),name='payment_verify'),
+    path('send/mail',customer.SendEmialTempView.as_view(),name='send_mail'),
+    path('forget_passoword',customer.ForgetpasswordView.as_view(),name='forget_pasword'),
+    path('change_password/<uidb64>/<token>',customer.ChangepasswordView.as_view(),name='change_password'),
+
+
+
 
 
 

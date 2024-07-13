@@ -13,9 +13,23 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator 
 
+from django.core.mail import EmailMessage
+
+def send_my_email():
+    email = EmailMessage(
+        'Hello',  # subject
+        'Body goes here',  # message
+        'support@catloads.com',  # from email
+        ['rishanrash143@gmail.com'],  # to email list
+        reply_to=['another@example.com'],  # reply address
+        headers={'Message-ID': 'foo'},
+    )
+    email.send()
+
 class DashboardView(View):
     template_name = 'catloads_web/index.html'
     def get(self,request):
+        # send_my_email()
         try:
             products_sale = ProductSale.objects.filter(is_deleted=False).annotate(order_count=Count('order_items')).order_by('-order_count')
             banners = Banner.objects.filter(is_deleted= False)

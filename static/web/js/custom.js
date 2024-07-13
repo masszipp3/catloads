@@ -1155,7 +1155,7 @@ var Pixio = function () {
 			handleColorFilter();
 			handleLightgallery();
 			// handleOpenModal();
-			handleSupport();
+			// handleSupport();
 			menuHover();
 			wishlistBtn();
 			navScroller();

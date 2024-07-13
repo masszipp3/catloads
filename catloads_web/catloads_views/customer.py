@@ -1,6 +1,7 @@
 from django.shortcuts import render,get_object_or_404,redirect
 from django.urls import reverse
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.urls import reverse_lazy
 from django.views import View
 from catloads_web.models import Cart,CartItem,CustomUser,Order,OrderItem,ProductSale,ProductSaleItems,Product
@@ -8,7 +9,8 @@ from catloads_web.forms import RegisterForm,EditUserForm
 from django.views.generic.list import ListView
 from django.views.generic.edit import UpdateView
 from django.db.models import Count, Q
-from django.http import JsonResponse   
+from django.http import HttpResponse, JsonResponse   
+from django.core.mail import EmailMultiAlternatives
 import json
 from django.views.generic import DetailView,TemplateView
 from django.contrib.auth.decorators import login_required
@@ -24,6 +26,15 @@ from django.contrib import messages
 from catloads_web.decorator import custom_login_required
 from django.http import HttpResponseRedirect
 from django.views.decorators.clickjacking import xframe_options_exempt
+from django.core.mail import send_mail
+from django.urls import reverse
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
+from catloads_web.utils import *
+from django.core.mail import EmailMessage
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+from catloads import settings
 
 def encode_id_to_base64(id):
     # Convert integer ID to bytes
@@ -335,3 +346,94 @@ class AccountUpdateView(UpdateView):
     def form_invalid(self, form):
         print(form.errors)  # This will help identify what went wrong
         return super().form_invalid(form)
+    
+
+class ForgetpasswordView(View):
+    template_name = 'catloads_web/forget_password.html'
+    success_url = reverse_lazy('catloads_web:login')
+
+    def get(self,request):
+        try:
+            return render(request,self.template_name)
+        except Exception as e:
+            print("Error in Login view : ",e)
+            return redirect(self.success_url)
+
+    def post(self,request):
+        try:
+            email = request.POST.get('email')
+            user = CustomUser.objects.filter(email=email).first()
+            if user is None:
+                message = 'User not exists'
+            else:
+                self.send_resetmail(user, request)
+                message =''
+        except Exception as e:
+            message = f'Error Occured,{e}'
+            return render(request,self.template_name,{"msg":message})    
+        return render(request,self.template_name,{"success":True})
+
+    def send_resetmail(self, user, request):
+        token_generator = PasswordResetTokenGenerator()
+        token = token_generator.make_token(user)
+        uid = urlsafe_base64_encode(force_bytes(user.pk))
+        reset_link = request.build_absolute_uri(
+                    reverse('catloads_web:change_password', kwargs={'uidb64': uid, 'token': token}))
+        context = {
+            'name': user.name,
+            'email': user.email,
+            'reset_link': reset_link,     
+        }
+        html_content = render_to_string('catloads_web/email.html', context)
+        text_content = strip_tags(html_content) 
+        email = EmailMultiAlternatives(
+        subject='Password Reset',
+        body=text_content,
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        to=[user.email]
+         )
+        email.attach_alternative(html_content, "text/html")
+        email.send()    
+
+class ChangepasswordView(View):
+    template_name = 'catloads_web/change_password.html'
+    success_url = reverse_lazy('catloads_web:login')
+
+    def get(self,request,**kwargs):
+        try:
+            token = kwargs.get('token')
+            uidb64 = kwargs.get('uidb64')
+            uid = force_str(urlsafe_base64_decode(uidb64))
+            user = CustomUser.objects.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, CustomUser.DoesNotExist):
+            user = None
+        if user is not None and PasswordResetTokenGenerator().check_token(user, token):
+            return render(request,self.template_name,{'success':True})
+        else:
+            return HttpResponse("Token Expired")
+    def post(self,request,**kwargs):
+        try:
+            uidb64 = kwargs.get('uidb64')
+            uid = force_str(urlsafe_base64_decode(uidb64))
+            user = CustomUser.objects.get(pk=uid)
+            new_password = request.POST.get('new_password')
+            confirm_password = request.POST.get('confirm_password')
+            if new_password == confirm_password:
+                user.set_password(new_password)
+                user.save()
+                return redirect(self.success_url)
+            else:
+                render(request,self.template_name,{'msg':'Password Doesnot Match'})
+        except Exception:
+            return render(request,self.template_name,{'msg':'Failed to Change the Password'})
+
+
+class SendEmialTempView(View):
+    template_name = 'catloads_web/email.html'
+    success_url = reverse_lazy('catloads_web:login')
+
+    def get(self,request):
+        try:
+            return render(request,self.template_name)
+        except Exception as e:
+            print("Error in Login view : ",e)               
