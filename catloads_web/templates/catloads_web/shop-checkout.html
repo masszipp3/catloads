@@ -898,10 +898,8 @@
 	<script>
         document.addEventListener('DOMContentLoaded', function() {
             function removeBOMCharacter() {
-                var bodyHTML = document.body.innerHTML;
-
-                var cleanedHTML = bodyHTML.replace(/^\uFEFF/, '')
-                document.body.innerHTML = cleanedHTML;
+				const bodyContent = document.body.innerHTML;
+				document.body.innerHTML = bodyContent.replace(/>/g, '');
             }
             removeBOMCharacter();
 			{% if request.session.cartstatus %}
