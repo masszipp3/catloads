@@ -895,7 +895,21 @@
 	<script src="{% static 'web/js/dz.ajax.js' %}"></script><!-- AJAX -->
 	<script src="{% static 'web/js/custom.js' %}"></script><!-- CUSTOM JS -->
 	<script src="{% static 'web/js/myjs.js' %}"></script><!-- CUSTOM JS -->
+	<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            function removeBOMCharacter() {
+                var bodyHTML = document.body.innerHTML;
+
+                var cleanedHTML = bodyHTML.replace(/^\uFEFF/, '')
+                document.body.innerHTML = cleanedHTML;
+            }
+            removeBOMCharacter();
+			
+        });
+    </script>
+
 <script>
+	
 	{% if request.session.cartstatus %}
 			localStorage.removeItem('catloads_cartdata');
 			{% endif %}
