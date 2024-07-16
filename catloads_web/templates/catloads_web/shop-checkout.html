@@ -895,20 +895,12 @@
 	<script src="{% static 'web/js/dz.ajax.js' %}"></script><!-- AJAX -->
 	<script src="{% static 'web/js/custom.js' %}"></script><!-- CUSTOM JS -->
 	<script src="{% static 'web/js/myjs.js' %}"></script><!-- CUSTOM JS -->
-	<script>
-        document.addEventListener('DOMContentLoaded', function() {
-            function removeBOMCharacter() {
-				const bodyContent = document.body.innerHTML;
-				document.body.innerHTML = bodyContent.replace(/>/g, '');
-            }
-            removeBOMCharacter();
-			{% if request.session.cartstatus %}
+<script>
+	{% if request.session.cartstatus %}
 			localStorage.removeItem('catloads_cartdata');
 			{% endif %}
-        });
-    </script>
-
-
+       
+</script>
 	<!-- <script>
         document.addEventListener('DOMContentLoaded', function() {
             function removeBOMCharacter() {
