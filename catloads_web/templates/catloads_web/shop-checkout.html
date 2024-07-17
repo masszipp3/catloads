@@ -10,6 +10,9 @@
 		.dz-bnr-inr .container{
 			height: 20px !important;
 		}
+		#text{
+			display:  none;
+		}
 	</style>
 
 	<!-- Meta -->
@@ -895,24 +898,22 @@
 	<script src="{% static 'web/js/dz.ajax.js' %}"></script><!-- AJAX -->
 	<script src="{% static 'web/js/custom.js' %}"></script><!-- CUSTOM JS -->
 	<script src="{% static 'web/js/myjs.js' %}"></script><!-- CUSTOM JS -->
-<script>
-	{% if request.session.cartstatus %}
-			localStorage.removeItem('catloads_cartdata');
-			{% endif %}
-       
-</script>
-	<!-- <script>
+
+	
+	<script>
         document.addEventListener('DOMContentLoaded', function() {
             function removeBOMCharacter() {
                 var bodyHTML = document.body.innerHTML;
 
-                var cleanedHTML = bodyHTML.replace(/^\uFEFF/, '')
+                var cleanedHTML = bodyHTML.replace(/&gt;/, '')
                 document.body.innerHTML = cleanedHTML;
             }
             removeBOMCharacter();
+			{% if request.session.cartstatus %}
+			localStorage.removeItem('catloads_cartdata');
+			{% endif %}
         });
-    </script> -->
-
+    </script>
 	{% block footer %}
 	{% endblock %}
 </body>
