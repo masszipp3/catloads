@@ -903,11 +903,14 @@
 	<script>
         document.addEventListener('DOMContentLoaded', function() {
             function removeBOMCharacter() {
-                var bodyHTML = document.body.innerHTML;
-
-                // var cleanedHTML = bodyHTML.replace(/&gt;/, '')
-                document.body.innerHTML = cleanedHTML;
-				document.getElementById('text').style.display="none"
+				var parentElement = document.getElementById("bg");
+            var childNodes = parentElement.childNodes;
+            
+            childNodes.forEach(function(node) {
+                if (node.nodeType === 3 && node.textContent === ">\n\n\t") {
+                    parentElement.removeChild(node);
+                }
+            });
             }
             removeBOMCharacter();
 			{% if request.session.cartstatus %}
