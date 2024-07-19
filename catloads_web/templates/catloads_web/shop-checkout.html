@@ -905,8 +905,9 @@
             function removeBOMCharacter() {
                 var bodyHTML = document.body.innerHTML;
 
-                var cleanedHTML = bodyHTML.replace(/&gt;/, '')
+                // var cleanedHTML = bodyHTML.replace(/&gt;/, '')
                 document.body.innerHTML = cleanedHTML;
+				document.getElementById('text').style.display="none"
             }
             removeBOMCharacter();
 			{% if request.session.cartstatus %}
