@@ -13436,7 +13436,7 @@ strong,
 }
 @media only screen and (max-width: 991px) {
   .content-inner-3 {
-    padding-top: 20px;
+    padding-top: 0;
     padding-bottom: 20px;
   }
 }
@@ -44432,11 +44432,14 @@ body .working-location img {
 }
 @media only screen and (max-width: 991px) {
   .dz-product-detail .dz-info {
-    margin-bottom: 20px;
+  padding-top: 10px;
+    margin-bottom: 10px;
   }
 }
 @media only screen and (max-width: 575px) {
   .dz-product-detail .dz-info {
+  padding-top: 0;
+
     margin-bottom: 0;
   }
 }
