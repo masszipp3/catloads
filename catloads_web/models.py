@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils import timezone
-
+import math
 # Create your models here.
 from django.db import models
 from django.contrib.auth.models import User
@@ -185,7 +185,8 @@ class ProductSale(BaseModel):
 
     def get_discount_percentage(self):
         if self.price > 0:
-            return round((self.discount / (self.price+self.discount)) * 100)
+            discount_percentage = (self.discount / (self.price + self.discount)) * 100
+            return math.floor(discount_percentage) 
         return 0
     
     def get_maxprice(self): 
