@@ -14,7 +14,7 @@ from django.utils.decorators import method_decorator
 class ProductDetailView(DetailView):
     model = ProductSale
     template_name = 'catloads_web/product-default.html'
-    context_object_name = 'products'    
+    context_object_name = 'products'        
     slug_field = 'slug'
     slug_url_kwarg = 'slug'
 
