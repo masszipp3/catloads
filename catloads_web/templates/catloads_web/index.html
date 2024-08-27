@@ -7,17 +7,8 @@
 	<!-- Title -->
 	<title>Catloads</title>
 
-	<style>
-		.dz-bnr-inr .container{
-			height: 20px !important;
-		}
-	</style>
-	   <link href="https://fonts.cdnfonts.com/css/oceanwide" rel="stylesheet">
-	   <style>
-		   button,h1,h2,h3,h4,h5,h6,a{
-			   font-family: 'OceanWide', sans-serif !important;
-		   }
-	   </style>
+	
+	   
 
 	<!-- Meta -->
 	<meta charset="UTF-8">
@@ -92,7 +83,30 @@
 	<!-- GOOGLE FONTS-->
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-	
+	<style>
+		.dz-bnr-inr .container{
+			height: 20px !important;
+		}
+		  body {
+      visibility: hidden;
+    }
+	.styuuu a{
+		color: rgb(241, 116, 116);
+		text-decoration: underline;
+		text-underline-offset:3px
+	}
+	.styuuu a:hover{
+		color: rgb(225, 21, 10);
+		text-decoration: underline;
+		text-underline-offset:3px
+	}
+	</style>
+	   <link href="https://fonts.cdnfonts.com/css/oceanwide" rel="stylesheet">
+	   <style>
+		   button,h1,h2,h3,h4,h5,h6,a{
+			   font-family: 'OceanWide', sans-serif !important;
+		   }
+	   </style>
 	{% block header %}
 	{% endblock %}
 
@@ -688,19 +702,7 @@
 		<footer class="site-footer style-1">
 
 			<!-- Footer Top End -->
-<style>
-	.styuuu a{
-		color: rgb(241, 116, 116);
-		text-decoration: underline;
-		text-underline-offset:3px
-	}
-	.styuuu a:hover{
-		color: rgb(225, 21, 10);
-		text-decoration: underline;
-		text-underline-offset:3px
-	}
-
-</style><script>
+<script>
 	
 </script>
 
@@ -709,14 +711,7 @@
 			<div class="footer-bottom">
 				<div class="container">
 					<div class="row fb-inner wow fadeInUp" data-wow-delay="0.1s">
-						<div class="col-lg-4 col-md-12 text-start mt-2 styuuu">
-							<a href="{% url 'catloads_web:privacy_policy' %}" class="copyright-text mt-2 me-1">Privacy Policy</a>
-							<a href="{% url 'catloads_web:terms_and_condition' %}" class="copyright-text mt-2 me-1 ">Terms & Conditions</a>
-							<a href="{% url 'catloads_web:customer_contact' %}" class="copyright-text mt-2 ">Contact us</a>
-							<a href="{% url 'catloads_web:about_us' %}" class="copyright-text mt-2 ">About us</a>
-
-							
-						</div>
+						
 						<div class="col-lg-4 col-md-12 text-start">
 							<p class="copyright-text mt-2">© <span class="current-year">2024</span> <a style="color: #9d38bd !important;" href="">Catloads</a>
 								All Rights Reserved.</p>
@@ -730,8 +725,10 @@
 									<img src="{% static 'web/images/master-card-icon.png' %}" alt="" style="height: 40px;width: 40px;">
 									<img src="{% static 'web/images/rupay-logo-icon.png' %}" alt="" style="height: 40px;width: 40px;">
 									<img src="{% static 'web/images/upi-icon.png' %}" alt="" style="height: 40px;width: 40px;">
+									<img src="{% static 'web/images/paypal.png' %}" alt="" style="height: 38px;width: 35px;padding-left: 1px;padding-top: 3px;">
 									<img src="{% static 'web/images/google-pay-acceptance-mark-icon.png' %}" alt="" style="height: 40px;width: 40px;padding-left: 1px;">
 									<img src="{% static 'web/images/visa-icon.png' %}" alt="" style="height: 40px;width: 40px;padding-left: 2px;">
+									
 
 								 </div>
 							</div>
@@ -751,6 +748,11 @@
 		<!-- Quick Modal End -->
 
 	</div>
+	<script>
+		window.onload = function() {
+		  document.body.style.visibility = 'visible';
+		};
+	  </script>
 	<!-- JAVASCRIPT FILES ========================================= -->
 	<script src="{% static 'web/js/jquery.min.js' %}"></script><!-- JQUERY MIN JS -->
 	<script src="{% static 'web/vendor/wow/wow.min.js' %}"></script><!-- WOW JS -->
