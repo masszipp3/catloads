@@ -50179,6 +50179,7 @@ footer .footer-bottom p {
 footer .footer-bottom .text-start,
 footer .footer-bottom .text-end {
   padding: 0;
+  
 }
 footer .footer-bottom .heart {
   width: 60px;
@@ -50224,6 +50225,7 @@ footer .fb-inner .copyright-text a {
   }
   footer .footer-bottom .text-end {
     margin-top: 15px;
+    margin-bottom: 60px;
   }
   footer .footer-bottom p {
     font-size: 15px;
