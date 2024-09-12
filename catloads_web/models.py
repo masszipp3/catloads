@@ -235,7 +235,6 @@ class Order(BaseModel):
     razorpay_id = models.CharField(max_length=200,null=True,blank=True)
 
 
-
     def get_order_total(self):
         return (
             self.items.annotate(

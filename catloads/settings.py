@@ -174,6 +174,7 @@ AUTH_USER_MODEL = 'catloads_web.CustomUser'
 RAZOR_PAY_KEY = "rzp_test_JsXnTn63V5HMtu"
 
 RAZOR_PAY_SECRET = "eCRinwb8kkxDsH5u9ixPHLpi"
+RAZO_PAY_WEBHOOK = "0bb619d97e8ddc205e39b0736b293452ef242c7156f05f524d8907d7474673a1"
 
 LOGIN_REDIRECT_URL = '/login/redirect'
 

@@ -16,10 +16,14 @@ import base64
 from .customer import decode_base64_to_id,handle_cart_data,updateto_Order
 import razorpay
 import json
-from catloads.settings import RAZOR_PAY_KEY, RAZOR_PAY_SECRET
+from catloads.settings import RAZOR_PAY_KEY, RAZOR_PAY_SECRET,RAZO_PAY_WEBHOOK
 from django.http import HttpResponse
 import xlwt
 from django.utils import timezone
+from django.views.decorators.csrf import csrf_exempt
+import json
+import hmac
+import hashlib
 
 class CartView(TemplateView):
     template_name = 'catloads_web/shop-cart.html'
@@ -142,6 +146,41 @@ class VerifyPaymentView(View):
         instance.order_status = 2 if paymemnt.get('status') == 'captured' else 3
         instance.save()
         return redirect('catloads_web:downloads') if paymemnt.get('status') == 'captured' else redirect('catloads_web:orders')
+
+
+class Update_paymentView(View):
+    @csrf_exempt
+    def post(self,request):
+        securyt_key = RAZO_PAY_WEBHOOK
+
+        webhook_payload = request.body
+        received_signature = request.headers.get('X-Razorpay-Signature')
+        generated_signature = hmac.new(securyt_key.encode(), webhook_payload, hashlib.sha256).hexdigest()
+        if hmac.compare_digest(received_signature, generated_signature):
+            webhook_payload = json.loads(webhook_payload)
+
+            # Handle the event - e.g., check if it's a payment captured event
+            if webhook_payload['event'] == 'payment.captured':
+                # Get the relevant information from the payload
+                payment_id = webhook_payload['payload']['payment']['entity']['id']
+                order_id = webhook_payload['payload']['payment']['entity']['order_id']
+                amount = webhook_payload['payload']['payment']['entity']['amount']
+                if order := Order.objects.filter(razorpay_id=order_id).first():
+                    order.order_status= 2
+                    order.save()
+                    payment,_ = Payment.objects.get_or_create(order=order, transaction_id=payment_id)
+                    payment.amount = amount
+                    payment.save()
+                    return HttpResponse(status=200)
+        return HttpResponse(status=400)    
+
+
+
+
+
+
+
+
 
 
 
