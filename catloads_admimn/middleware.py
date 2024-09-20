@@ -6,7 +6,7 @@ class GeoIPMiddleware:
 
     def __call__(self, request):
         # Check if session contains country data
-        # if 'country_data' not in request.session:
+        if 'country_data' not in request.session:
             # Get user's IP address
             ip_address = request.META.get('REMOTE_ADDR', None)
             
@@ -19,7 +19,6 @@ class GeoIPMiddleware:
                     request.session['country_data'] = {
                         'country_code': country['country_code'],
                         'country_name': country['country_name'],
-                        'ip':ip_address
                     }
                 except Exception as e:
                     # Handle case where GeoIP2 lookup fails
@@ -30,5 +29,5 @@ class GeoIPMiddleware:
                     print(e)
 
         # Proceed with the request
-            response = self.get_response(request)
-            return response
+        response = self.get_response(request)
+        return response
