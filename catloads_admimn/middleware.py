@@ -7,7 +7,7 @@ class GeoIPMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        if 'country_data' not in request.session:
+        # if 'country_data' not in request.session:
             ip_address = request.META.get('HTTP_X_FORWARDED_FOR', None)
             try:
                 error = ''
@@ -39,4 +39,4 @@ class GeoIPMiddleware:
                 'ip':ip_address,
                 'e':error
             }
-        return self.get_response(request)
+        # return self.get_response(request)
