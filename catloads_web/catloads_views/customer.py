@@ -171,7 +171,7 @@ def direct_google_login(request):
         cart_data = unquote(cart)
         user = request.user
         handle_cart_data(user, cart_data,request)
-        order_id = updateto_Order(user=user)
+        order_id = updateto_Order(user=user,request=request)
         return redirect(reverse('catloads_web:order_create', kwargs={'encoded_id': order_id}))
     return render(request,'catloads_web/redirect.html')
 
@@ -199,7 +199,7 @@ class CustomerRegistrationUpdateView(View):
                     user.backend = 'django.contrib.auth.backends.ModelBackend'
                     handle_cart_data(user, cartdata,request)  
                     if request.GET.get('redirect'):
-                        order_id = updateto_Order(user=user)
+                        order_id = updateto_Order(user=user,request=request)
                         login(request,user)
                         return redirect(reverse('catloads_web:order_create', kwargs={'encoded_id': order_id}))
                 return redirect(self.success_url)
