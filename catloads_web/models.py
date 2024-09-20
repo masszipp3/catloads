@@ -49,6 +49,9 @@ class Country(BaseModel):
 
     def __str__(self):
         return self.name
+    
+    def get_default_country(self): 
+        return Country.objects.filter(default=True).first()
 
 
 class CustomUser(AbstractUser):

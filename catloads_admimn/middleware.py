@@ -1,33 +1,36 @@
 from django.contrib.gis.geoip2 import GeoIP2
+from catloads_web.models import Country
+from django.shortcuts import get_object_or_404
 
 class GeoIPMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
 
     def __call__(self, request):
-        # Check if session contains country data
         # if 'country_data' not in request.session:
-            # Get user's IP address
             ip_address = request.META.get('REMOTE_ADDR', None)
             
-            # Use GeoIP2 to get country data
-            if ip_address:
-                g = GeoIP2()
-                try:
-                    country = g.country(ip_address)
-                    # Store country data in session
-                    request.session['country_data'] = {
-                        'country_code': country['country_code'],
-                        'country_name': country['country_name'],
-                    }
-                except Exception as e:
-                    # Handle case where GeoIP2 lookup fails
-                    request.session['country_data'] = {
-                        'country_code': 'US',  # Fallback to 'US' or some default country
-                        'country_name': 'United States',
-                    }
-                    print(e)
+            try:
+                if ip_address:
+                    g = GeoIP2()
+                    country_info = g.country(ip_address)
+                    country_code = country_info['country_code']
+                    country = get_object_or_404(Country, code=country_code)
+                else:
+                    raise Exception("No IP address found")
+            except Exception as e:
+                # Fallback to default country (United States)
+                country, _ = Country.objects.get_or_create(code='US', defaults={
+                    'name': 'United States',
+                    'symbol': '$'
+                })
+                print(f"GeoIP lookup failed: {e}")
 
-        # Proceed with the request
-            response = self.get_response(request)
-            return response
+            # Store country data in session
+            request.session['country_data'] = {
+                'country_code': country.code,
+                'country_name': country.name,
+                'country_id': country.id
+            }
+
+            return self.get_response(request)
