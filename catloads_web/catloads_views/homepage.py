@@ -35,6 +35,9 @@ class DashboardView(View):
             default_country = Country.get_default_country().id if Country.get_default_country() else None 
             country_id = self.request.session.get('country_data', {}).get('country_id') or  default_country.id
             products_sale = ProductSale.objects.filter(country_sale_prices__country_id=country_id,is_deleted=False) 
+            if products_sale is None:
+                products_sale = ProductSale.objects.filter(country_sale_prices__country_id=default_country.id,is_deleted=False)
+                country_id =  default_country.id
             products_sale=products_sale.annotate(price_for_country=Subquery(
                 CountryPrice.objects.filter(
                     product_sale=OuterRef('pk'), 
