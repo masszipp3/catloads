@@ -351,10 +351,10 @@
 								</div>
 								<div class="dz-content">
 									<h5 class="title"><a href="{% url 'catloads_web:product_detail' product.slug %}">{{product.name}}</a></h5>
-									<h5 class="price"> {{product.get_price_and_discount.symbol }}{{product.get_price_and_discount.price | round_amount }}</h5>
+									<h5 class="price"> {{product.symbol }}{{product.price_for_country| round_amount }}</h5>
 								</div>
 								<div class="product-tag">
-									<span class="badge ">Get {{ product.get_discount_percentage }}% Off</span>
+									<span class="badge ">Get {{ product.discount_percentage | round_amount }}% Off</span>
 								</div>
 							</div>
 						</li>

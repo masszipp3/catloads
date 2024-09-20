@@ -1,7 +1,7 @@
 from django.shortcuts import render,get_object_or_404,redirect
 from django.urls import reverse_lazy
 from django.views import View
-from catloads_web.models import Category,Product,ProductSale,Banner,CustomUser,Country
+from catloads_web.models import Category,Product,ProductSale,Banner,CustomUser,Country,CountryPrice
 from catloads_admimn.forms import CategoryForm,ProductForm
 from django.views.generic.list import ListView
 from django.views.generic.edit import UpdateView
@@ -9,6 +9,7 @@ from django.db.models import Count, Q
 from django.http import JsonResponse   
 from django.contrib.auth import authenticate, login,logout
 from django.urls import reverse
+from django.db.models import Subquery,OuterRef,ExpressionWrapper,FloatField,F
 
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator 
@@ -32,11 +33,28 @@ class DashboardView(View):
         # send_my_email()
         try:
             default_country = Country.get_default_country().id if Country.get_default_country() else None 
-            country_id = self.request.session.get('country_data', {}).get('country_id') or  default_country
+            country_id = self.request.session.get('country_data', {}).get('country_id') or  default_country.id
             products_sale = ProductSale.objects.filter(country_sale_prices__country_id=country_id,is_deleted=False) 
-            if not products_sale:
-               products_sale= ProductSale.objects.filter(country_sale_prices__country_id=default_country,is_deleted=False)
-            products_sale=products_sale.annotate(order_count=Count('order_items')).order_by('-order_count')    
+            products_sale=products_sale.annotate(price_for_country=Subquery(
+                CountryPrice.objects.filter(
+                    product_sale=OuterRef('pk'), 
+                    country_id=country_id
+                ).values('price')[:1]
+            ),symbol=Subquery(
+                CountryPrice.objects.filter(
+                    product_sale=OuterRef('pk'), 
+                    country_id=country_id
+                ).values('country__symbol')[:1]),
+
+            discount_for_country=Subquery(
+                CountryPrice.objects.filter(
+                    product_sale=OuterRef('pk'), 
+                    country_id=country_id
+                ).values('discount')[:1]
+            ),discount_percentage=ExpressionWrapper(
+        100 * F('discount_for_country') / (F('discount_for_country') + F('price_for_country')),
+        output_field=FloatField()
+    ),order_count=Count('order_items')).order_by('-order_count')    
             banners = Banner.objects.filter(is_deleted= False)
             context = {'products_sale':products_sale,'banners':banners}
             return render(request,self.template_name,context=context)
