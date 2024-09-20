@@ -8,7 +8,7 @@ class GeoIPMiddleware:
 
     def __call__(self, request):
         # if 'country_data' not in request.session:
-            ip_address = request.META.get('REMOTE_ADDR', None)
+            ip_address = request.META.get('HTTP_X_FORWARDED_FOR', None)
             
             try:
                 error = ''
