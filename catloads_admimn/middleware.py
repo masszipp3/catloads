@@ -19,7 +19,6 @@ class GeoIPMiddleware:
                 else:
                     raise Exception("No IP address found")
             except Exception as e:
-                # Fallback to default country (United States)
                 country, _ = Country.objects.get_or_create(code='US', defaults={
                     'name': 'United States',
                     'symbol': '$'

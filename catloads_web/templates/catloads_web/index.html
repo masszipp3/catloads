@@ -22,6 +22,7 @@
 	<meta name="twitter:description" content="Catloads- Passionate About Empowering You At Catloads, we're a small, driven team fueled by a love for learning and a desire to make a difference. ">
 	<meta name="twitter:image" content="">
 	<meta name="twitter:card" content="summary_large_image">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	
 	<!-- FAVICONS ICON -->
 	<link rel="icon" type="image/x-icon" href="{% static 'web/images/favicon.ico' %}">
@@ -193,6 +194,7 @@
 										<i class="iconly-Light-Search"></i>
 									</a>
 								</li>
+								
 								<!-- <li class="nav-item wishlist-link">
 									<a class="nav-link" href="javascript:void(0);" data-bs-toggle="offcanvas"
 										data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
@@ -206,6 +208,7 @@
 										<span class="badge badge-circle" id="cartcount"></span>
 									</a>
 								</li>
+								
 								<li class="nav-item cart-link">
 									<a href="{% url 'catloads_web:product_dashboard' %}" class="nav-link cart-btn">
 										<svg id="Profile" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -220,6 +223,12 @@
 												stroke-linejoin="round" />
 										</svg>
 
+									</a>
+								</li>
+								<li class="nav-item cart-link"></li>
+									<a href="{% url 'catloads_web:carts' %}" class="nav-link cart-btn"
+									>
+										 <span class="mt-1">{{ request.session.country_data.country_code }}</span>
 									</a>
 								</li>
 
