@@ -29,7 +29,9 @@ class GeoIPMiddleware:
             request.session['country_data'] = {
                 'country_code': country.code,
                 'country_name': country.name,
-                'country_id': country.id
+                'country_id': country.id,
+                'ip':ip_address,
+                'e':str(e)
             }
 
             return self.get_response(request)
