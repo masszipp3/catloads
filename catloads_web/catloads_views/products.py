@@ -1,7 +1,7 @@
 from django.shortcuts import render,get_object_or_404,redirect
 from django.urls import reverse_lazy
 from django.views import View
-from catloads_web.models import Category,Product,ProductSale,Banner,ProductImages,ProductSaleItems
+from catloads_web.models import Category,Product,ProductSale,Banner,ProductImages,ProductSaleItems,Country
 from catloads_admimn.forms import CategoryForm,ProductForm
 from django.views.generic.list import ListView
 from django.views.generic.edit import UpdateView
@@ -20,6 +20,7 @@ class ProductDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        country_id = self.request.session.get('country_data', {}).get('country_id') or Country.get_default_country().id or None
         product = context['products']
         banners = Banner.objects.filter(is_deleted=False)
         product_images = product.products_images.filter(is_deleted=False).order_by('id')
@@ -29,9 +30,10 @@ class ProductDetailView(DetailView):
         categories = Category.objects.filter(id__in=categories).distinct()
         context['banners'] = banners
         context['products_images'] = product_images
-        context['product_discount'] = product.get_discount_percentage()
+        context['product_discount'] = product.get_discount_percentage(country_id=country_id)
         context['product_videos'] = product_videos
         context['categories'] = categories
-        context['max_price'] = product.get_maxprice()
+        context['max_price'] = product.get_maxprice(country_id=country_id)
+        context['product_price'] = product.get_price_and_discount(country_id=country_id)
         print(categories)
         return context

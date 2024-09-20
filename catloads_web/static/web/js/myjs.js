@@ -1,8 +1,11 @@
-$(document).ready(function(){
-    $('.shop-meta').on('click',function(){
+$(document).ready(function () {
+    var currency_symbol = $('#currency_symbol').data('symbol')
+    console.log(currency_symbol)
+
+    $('.shop-meta').on('click', function () {
         window.location.href = $(this).data('url')
     })
-    $('#order_cofirm').on('click',function(e){
+    $('#order_cofirm').on('click', function (e) {
         e.preventDefault();
         let csrftoken = $('[name=csrfmiddlewaretoken]').val();
         var validatation = validate_orderdata()
@@ -18,8 +21,8 @@ $(document).ready(function(){
         var razorpay_id = $('#razorpay_order_id').val()
         var razorpay_key = $('#razorpay_key_id ').val()
         var currency = $('#currency ').val()
-        console.log(currency,razorpay_id,razorpay_key)
-    
+        console.log(currency, razorpay_id, razorpay_key)
+
         if (validatation) {
             // var options = {
             //     "key": "YOUR_KEY_ID", // Enter the Key ID generated from the Dashboard
@@ -44,7 +47,7 @@ $(document).ready(function(){
             // };
             var options = {
                 "key": razorpay_key, // Enter the Key ID generated from the Dashboard
-                "amount": total_price*100, // Convert to paise. Amount is in currency subunits. Default currency is INR.
+                "amount": total_price * 100, // Convert to paise. Amount is in currency subunits. Default currency is INR.
                 "currency": currency,
                 "name": "Catloads",
                 "description": "Description",
@@ -64,20 +67,20 @@ $(document).ready(function(){
                         'phone': phone,
                         'discount': total_discount
                     };
-    
+
                     $.ajax({
                         type: 'POST',
-                        headers: {'X-CSRFToken': csrftoken},
+                        headers: { 'X-CSRFToken': csrftoken },
                         url: url,
                         data: paymentData,
-                        success: function(response) {
+                        success: function (response) {
                             if (response.Message === 'Success') {
                                 if (response.redirect_url) {
-                                    window.location.href = response.redirect_url; 
+                                    window.location.href = response.redirect_url;
                                 }
                             }
                         },
-                        error: function(xhr) {
+                        error: function (xhr) {
                             console.error(xhr.responseText);
                             // resetFields();
                         }
@@ -87,7 +90,7 @@ $(document).ready(function(){
                 "prefill": {
                     "name": $('#name').val(),
                     "email": $('#email').val(),
-                    "contact":$('#mobile').val()
+                    "contact": $('#mobile').val()
                 },
                 "theme": {
                     "color": "#F37254"
@@ -95,9 +98,9 @@ $(document).ready(function(){
             };
             try {
                 var rzp1 = new Razorpay(options);
-                rzp1.on('payment.failed', function (response){
-                    window.location.href = '/payment/failure?order_id='+order_id+'&payment_id='+response.error.metadata.payment_id+'&signature='+response.error.metadata.razorpay_signature;
-            });
+                rzp1.on('payment.failed', function (response) {
+                    window.location.href = '/payment/failure?order_id=' + order_id + '&payment_id=' + response.error.metadata.payment_id + '&signature=' + response.error.metadata.razorpay_signature;
+                });
                 rzp1.open();
             } catch (e) {
                 alert("Razorpay Checkout failed to load. Please try again in another browser or contact support.");
@@ -105,7 +108,7 @@ $(document).ready(function(){
             }
         }
     })
-    cart= loadCart()
+    cart = loadCart()
     $('#cartcount').text(cart.items.length)
 
     var $keyword = $('#serach_input');
@@ -114,9 +117,9 @@ $(document).ready(function(){
 
     function debounce(func, wait, immediate) {
         var timeout;
-        return function() {
+        return function () {
             var context = this, args = arguments;
-            var later = function() {
+            var later = function () {
                 timeout = null;
                 if (!immediate) func.apply(context, args);
             };
@@ -127,7 +130,7 @@ $(document).ready(function(){
         };
     }
 
-    var handleInput = debounce(function() {
+    var handleInput = debounce(function () {
         var value = $keyword.val().trim();
         let url = $keyword.data('url');
 
@@ -136,28 +139,28 @@ $(document).ready(function(){
                 type: 'GET',
                 url: url,
                 data: { 'search': value },
-                success: function(response) {
+                success: function (response) {
                     $searchdiv.empty()
-                    const product=response.products
+                    const product = response.products
                     console.log(product)
-                    for(i=0;i<product.length;i++){
-						
+                    for (i = 0; i < product.length; i++) {
+
                         var context = `<a href="/product/${product[i].slug}" class="p-2 ms-4 mt-2" style="display: block;">${product[i].name}</a>`
                         $searchdiv.append(context)
-                    }   
+                    }
                 },
-                error: function(xhr) {
+                error: function (xhr) {
                     console.error(xhr.responseText);
                 }
             });
         } else {
             $searchdiv.empty();
         }
-    }, 250); 
+    }, 250);
 
     $keyword.on('input', handleInput);
 
-    $('.cart_btn').click(function(e) {
+    $('.cart_btn').click(function (e) {
         // e.preventDefault(); // Prevent default action of the anchor tag
 
         const productId = $(this).data('id');
@@ -165,19 +168,19 @@ $(document).ready(function(){
         const productimage = $(this).data('image');
         const product_slug = $(this).data('slug');
         const product_name = $(this).data('name');
-        const quantity = 1;  
+        const quantity = 1;
         const cart_btn = $(this)
         const url = $(this).data('url')
         console.log(url)
-        
+
 
         const productObj = {
             product: productId,
             price: productPrice,
             quantity: quantity,
-            image:productimage,
-            slug : product_slug,
-            name : product_name,
+            image: productimage,
+            slug: product_slug,
+            name: product_name,
             subtotal: productPrice * quantity
         };
 
@@ -187,278 +190,280 @@ $(document).ready(function(){
         if (existingProduct) {
             // existingProduct.quantity += quantity;
             // existingProduct.subtotal += productPrice * quantity;
+            existingProduct.price = productPrice
+            existingProduct.subtotal = productPrice * existingProduct.quantity;
         } else {
             cart.items.push(productObj);
         }
         cart.cart_total = cart.items.reduce((total, item) => total + item.subtotal, 0);
         localStorage.setItem('catloads_cartdata', JSON.stringify(cart));
         $('#cartcount').text(cart.items.length)
-        order_post(url,cart)
+        order_post(url, cart)
         // cart_btn.text('Added to Cart')
         // cart_btn.removeClass('btn-secondary')
         // cart_btn.addClass('btn-success')
         // $('.cart_btn2').show()
     });
-    
-
-    if (window.location.pathname === '/customer/cart') { 
-        load_cartdata() 
-
-    // Check if the current page is the cart page
-        
-    }
 
 
-    
-   
-$('#cart_table').on('click', '.plus-cart', function() {
-    const index = $(this).data('index');
-    let cart = loadCart();
-    cart.items[index].quantity++;
-    cart.items[index].subtotal = cart.items[index].price * cart.items[index].quantity;
-    cart.cart_total = updateCartTotal(cart)
-    localStorage.setItem('catloads_cartdata', JSON.stringify(cart));
-    $(this).siblings('input').val( cart.items[index].quantity)
-});
+    if (window.location.pathname === '/customer/cart') {
+        load_cartdata()
 
-$('#cart_table').on('click', '.minus-cart', function() {
-    const index = $(this).data('index');
-    let cart = loadCart();
-    cart.items[index].quantity--;
-    if(cart.items[index].quantity < 1){
-        cart.items.splice(index, 1);
-        $(this).parents('tr').first().remove()
-        $('.cartsdata').hide()
-
-    }
-    if(cart.items.length >= 1){
-    cart.items[index].subtotal = cart.items[index].price * cart.items[index].quantity;
-    $(this).siblings('input').val( cart.items[index].quantity)    
-    cart.cart_total = updateCartTotal(cart)
-    }
-    else{
-        cart.cart_total = 0
-    $('.cartmsg').show()
-    }
-    updateCartTotal(cart)
-
-    localStorage.setItem('catloads_cartdata', JSON.stringify(cart));
-});
-
-$('#login-form, #registration-form').submit(function(e) {
-    e.preventDefault(); // Prevent the default form submission
-
-// sourcery skip: avoid-using-var
-    var cartData = localStorage.getItem('catloads_cartdata'); // Get cart data from localStorage
-    if (cartData) {
-        $('<input>').attr({
-            type: 'hidden',
-            name: 'cartData',
-            value: cartData
-        }).appendTo(this); // Append cart data to the form
-    }
-    this.submit(); // Submit the form
-});
-
-function validate_orderdata(){
-    var status =true
-    var errobox = $('#error_box')
-    var name = $('#name').val();
-    var email = $('#email').val();
-    var mobile = $('#mobile').val();
-    var city = $('#city').val();
-    var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Simple email regex pattern
-    var mobilePattern = /^[0-9]{10}$/; // Regex pattern for 10-digit mobile number
-    var targetOffset = errobox.offset().top;
-    errobox.empty()
-
-    // Validate Email
-    if (!emailPattern.test(email)) {
-	    errobox.append(`<div class="alert alert-warning">Enter a Valid Email</div>`)
-        status= false
+        // Check if the current page is the cart page
 
     }
 
-    // Validate Mobile
-    if (!mobilePattern.test(mobile)) {
-        errobox.append(`<div class="alert alert-warning">Enter a Valid Number</div>`)
-        console.log('mobile')
-        status= false
-        // $('html, body').animate({ scrollTop: targetOffset }, 'slow');
+
+
+
+    $('#cart_table').on('click', '.plus-cart', function () {
+        const index = $(this).data('index');
+        let cart = loadCart();
+        cart.items[index].quantity++;
+        cart.items[index].subtotal = cart.items[index].price * cart.items[index].quantity;
+        cart.cart_total = updateCartTotal(cart)
+        localStorage.setItem('catloads_cartdata', JSON.stringify(cart));
+        $(this).siblings('input').val(cart.items[index].quantity)
+    });
+
+    $('#cart_table').on('click', '.minus-cart', function () {
+        const index = $(this).data('index');
+        let cart = loadCart();
+        cart.items[index].quantity--;
+        if (cart.items[index].quantity < 1) {
+            cart.items.splice(index, 1);
+            $(this).parents('tr').first().remove()
+            $('.cartsdata').hide()
+
+        }
+        if (cart.items.length >= 1) {
+            cart.items[index].subtotal = cart.items[index].price * cart.items[index].quantity;
+            $(this).siblings('input').val(cart.items[index].quantity)
+            cart.cart_total = updateCartTotal(cart)
+        }
+        else {
+            cart.cart_total = 0
+            $('.cartmsg').show()
+        }
+        updateCartTotal(cart)
+
+        localStorage.setItem('catloads_cartdata', JSON.stringify(cart));
+    });
+
+    $('#login-form, #registration-form').submit(function (e) {
+        e.preventDefault(); // Prevent the default form submission
+
+        // sourcery skip: avoid-using-var
+        var cartData = localStorage.getItem('catloads_cartdata'); // Get cart data from localStorage
+        if (cartData) {
+            $('<input>').attr({
+                type: 'hidden',
+                name: 'cartData',
+                value: cartData
+            }).appendTo(this); // Append cart data to the form
+        }
+        this.submit(); // Submit the form
+    });
+
+    function validate_orderdata() {
+        var status = true
+        var errobox = $('#error_box')
+        var name = $('#name').val();
+        var email = $('#email').val();
+        var mobile = $('#mobile').val();
+        var city = $('#city').val();
+        var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Simple email regex pattern
+        var mobilePattern = /^[0-9]{10}$/; // Regex pattern for 10-digit mobile number
+        var targetOffset = errobox.offset().top;
+        errobox.empty()
+
+        // Validate Email
+        if (!emailPattern.test(email)) {
+            errobox.append(`<div class="alert alert-warning">Enter a Valid Email</div>`)
+            status = false
+
+        }
+
+        // Validate Mobile
+        if (!mobilePattern.test(mobile)) {
+            errobox.append(`<div class="alert alert-warning">Enter a Valid Number</div>`)
+            console.log('mobile')
+            status = false
+            // $('html, body').animate({ scrollTop: targetOffset }, 'slow');
+        }
+
+        // Validate City
+        // if (city.length < 2) {
+        //     errobox.append(`<div class="alert alert-warning">Enter a Valid City</div>`)
+
+        //     status= false
+        //     ; // Prevent form from submitting
+        // }
+
+        if (name.length < 2) {
+            errobox.append(`<div class="alert alert-warning">Enter a Valid Name</div>`)
+
+            status = false
+            // $('html, body').animate({ scrollTop: targetOffset }, 'slow');
+
+        }
+        if (!status) {
+            $('html, body').animate({ scrollTop: targetOffset }, 'fast');
+
+        }
+        return status
     }
 
-    // Validate City
-    // if (city.length < 2) {
-    //     errobox.append(`<div class="alert alert-warning">Enter a Valid City</div>`)
+    $('#submitorder_btn').on('clcik', function (e) {
 
-    //     status= false
-    //     ; // Prevent form from submitting
-    // }
+    });
 
-    if (name.length < 2) {
-        errobox.append(`<div class="alert alert-warning">Enter a Valid Name</div>`)
-
-        status= false
-        // $('html, body').animate({ scrollTop: targetOffset }, 'slow');
-
-    }
-    if (!status){
-        $('html, body').animate({ scrollTop: targetOffset }, 'fast');
-
-    }
-    return status
-}
-
-$('#submitorder_btn').on('clcik',function(e) {
-   
-});
-
-$('#promocodebtn').on('click', function(){
-    var promocode = $('#promocode')
-    var promobtn = $(this)
-    var order_total = $('#total')
-    var url = $(this).data('url')
+    $('#promocodebtn').on('click', function () {
+        var promocode = $('#promocode')
+        var promobtn = $(this)
+        var order_total = $('#total')
+        var url = $(this).data('url')
         $.ajax({
             type: 'GET',
             url: url,
-            data: { 'promocode': promocode.val() ,'order_total':order_total.data('total')},
-            success: function(response) {
-                if (response.Message=='Success'){
+            data: { 'promocode': promocode.val(), 'order_total': order_total.data('total') },
+            success: function (response) {
+                if (response.Message == 'Success') {
                     promobtn.text(`Applied`)
                     promobtn.attr('disabled', true)
-                    $('#alertpromo').text(`Applied ₹ ${response.discount} discount on your order`)
+                    $('#alertpromo').text(`Applied ${currency_symbol} ${response.discount} discount on your order`)
                     promobtn.addClass('btn-success')
-                    order_total.text('₹'+response.total)
-                    $('#discount').text('₹'+response.discount)
-                    promocode.attr('data-id',response.promocode_id)
+                    order_total.text(`${currency_symbol}` + response.total)
+                    $('#discount').text(`${currency_symbol}` + response.discount)
+                    promocode.attr('data-id', response.promocode_id)
                     $('#total_pricefinal').val(response.total)
                     $('#total_dsicount').val(response.discount)
 
                 }
-                else{
+                else {
                     $('#alertpromo').text('Invalid promocode').addClass('text-danger')
                 }
             },
-            error: function(xhr) {
+            error: function (xhr) {
                 console.error(xhr.responseText);
                 // resetFields();
             }
         });
-})
+    })
 
 
-$('#checkout_btn').on('click',function(){
-    console.log('hhh')
-    var url = $(this).data('url')
-    var cart = loadCart()
-    order_post(url,cart)
+    $('#checkout_btn').on('click', function () {
+        console.log('hhh')
+        var url = $(this).data('url')
+        var cart = loadCart()
+        order_post(url, cart)
 
-})
-});
-
-
-function order_post(url,cart){
-    if (cart.items.length>=1){
-        let csrftoken = $('[name=csrfmiddlewaretoken]').val();
-        $.ajax({
-            type: 'POST',
-            headers: {'X-CSRFToken': csrftoken},
-            url: url,
-            data: {'cart':JSON.stringify(cart)},
+    })
+    function order_post(url, cart) {
+        if (cart.items.length >= 1) {
+            let csrftoken = $('[name=csrfmiddlewaretoken]').val();
+            $.ajax({
+                type: 'POST',
+                headers: { 'X-CSRFToken': csrftoken },
+                url: url,
+                data: { 'cart': JSON.stringify(cart) },
     
-        
-            success: function(response) {
-                if (response.Message=='Success'){
-                    if (response.redirect_url) {
-                        localStorage.removeItem('catloads_cartdata');
-                        window.location.href = response.redirect_url; 
+    
+                success: function (response) {
+                    if (response.Message == 'Success') {
+                        if (response.redirect_url) {
+                            localStorage.removeItem('catloads_cartdata');
+                            window.location.href = response.redirect_url;
+                        }
                     }
-                }
-                else{
-                    if (response.redirect_url) {
-                        window.location.href = response.redirect_url; 
+                    else {
+                        if (response.redirect_url) {
+                            window.location.href = response.redirect_url;
+                        }
                     }
+                },
+                error: function (xhr) {
+                    console.error(xhr.responseText);
                 }
-            },
-            error: function(xhr) {
-                console.error(xhr.responseText);
-            }
-        });
-
-    }
-}
-   
-    
-
-
-function updateCartTotal(cart) {
-    let total = 0;
-    cart.items.forEach(item => {
-        total += item.subtotal;
-    });
-    $('#cart_total').text(`₹ ${total}`)
-    return total
-    
-
-    // Assuming there is an element to display the total
-}
-
-function loadCart() {
-    let cart = JSON.parse(localStorage.getItem('catloads_cartdata'));
-    if (!cart) {
-        cart = { cart_total: 0, items: [] };
-    }
-    return cart;
-}
-
-function load_cartdata()
-{
-    const cart = loadCart()
-        if (cart.items.length<1) {
-            // alert('not Found')
-        $('.cartsdata').hide()
-        $('.cartmsg').show()
-
-
-        }
-
-        else{
-
-            cart.items.forEach(function(item,index) {
-
-                $('#cart_table').append(`<tr>
-                <td class="product-item-img"><img src="${item.image}" alt="/"></td>
-                <td class="product-item-name">${item.name}</td>
-                <td class="product-item-price">₹${item.price}</td>
-                <td class="product-item-quantity">
-                <div class=" btn-quantity style-1 me-3" style="display:  flex; justify-content: space-between; align-items: center;">
-                <button class="p-2 minus-cart" data-index=${index} style="background-color: black; color: white;border-radius: 100%;" ><i class="fa-solid fa-minus"></i></button>
-                <input style="margin: 10px !important;" type="text" value="${item.quantity}" name=""> 
-                <button class="p-2 plus-cart" data-index=${index} style="background-color: black; color: white;border-radius: 100%;" ><i class="fa-solid fa-plus"></i></button>
-                
-
-            </div>
-                    
-                </td>
-                <td class="product-item-totle">₹${item.subtotal}</td>
-                <td class="product-item-close" ><a href="javascript:void(0);" style="display: flex;align-items: center; justify-content: center;"><i class="fa fa-trash-o"></i></a></td>
-
-            </tr>`);
             });
-
-        }  
+    
+        }
+    }
+    
+    
+    
+    
+    function updateCartTotal(cart) {
+        let total = 0;
+        cart.items.forEach(item => {
+            total += item.subtotal;
+        });
+        $('#cart_total').text(`${currency_symbol} ${total}`)
+        return total
+    
+    
+        // Assuming there is an element to display the total
+    }
+    
+    function loadCart() {
+        let cart = JSON.parse(localStorage.getItem('catloads_cartdata'));
+        if (!cart) {
+            cart = { cart_total: 0, items: [] };
+        }
+        return cart;
+    }
+    
+    function load_cartdata() {
+        const cart = loadCart()
+        if (cart.items.length < 1) {
+            // alert('not Found')
+            $('.cartsdata').hide()
+            $('.cartmsg').show()
+    
+    
+        }
+    
+        else {
+    
+            cart.items.forEach(function (item, index) {
+    
+                $('#cart_table').append(`<tr>
+                    <td class="product-item-img"><img src="${item.image}" alt="/"></td>
+                    <td class="product-item-name">${item.name}</td>
+                    <td class="product-item-price">${currency_symbol}${item.price}</td>
+                    <td class="product-item-quantity">
+                    <div class=" btn-quantity style-1 me-3" style="display:  flex; justify-content: space-between; align-items: center;">
+                    <button class="p-2 minus-cart" data-index=${index} style="background-color: black; color: white;border-radius: 100%;" ><i class="fa-solid fa-minus"></i></button>
+                    <input style="margin: 10px !important;" type="text" value="${item.quantity}" name=""> 
+                    <button class="p-2 plus-cart" data-index=${index} style="background-color: black; color: white;border-radius: 100%;" ><i class="fa-solid fa-plus"></i></button>
+                    
+    
+                </div>
+                        
+                    </td>
+                    <td class="product-item-totle">${currency_symbol}${item.subtotal}</td>
+                    <td class="product-item-close" ><a href="javascript:void(0);" style="display: flex;align-items: center; justify-content: center;"><i class="fa fa-trash-o"></i></a></td>
+    
+                </tr>`);
+            });
+    
+        }
         updateCartTotal(cart)
-
-
-
-
-}
-
-
-  
-
-
-
+    
+    
+    
+    
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+});
 
 
 

@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.urls import reverse_lazy
 from django.views import View
-from catloads_web.models import Cart,CartItem,CustomUser,Order,OrderItem,ProductSale,ProductSaleItems,Product
+from catloads_web.models import Cart,CartItem,CustomUser,Order,OrderItem,ProductSale,ProductSaleItems,Product,Country
 from catloads_web.forms import RegisterForm,EditUserForm
 from django.views.generic.list import ListView
 from django.views.generic.edit import UpdateView
@@ -53,9 +53,10 @@ def decode_base64_to_id(encoded_id):
     return int(id_bytes.decode('utf-8'))
 
 def handle_cart_data(user, cart_data_json,request):
+    country_id = request.session.get('country_data', {}).get('country_id') or Country.get_default_country().id or None
     cart_data = json.loads(cart_data_json)
     print(cart_data)
-    cart, _ = Cart.objects.get_or_create(user=user)
+    cart, _ = Cart.objects.get_or_create(user=user,country_id=country_id)
     cart.cart_total=cart_data['cart_total']
     cart.save()
     for item in cart_data.get('items', []):
@@ -64,15 +65,20 @@ def handle_cart_data(user, cart_data_json,request):
             product_id=item['product'],
             defaults={
                 'quantity': item['quantity'],
+                'price': item['price'],
             }
         )
         request.session['cartstatus'] = True
 
-def updateto_Order(user):
+def updateto_Order(request=None,user=None):
     try:
         with transaction.atomic():
-            cart,_ = Cart.objects.get_or_create(user=user)
-            order = Order.objects.create(user=user)  # Properly unpack the tuple
+            users = user if user else request.user
+            country_id =None
+            if request:
+                country_id = request.session.get('country_data', {}).get('country_id') or Country.get_default_country().id or None
+            cart,_ = Cart.objects.get_or_create(user=users,country_id=country_id)
+            order = Order.objects.create(user=users,country_id=country_id)  # Properly unpack the tuple
 
             cartitems = cart.items.all()
             if cartitems.exists():  # Check if there are items in the cart
@@ -83,7 +89,7 @@ def updateto_Order(user):
                         product=item.product,
                         defaults={
                             'quantity': item.quantity , # Update quantity if exists
-                            'price': item.product.price
+                            'price': item.price
                         }
                     )
                 cart.delete()  
@@ -153,8 +159,10 @@ class CustomerOrders(TemplateView):
     template_name = 'catloads_web/account-orders.html'
 
     def get_context_data(self, **kwargs):
+
         context = super().get_context_data(**kwargs)  
-        order = Order.objects.filter(user=self.request.user) 
+        country_id = self.request.session.get('country_data', {}).get('country_id') or Country.get_default_country().id or None
+        order = Order.objects.filter(user=self.request.user,country_id=country_id) 
         context['orders'] = order
         return context
 
@@ -163,7 +171,7 @@ def direct_google_login(request):
         cart_data = unquote(cart)
         user = request.user
         handle_cart_data(user, cart_data,request)
-        order_id = updateto_Order(user)
+        order_id = updateto_Order(user=user)
         return redirect(reverse('catloads_web:order_create', kwargs={'encoded_id': order_id}))
     return render(request,'catloads_web/redirect.html')
 
@@ -191,7 +199,7 @@ class CustomerRegistrationUpdateView(View):
                     user.backend = 'django.contrib.auth.backends.ModelBackend'
                     handle_cart_data(user, cartdata,request)  
                     if request.GET.get('redirect'):
-                        order_id = updateto_Order(user)
+                        order_id = updateto_Order(user=user)
                         login(request,user)
                         return redirect(reverse('catloads_web:order_create', kwargs={'encoded_id': order_id}))
                 return redirect(self.success_url)
@@ -225,7 +233,7 @@ class LoginView(View):
                 if cartdata := request.POST.get('cartData'):
                     handle_cart_data(user, cartdata,request)  
                     if request.GET.get('redirect'):
-                        order_id = updateto_Order(user)
+                        order_id = updateto_Order(user=user,request=request)
                         self.success_url = reverse('catloads_web:order_create', kwargs={'encoded_id': order_id})
                 login(request,user)
                 if request.GET.get('next'):
@@ -308,7 +316,7 @@ class CartDataView(View):
         cart = request.POST['cart']
         # print(cart)
         handle_cart_data(user,cart,request)
-        order = updateto_Order(user)
+        order = updateto_Order(request=request)
         redirect_url = reverse('catloads_web:order_create', kwargs={'encoded_id': order})
         return JsonResponse({'Message':'Success','order': order,'redirect_url':redirect_url})
 

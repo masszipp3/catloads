@@ -50,7 +50,8 @@ class Country(BaseModel):
     def __str__(self):
         return self.name
     
-    def get_default_country(self): 
+    @staticmethod
+    def get_default_country(): 
         return Country.objects.filter(default=True).first()
 
 
@@ -188,16 +189,40 @@ class ProductSale(BaseModel):
         sale_items = ProductSaleItems.objects.filter(sale_master=self)
         return sale_items.values_list('product__category__name', flat=True).distinct()
 
-    def get_discount_percentage(self):
-        if self.price > 0:
-            discount_percentage = (self.discount / (self.price + self.discount)) * 100
-            return math.floor(discount_percentage) 
+    def get_discount_percentage(self,country_id=None):
+        default_country = Country.get_default_country()
+        country_discount = self.country_sale_prices.filter(country_id=country_id).first() if country_id else  self.country_sale_prices.filter(country=default_country).first()
+        if country_discount and country_discount.price >0:
+            discount_amount= (country_discount.discount / (country_discount.discount+country_discount.price))* 100
+            return math.floor(discount_amount)
         return 0
     
-    def get_maxprice(self): 
-        return self.discount + self.price if self.discount > 0 else self.discount
+    def get_maxprice(self,country_id=None):
+        default_country = Country.get_default_country()
+        country_discount = self.country_sale_prices.filter(country_id=country_id).first() if country_id else  self.country_sale_prices.filter(country=default_country).first() 
+        return country_discount.discount + country_discount.price if country_discount.discount > 0 else country_discount.discount
     
-
+    def get_price_and_discount(self,country_id=None):
+        try:
+            if not country_id:
+                country_price = self.country_sale_prices.first() 
+            else:
+                country_price = self.country_sale_prices.filter(country_id=country_id).first()
+            if country_price is None:
+                raise Exception("Country error")      
+            return {
+                'price': country_price.price,
+                'discount': country_price.discount,
+                'symbol':country_price.country.discount
+            }
+        except:
+            default_country = Country.get_default_country()
+            country_price = self.country_sale_prices.filter(country=default_country).first()
+            return {
+                'price': country_price.price or self.price,
+                'discount': country_price.discount or self.discount,
+                'symbol': Country.get_default_country().symbol or '$'
+            }
 
 class ProductSaleItems(BaseModel):
     product = models.ForeignKey(Product, related_name='products_saleitem', on_delete=models.SET_NULL,null=True,blank=True)
@@ -239,6 +264,7 @@ class Order(BaseModel):
     order_status = models.IntegerField(choices=ORDER_STATUS,null=True,blank=True,default=1)
     order_id  = models.CharField(max_length=255,null=True)
     razorpay_id = models.CharField(max_length=200,null=True,blank=True)
+    country = models.ForeignKey(Country,on_delete=models.SET_NULL,null=True,blank=True)
 
 
     def get_order_total(self):
@@ -305,6 +331,8 @@ class Payment(BaseModel):
 class Cart(BaseModel):
     user = models.ForeignKey(CustomUser, related_name='cart', on_delete=models.SET_NULL,null=True,blank=True)
     cart_total = models.DecimalField(max_digits=10,decimal_places=2,default=0.00)
+    country = models.ForeignKey(Country,on_delete=models.SET_NULL,null=True,blank=True)
+
 
     def __str__(self):
         return f'Cart {self.id}'
@@ -318,6 +346,7 @@ class Cart(BaseModel):
 class CartItem(BaseModel):
     cart = models.ForeignKey(Cart, related_name='items', on_delete=models.CASCADE)
     product = models.ForeignKey(ProductSale, related_name='cart_items', on_delete=models.CASCADE)
+    price =  models.DecimalField(max_digits=10, decimal_places=2,default=0.00)
     quantity = models.IntegerField(default=1)
 
     def __str__(self):

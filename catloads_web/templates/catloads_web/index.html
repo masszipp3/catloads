@@ -229,9 +229,9 @@
 									console.log("{{ request.session.country_data.ip }}","{{ request.session.country_data.e }}")
 								</script>
 								<li class="nav-item cart-link"></li>
-									<a href="{% url 'catloads_web:carts' %}" class="nav-link cart-btn"
+									<a  class="nav-link cart-btn"
 									>
-										 <span class="mt-1">{{ request.session.country_data.country_code }}</span>
+										 <span id="currency_symbol" data-symbol="{{ request.session.country_data.symbol }}" class="mt-1">{{ request.session.country_data.country_code }}</span>
 									</a>
 								</li>
 
@@ -351,7 +351,7 @@
 								</div>
 								<div class="dz-content">
 									<h5 class="title"><a href="{% url 'catloads_web:product_detail' product.slug %}">{{product.name}}</a></h5>
-									<h5 class="price"> ₹{{product.price | round_amount }}</h5>
+									<h5 class="price"> {{product.get_price_and_discount.symbol }}{{product.get_price_and_discount.price | round_amount }}</h5>
 								</div>
 								<div class="product-tag">
 									<span class="badge ">Get {{ product.get_discount_percentage }}% Off</span>

@@ -7,9 +7,8 @@ class GeoIPMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        # if 'country_data' not in request.session:
+        if 'country_data' not in request.session:
             ip_address = request.META.get('HTTP_X_FORWARDED_FOR', None)
-            
             try:
                 error = ''
                 if ip_address:
@@ -20,10 +19,14 @@ class GeoIPMiddleware:
                 else:
                     raise Exception("No IP address found")
             except Exception as e:
-                country, _ = Country.objects.get_or_create(code='US', defaults={
-                    'name': 'United States',
-                    'symbol': '$'
-                })
+                country = Country.get_default_country()
+                if not country:
+                    country, _ = Country.objects.get_or_create(code='US', defaults={
+                        'name': 'United States',
+                        'symbol': '$',
+                    })
+                    country.default=True
+                    country.save()
                 print(f"GeoIP lookup failed: {e}")
                 error=str(e)
 
@@ -32,9 +35,8 @@ class GeoIPMiddleware:
                 'country_code': country.code,
                 'country_name': country.name,
                 'country_id': country.id,
+                'symbol':country.symbol,
                 'ip':ip_address,
                 'e':error
             }
-
-
-            return self.get_response(request)
+        return self.get_response(request)

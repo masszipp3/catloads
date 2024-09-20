@@ -87,11 +87,13 @@ class ProductSaleForm(forms.ModelForm):
             default_country = Country.objects.get(default=True)
         except ObjectDoesNotExist:
             default_country = Country.objects.get(name='United States', code='US')
+            default_country.default=True
+            default_country.save()
 
         CountryPrice.objects.create(
             product_sale=product_sale,
             country=default_country,
             price=price,
-            discount=self.cleaned_data.get('discount', 0.00) 
+            discount=self.cleaned_data.get('discount', 0.00)
         )
         return product_sale      

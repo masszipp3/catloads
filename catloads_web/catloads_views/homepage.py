@@ -1,7 +1,7 @@
 from django.shortcuts import render,get_object_or_404,redirect
 from django.urls import reverse_lazy
 from django.views import View
-from catloads_web.models import Category,Product,ProductSale,Banner,CustomUser
+from catloads_web.models import Category,Product,ProductSale,Banner,CustomUser,Country
 from catloads_admimn.forms import CategoryForm,ProductForm
 from django.views.generic.list import ListView
 from django.views.generic.edit import UpdateView
@@ -31,8 +31,12 @@ class DashboardView(View):
     def get(self,request):
         # send_my_email()
         try:
-            print(request.session.get('country_data'))
-            products_sale = ProductSale.objects.filter(is_deleted=False).annotate(order_count=Count('order_items')).order_by('-order_count')
+            default_country = Country.get_default_country().id
+            country_id = self.request.session.get('country_data', {}).get('country_id') or Country.get_default_country().id or None
+            products_sale = ProductSale.objects.filter(country_sale_prices__country_id=country_id,is_deleted=False) 
+            if not products_sale:
+               products_sale= ProductSale.objects.filter(country_sale_prices__country_id=default_country,is_deleted=False)
+            products_sale=products_sale.annotate(order_count=Count('order_items')).order_by('-order_count')    
             banners = Banner.objects.filter(is_deleted= False)
             context = {'products_sale':products_sale,'banners':banners}
             return render(request,self.template_name,context=context)

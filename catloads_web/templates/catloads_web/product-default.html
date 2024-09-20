@@ -261,8 +261,8 @@ swiper-container::part(bullet) { /* Assuming there's a part named 'bullet' for i
 											</div>
 										</div>
 										<div style="display: flex;align-items: center;">
-										<h1>₹ {{ products.price | round_amount}} </h1> 
-										<h5 class="p-2" style="color: #5d575e !important; font-weight: 400;"><strike>₹ {{products.get_maxprice | round_amount}}</strike></h5><h5 class="text-success">{{products.get_discount_percentage}}%off</h5>
+										<h1>{{product_price.symbol}} {{ product_price.price | round_amount}} </h1> 
+										<h5 class="p-2" style="color: #5d575e !important; font-weight: 400;"><strike>{{product_price.symbol}} {{max_price | round_amount}}</strike></h5><h5 class="text-success">{{product_discount}}%off</h5>
 										</div>
 										<p class="para-text">
 											{{ products.caption }}
@@ -277,7 +277,7 @@ swiper-container::part(bullet) { /* Assuming there's a part named 'bullet' for i
 
 										{% csrf_token %}
 										
-												<a data-id="{{products.id}}" style="font-family: 'Lufga' ,sans-serif !important;"  data-url="{% url 'catloads_web:cartdata' %}" data-name="{{products.name}}" data-image="{{products.thumbnail.url}}" data-producturl="{{products.slug}}"  data-price="{{products.price}}"  class="btn btn-success w-100 cart_btn ms-2 d-none d-md-block">Buy Now</a>
+												<a data-id="{{products.id}}" style="font-family: 'Lufga' ,sans-serif !important;"  data-url="{% url 'catloads_web:cartdata' %}" data-name="{{products.name}}" data-image="{{products.thumbnail.url}}" data-producturl="{{products.slug}}"  data-price=" {{ product_price.price}}"  class="btn btn-success w-100 cart_btn ms-2 d-none d-md-block">Buy Now</a>
 												<!-- <a href="{% url 'catloads_web:carts' %}"  class="btn btn-secondary w-100 cart_btn2 mt-2" style="display: none;">Checkout</a> -->
 												
 											
@@ -527,11 +527,11 @@ swiper-container::part(bullet) { /* Assuming there's a part named 'bullet' for i
 	</style>
 	<div class="mobile-pricefooter row d-blcok d-md-none" style="align-items: center;">
 		<div class="col-6">
-			<h1 class="mt-2" style="display: inline-block;">₹ {{ products.price | round_amount }} </h1> <h5 class="ps-1 mt-2" style="display: inline-block;color: #5d575e !important; font-weight: 400;"> <strike>₹{{products.get_maxprice | round_amount}}</strike></h5>	
+			<h1 class="mt-2" style="display: inline-block;">{{product_price.symbol}}  {{ product_price.price | round_amount }} </h1> <h5 class="ps-1 mt-2" style="display: inline-block;color: #5d575e !important; font-weight: 400;"> <strike>{{product_price.symbol}}{{max_price | round_amount}}</strike></h5>	
 	
 		</div>
 		<div class="col-6">
-			<a data-id="{{products.id}}" style="font-family: 'Lufga' ,sans-serif !important;"  data-url="{% url 'catloads_web:cartdata' %}" data-name="{{products.name}}" data-image="{{products.thumbnail.url}}" data-producturl="{{products.slug}}"  data-price="{{products.price}}"  class="btn btn-success w-100 cart_btn ms-2">Buy Now</a>
+			<a data-id="{{products.id}}" style="font-family: 'Lufga' ,sans-serif !important;"  data-url="{% url 'catloads_web:cartdata' %}" data-name="{{products.name}}" data-image="{{products.thumbnail.url}}" data-producturl="{{products.slug}}"  data-price=" {{ product_price.price}}"  class="btn btn-success w-100 cart_btn ms-2">Buy Now</a>
 	
 		</div>
 	</div>

@@ -42,7 +42,7 @@ class OrderCreate(View):
                 login_url = f"{reverse('catloads_web:login')}?redirect=order"
                 return HttpResponseRedirect(login_url)
             if encoded_id is None:
-                order_id = updateto_Order(request.user)
+                order_id = updateto_Order(request)
                 return HttpResponseRedirect(reverse('catloads_web:order_create', kwargs={'encoded_id': order_id}))
             print(request.user.pk)
             order_id = decode_base64_to_id(encoded_id)

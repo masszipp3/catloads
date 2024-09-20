@@ -221,6 +221,12 @@
 
 										</a>
 									</li>
+									<li class="nav-item cart-link"></li>
+									<a  class="nav-link cart-btn"
+									>
+										 <span id="currency_symbol" data-symbol="{{ request.session.country_data.symbol }}" class="mt-1">{{ request.session.country_data.country_code }}</span>
+									</a>
+								</li>
 
 								</ul>
 							</div>
@@ -746,7 +752,7 @@
 									</div>
 									<div class="dz-content">
 										<h6 class="title mb-0">{{order.product.name}} x {{order.quantity}}</h6>
-										<span class="price">₹{{order.price}}</span>
+										<span class="price">{{ request.session.country_data.symbol }}{{order.price}}</span>
 									</div>
 								</div>
 								{% endfor %}
@@ -755,7 +761,7 @@
 									<tbody>
 										<tr class="subtotal">
 											<td>Subtotal</td>
-											<td class="price">₹{{order.get_order_total}}</td>
+											<td class="price">{{ request.session.country_data.symbol }}{{order.get_order_total}}</td>
 										</tr>
 		
 										<tr class="shipping">
@@ -768,12 +774,12 @@
 													</label>
 												</div>
 											</td>
-											<td class="price" id="discount">₹ {{order.discount}}</td>
+											<td class="price" id="discount">{{ request.session.country_data.symbol }} {{order.discount}}</td>
 										</tr>
 										<tr class="total">
 											<td>Total</td>
 											<td id="total" data-total="{{order.get_order_total}}" class="price">
-												₹{{order.get_order_total}}</td>
+												{{ request.session.country_data.symbol }}{{order.get_order_total}}</td>
 		
 										</tr>
 									</tbody>

@@ -77,7 +77,7 @@
 											<td class="product-item-name text-primary">{{order.order_id}}</td>
 											<td class="product-item-date">{{order.created_on}}</td>
 											<td class="product-item-Status"> {{ order.get_status_display }}</td>
-											<td class="product-item-price">₹{{order.total_price}} for {{order.get_orderitemcount}} items</td>
+											<td class="product-item-price">{{ request.session.country_data.symbol }}{{order.total_price}} for {{order.get_orderitemcount}} items</td>
 											{% if order.order_status == 2 %}
 											<td class="product-item-totle"><a class="btn btn-sm btn-success" href="{% url 'catloads_web:downloads' %}?order_id={{order.id}}">View</a></td>
 											{% else %}
