@@ -226,7 +226,7 @@
 									</a>
 								</li>
 								<script>
-									console.log({{ request.session.country_data.ip }},{{ request.session.country_data.e }})
+									console.log("{{ request.session.country_data.ip }}","{{ request.session.country_data.e }}")
 								</script>
 								<li class="nav-item cart-link"></li>
 									<a href="{% url 'catloads_web:carts' %}" class="nav-link cart-btn"
