@@ -33,31 +33,48 @@ class DashboardView(View):
         # send_my_email()
         try:
             default_country = Country.get_default_country()
-            country_id = self.request.session.get('country_data', {}).get('country_id') or  default_country.id
-            products_sale = ProductSale.objects.filter(country_sale_prices__country_id=country_id,is_deleted=False) 
-            if products_sale is None:
-                products_sale = ProductSale.objects.filter(country_sale_prices__country_id=default_country.id,is_deleted=False)
-                country_id =  default_country.id
-            products_sale=products_sale.annotate(price_for_country=Subquery(
-                CountryPrice.objects.filter(
-                    product_sale=OuterRef('pk'), 
-                    country_id=country_id
-                ).values('price')[:1]
-            ),symbol=Subquery(
-                CountryPrice.objects.filter(
-                    product_sale=OuterRef('pk'), 
-                    country_id=country_id
-                ).values('country__symbol')[:1]),
+            country_id = self.request.session.get('country_data', {}).get('country_id') or default_country.id
 
-            discount_for_country=Subquery(
-                CountryPrice.objects.filter(
-                    product_sale=OuterRef('pk'), 
-                    country_id=country_id
-                ).values('discount')[:1]
-            ),discount_percentage=ExpressionWrapper(
-        100 * F('discount_for_country') / (F('discount_for_country') + F('price_for_country')),
-        output_field=FloatField()
-    ),order_count=Count('order_items')).order_by('-order_count')    
+            # Fetch products for the given country_id
+            products_sale = ProductSale.objects.filter(
+                country_sale_prices__country_id=country_id, 
+                is_deleted=False
+            )
+
+            # If no products are found for the selected country, fetch products for the default country
+            if not products_sale.exists():
+                products_sale = ProductSale.objects.filter(
+                    country_sale_prices__country_id=default_country.id, 
+                    is_deleted=False
+                )
+                country_id = default_country.id
+
+            # Annotate products with price, discount, symbol, and discount percentage for the country
+            products_sale = products_sale.annotate(
+                price_for_country=Subquery(
+                    CountryPrice.objects.filter(
+                        product_sale=OuterRef('pk'),
+                        country_id=country_id
+                    ).values('price')[:1]
+                ),
+                symbol=Subquery(
+                    CountryPrice.objects.filter(
+                        product_sale=OuterRef('pk'),
+                        country_id=country_id
+                    ).values('country__symbol')[:1]
+                ),
+                discount_for_country=Subquery(
+                    CountryPrice.objects.filter(
+                        product_sale=OuterRef('pk'),
+                        country_id=country_id
+                    ).values('discount')[:1]
+                ),
+                discount_percentage=ExpressionWrapper(
+                    100 * F('discount_for_country') / (F('discount_for_country') + F('price_for_country')),
+                    output_field=FloatField()
+                ),
+                order_count=Count('order_items')
+            ).order_by('-order_count')
             banners = Banner.objects.filter(is_deleted= False)
             context = {'products_sale':products_sale,'banners':banners}
             return render(request,self.template_name,context=context)
