@@ -31,6 +31,7 @@ class DashboardView(View):
     def get(self,request):
         # send_my_email()
         try:
+            print(request.session.get('country_data'))
             products_sale = ProductSale.objects.filter(is_deleted=False).annotate(order_count=Count('order_items')).order_by('-order_count')
             banners = Banner.objects.filter(is_deleted= False)
             context = {'products_sale':products_sale,'banners':banners}

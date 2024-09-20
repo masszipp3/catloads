@@ -1,7 +1,7 @@
 from django.shortcuts import render,get_object_or_404,redirect
 from django.urls import reverse_lazy
 from django.views import View
-from catloads_web.models import Category,ProductSale,Product,ProductSaleItems,ProductImages,ProductVideos
+from catloads_web.models import Category,ProductSale,Product,ProductSaleItems,ProductImages,ProductVideos,Country,CountryPrice
 from catloads_admimn.forms import ProductSaleForm
 from django.views.generic.list import ListView
 from django.views.generic.edit import UpdateView
@@ -12,6 +12,8 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from catloads_admimn.context_processors import get_countries
+import json
 
 class SaleCreateView(UserPassesTestMixin,View):
     template_name = 'catloads_admin/salecreate.html'
@@ -34,7 +36,7 @@ class SaleCreateView(UserPassesTestMixin,View):
                context['description'] = sale.description
             return render(request, self.template_name,context)
         except Exception as e:
-            print('Error Occured on Loading Sale Form')
+            print('Error Occured on Loading Sale Form',e)
     
     def post(self,request,id=None):
         try:
@@ -122,4 +124,61 @@ class ProductSaleSoftDeleteView(UserPassesTestMixin,View):
             print('Product Sale Delete Error', e)
         return redirect(self.success_url)
 
-            
+class ProductPricingList(UserPassesTestMixin,View):
+    success_url = reverse_lazy('catloadsadmin:sale_list')
+    def test_func(self):
+        return self.request.user.is_superuser   
+    
+    def handle_no_permission(self):
+        return HttpResponseRedirect(reverse('catloadsadmin:login'))
+    def get(self, request,id):
+        try:
+            instance = get_object_or_404(ProductSale, id=id)
+            country_prices = instance.country_sale_prices.all()
+            price_list =[{
+                'id':country_price.id,
+                'price': country_price.price,
+                'country': country_price.country.id,
+                'discount':country_price.discount
+            }for country_price in country_prices]
+            countries = Country.objects.values('id', 'code', 'name', 'symbol')
+            countries = list(countries)
+            return JsonResponse({'price_list':price_list,'countries':countries},status=200)
+
+        except Exception as e:
+            print('Product Sale Delete Error', e)
+        return JsonResponse({'error': str(e)}, status=404)       
+    
+class ProductPricingPOST(UserPassesTestMixin,View):
+    success_url = reverse_lazy('catloadsadmin:sale_list')
+    def test_func(self):
+        return self.request.user.is_superuser   
+    
+    def handle_no_permission(self):
+        return HttpResponseRedirect(reverse('catloadsadmin:login'))
+    def post(self, request,id):
+        try:
+            instance = get_object_or_404(ProductSale, id=id)
+            data = json.loads(request.body)
+            items = data.get('items', [])
+            print(items)
+            updated_country_ids = [item.get('country_id') for item in items if item.get('country_id')]
+            existing_country_prices = CountryPrice.objects.filter(product_sale=instance)
+            for item in items:
+                price = item.get('price')
+                discount = item.get('discount')
+                country_id = item.get('country_id')
+                country = get_object_or_404(Country, id=country_id)
+                CountryPrice.objects.update_or_create(
+                    product_sale=instance,
+                    country=country,
+                    defaults={
+                        'price': price,
+                        'discount': discount
+                    }
+                )
+                existing_country_prices.exclude(country__id__in=updated_country_ids).delete()
+            return JsonResponse({'status': 'success', 'message': 'Pricing updated successfully'},status=200)
+        except Exception as e:
+            print('Product Sale Delete Error', e)
+            return JsonResponse({'error': str(e)}, status=404)   

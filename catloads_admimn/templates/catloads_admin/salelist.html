@@ -25,7 +25,7 @@
                     <div class="text">Products</div>
                 </a>
                 <ul class="sub-menu">
-                    <li class="sub-menu-item" >
+                    <li class="sub-menu-item">
                         <a href="{% url 'catloadsadmin:product_create' %}" class="">
                             <div class="text">Add Product</div>
                         </a>
@@ -42,7 +42,7 @@
                     <div class="icon"><i class="icon-shopping-bag"></i></div>
                     <div class="text">Sale</div>
                 </a>
-                <ul class="sub-menu" >
+                <ul class="sub-menu">
                     <li class="sub-menu-item">
                         <a href="{% url 'catloadsadmin:sale_create' %}" class="">
                             <div class="text">Add Sale</div>
@@ -91,7 +91,7 @@
                     </li>
                 </ul>
             </li>
-            <li class="menu-item has-children" >
+            <li class="menu-item has-children">
                 <a href="javascript:void(0);" class="menu-item-button">
                     <div class="icon"><i class="icon-file-plus"></i></div>
                     <div class="text">Order</div>
@@ -102,8 +102,8 @@
                             <div class="text">Order list</div>
                         </a>
                     </li>
-                   
-                   
+
+
                 </ul>
             </li>
             <li class="menu-item has-children">
@@ -117,10 +117,10 @@
                             <div class="text">All user</div>
                         </a>
                     </li>
-                
+
                 </ul>
             </li>
-
+            {% csrf_token %}
             <li class="menu-item has-children">
                 <a href="javascript:void(0);" class="menu-item-button">
                     <div class="icon"><i class="icon-image"></i></div>
@@ -137,13 +137,13 @@
                             <div class="text">All Banners</div>
                         </a>
                     </li>
-                
+
                 </ul>
             </li>
-            
+
         </ul>
     </div>
-   
+
 </div>
 {% endblock %}
 
@@ -156,13 +156,17 @@
             <h3>Sale List</h3>
             <ul class="breadcrumbs flex items-center flex-wrap justify-start gap10">
                 <li>
-                    <a href="{% url 'catloadsadmin:dashboard' %}"><div class="text-tiny">Dashboard</div></a>
+                    <a href="{% url 'catloadsadmin:dashboard' %}">
+                        <div class="text-tiny">Dashboard</div>
+                    </a>
                 </li>
                 <li>
                     <i class="icon-chevron-right"></i>
                 </li>
                 <li>
-                    <a href="#"><div class="text-tiny">Sales</div></a>
+                    <a href="#">
+                        <div class="text-tiny">Sales</div>
+                    </a>
                 </li>
                 <li>
                     <i class="icon-chevron-right"></i>
@@ -176,7 +180,8 @@
         <div class="wg-box">
             <div class="title-box">
                 <i class="icon-coffee"></i>
-                <div class="body-text">Tip search by Product ID: Each product is provided with a unique ID, which you can rely on to find the exact product you need.</div>
+                <div class="body-text">Tip search by Product ID: Each product is provided with a unique ID, which you
+                    can rely on to find the exact product you need.</div>
             </div>
             <div class="flex items-center justify-between gap10 flex-wrap">
                 <div class="wg-filter flex-grow">
@@ -193,28 +198,31 @@
                     </div>
                     <form class="form-search">
                         <fieldset class="name">
-                            <input type="text" placeholder="Search here..." class="" name="name" tabindex="2" value="" aria-required="true" required="">
+                            <input type="text" placeholder="Search here..." class="" name="name" tabindex="2" value=""
+                                aria-required="true" required="">
                         </fieldset>
                         <div class="button-submit">
                             <button class="" type="submit"><i class="icon-search"></i></button>
                         </div>
                     </form>
                 </div>
-                <a class="tf-button style-1 w208" href="{% url 'catloadsadmin:sale_create' %}"><i class="icon-plus"></i>Add new</a>
+                <a class="tf-button style-1 w208" href="{% url 'catloadsadmin:sale_create' %}"><i
+                        class="icon-plus"></i>Add new</a>
             </div>
             <div class="wg-table table-product-list">
                 <ul class="table-title flex gap20 mb-14">
                     <li>
                         <div class="body-title">Product</div>
-                    </li>    
+                    </li>
                     <li>
                         <div class="body-title">Sale ID</div>
                     </li>
-                    <li>
-                        <div class="body-title">Price</div>
-                    </li>
+
                     <li>
                         <div class="body-title">Orders</div>
+                    </li>
+                    <li>
+                        <div class="body-title">Pricing</div>
                     </li>
                     <!-- <li>
                         <div class="body-title">Sale</div>
@@ -222,9 +230,7 @@
                     <!-- <li>
                         <div class="body-title">Stock</div>
                     </li> -->
-                    <li>
-                        <div class="body-title"> Discount</div>
-                    </li>
+
                     <li>
                         <div class="body-title">Action</div>
                     </li>
@@ -240,30 +246,42 @@
                                 <a class="body-title-2">{{sale.name}}</a>
                             </div>
                             <div class="body-text">{{sale.sale_id}}</div>
-                            <div class="body-text">{{sale.price}}</div>
                             <div class="body-text">{{sale.download_count}}</div>
+                            <div class="item edit">
+                                <a data-url="{% url 'catloadsadmin:pricinglist' sale.id %}"
+                                    class="btn btn-success pricing" data-bs-toggle="modal" data-product_id="{{sale.id}}"
+                                    data-bs-target="#exampleModal">Add Price</a>
+
+                            </div>
                             <!-- <div class="body-text">20</div> -->
                             <!-- <div>
                                 <div class="block-not-available">Out of stock</div>
                             </div> -->
-                            <div class="body-text">{{sale.discount}}</div>
+                            <!-- <div class="body-text">{{sale.discount}}</div> -->
                             <div class="list-icon-function">
                                 <!-- <div class="item eye">
                                     <i class="icon-eye"></i>
                                 </div> -->
+
                                 <div class="item edit">
-                                    <a style="text-decoration: none !important;" href="{% url 'catloadsadmin:sale_edit' sale.id %}"><i style="color: green;" class="icon-edit-3"></i></a> 
+                                    <a style="text-decoration: none !important;"
+                                        href="{% url 'catloadsadmin:sale_edit' sale.id %}"><i style="color: green;"
+                                            class="icon-edit-3"></i></a>
 
                                 </div>
+
                                 <div class="item trash">
-                                    <a style="text-decoration: none !important;" onclick="return confirm('Are you Sure..?')" href="{% url 'catloadsadmin:sale_delete' sale.id %}"> <i style="color: red;" class="icon-trash-2"></i></a>
+                                    <a style="text-decoration: none !important;"
+                                        onclick="return confirm('Are you Sure..?')"
+                                        href="{% url 'catloadsadmin:sale_delete' sale.id %}"> <i style="color: red;"
+                                            class="icon-trash-2"></i></a>
 
                                 </div>
                             </div>
                         </div>
                     </li>
                     {% endfor %}
-                   
+
                 </ul>
             </div>
             <div class="divider"></div>
@@ -274,7 +292,7 @@
                         {% if page_obj.has_previous %}
                         <a href="?page={{ page_obj.previous_page_number }}"><i class="icon-chevron-left"></i></a>
                     </li>
-                        {% endif %}
+                    {% endif %}
 
                     <li class="active">
                         <a href="#">{{page_obj.number}}</a>
@@ -283,7 +301,7 @@
                         {% if page_obj.has_next %}
                         <a href="?page={{ page_obj.next_page_number }}"><i class="icon-chevron-right"></i></a>
                         {% endif %}
-                    </li>   
+                    </li>
                 </ul>
             </div>
         </div>
@@ -293,7 +311,182 @@
 </div>
 
 
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="min-width: 700px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Add Pricing</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-2" style="min-height: 400px; width: 100%; overflow: scroll;">
+                <div style="display: flex;justify-content: end; margin: 20px;">
+                    <button class="add-more btn btn-primary"
+                        style="width: 80px; font-size: 13px; border-radius: 13px; background-color: rgb(160, 32, 162); border: 0;">
+                        Add </button>
+                </div>
+                <input type="hidden" name="product_id" id="sale_id">
+                
+                <div id="multi-container">
+                    <!-- <div class="multi" style="display: flex; justify-content: space-between; margin: 20px;">
+                        <input type="number" placeholder="Enter price" name="price" style="border-radius: 12px; border: 1px solid rgb(241, 241, 241);">
+                        <input type="number" placeholder="Enter discount" name="discount" style="border-radius: 12px; border: 1px solid rgb(241, 241, 241);">
+                        <div class="select" style="width: 120px;">
+                            <select name="country">
+                                <option value="">Country</option>
+                                {% for country in countries %}
+                                <option value="{{country.id}}">{{country.name}}-{{country.code}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <button type="button" class="btn btn-primary add-more" style="width: 80px; font-size: 13px; border-radius: 13px; background-color: rgb(160, 32, 162); border: 0;">Add</button> -->
+                </div>
+            </div>
+            <div style="display: flex;justify-content: end;">
+                <button class="btn btn-success m-3 p-4" id="submit_btn" style="font-size: 12px;font-weight: 900;">Update
+                    Price</button>
+                    
+                        <div class="spinner-border" id="spinner2" style="margin: 20px;display: none;" role="status">
+                          <span class="visually-hidden">Loading...</span>
+                        </div>
+                     
+            </div>
+        </div>
+        <!-- <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div> -->
+    </div>
+</div>
+</div>
+<script>
+
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+
+        $(document).on('click', '.pricing', function () {
+            var itemsdiv = $('#multi-container')
+            var product_id = $(this).data('product_id')
+            var url = $(this).data('url')
+            $('#sale_id').val(product_id)
+            $.ajax({
+                type: 'GET',
+                url: url,
+                success: function (response) {
+                    itemsdiv.empty()
+                    const productprice = response.price_list;
+                    const countries = response.countries;  // Assuming the countries are passed in the response
+
+                    for (i = 0; i < productprice.length; i++) {
+                        var options = `<option value="">Country</option>`;  // Initialize the options
+
+                        for (let j = 0; j < countries.length; j++) {
+                            const selected = countries[j].id === productprice[i].country ? 'selected' : '';  // Check if it's the selected country
+                            options += `<option value="${countries[j].id}" ${selected}>${countries[j].name}-${countries[j].code}</option>`;
+                        }
+
+                        var newMulti = `
+            <div class="multi" style="display: flex; justify-content: space-between; margin: 20px;">
+                <input type="number" placeholder="Enter price" value="${productprice[i].price}" name="price" style="border-radius: 12px; border: 1px solid rgb(241, 241, 241);">
+                <input type="number" placeholder="Enter discount" value="${productprice[i].discount}" name="discount" style="border-radius: 12px; border: 1px solid rgb(241, 241, 241);">
+                <div class="select" style="width: 120px;">
+                    <select name="country">
+                        ${options}  
+                    </select>
+                </div>
+                <button type="button" data-id="${productprice[i].id}" class="btn btn-danger remove" style="width: 80px; font-size: 13px; border-radius: 13px; border: 0;">Remove</button>
+            </div>`;
+
+                        itemsdiv.append(newMulti);
+                    }
+                },
+                error: function (xhr) {
+                    console.error(xhr.responseText);
+                }
+            });
+        })
+        $(document).on('click', '#submit_btn', function () {
+            let itemsData = [];
+            let csrftoken = $('[name=csrfmiddlewaretoken]').val();
+            let sale_id = $('#sale_id').val();
+            var valid = true
+
+
+            $('#multi-container .multi').each(function () {
+                let price = $(this).find('input[name="price"]').val();
+                let discount = $(this).find('input[name="discount"]').val();
+                let country_id = $(this).find('select[name="country"]').val();
+                if(!country_id || discount=="" || price == ""){
+                    alert('Please select a country');
+                    valid = false
+                    return false
+                }
+
+
+                // Build the data object for each item
+                let itemData = {
+                    'price': price,
+                    'discount': discount,
+                    'country_id': country_id
+                };
+                itemsData.push(itemData);
+            })
+            $(this).hide()
+            $('#spinner2').show()
+            if(valid){
+                $.ajax({
+                type: 'POST',
+                headers: { 'X-CSRFToken': csrftoken },
+                data: JSON.stringify({
+                    'items': itemsData
+                }),
+                url: `/admin/salesprice/update/${sale_id}`,
+                success: function (response) {
+                    console.log(response)
+                    $('#exampleModal').modal('hide')
+
+                },
+                error: function (xhr) {
+                    console.error(xhr.responseText);
+                }
+            })
+            
+            }
+            $('#spinner2').hide()
+            $(this).show()
+            
+           
+
+        })
+        // Add new input group when Add button is clicked
+        $(document).on('click', '.add-more', function () {
+            var newMulti = `
+            <div class="multi" style="display: flex; justify-content: space-between; margin: 20px;">
+                <input type="number" placeholder="Enter price" name="price" style="border-radius: 12px; border: 1px solid rgb(241, 241, 241);">
+                <input type="number" placeholder="Enter discount" name="discount" style="border-radius: 12px; border: 1px solid rgb(241, 241, 241);">
+                <div class="select" style="width: 120px;">
+                    <select name="country">
+                        <option value="">Country</option>
+                        {% for country in countries %}
+                        <option value="{{country.id}}">{{country.name}}-{{country.code}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="button" class="btn btn-danger remove" style="width: 80px; font-size: 13px; border-radius: 13px; border: 0;">Remove</button>
+            </div>`;
+            $('#multi-container').append(newMulti);  // Append the new multi div to the container
+        });
+
+        // Remove input group when Remove button is clicked
+        $(document).on('click', '.remove', function () {
+            $(this).closest('.multi').remove();  // Remove the closest multi div when clicked
+        });
+    });
+</script>
 {% endblock %}
 
 {% block footer %}
-{% endblock %}  
+{% endblock %}

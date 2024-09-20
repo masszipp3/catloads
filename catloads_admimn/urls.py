@@ -63,6 +63,10 @@ urlpatterns=[
     path('sale/<int:id>/edit',sale.SaleCreateView.as_view(),name='sale_edit'),
     path('sale/<int:id>/delete',sale.ProductSaleSoftDeleteView.as_view(),name='sale_delete'),
     path('sale/list',sale.SaleProductsList.as_view(),name='sale_list'),
+    path('sale/prices/<int:id>',sale.ProductPricingList.as_view(),name='pricinglist'),
+    path('salesprice/update/<int:id>',sale.ProductPricingPOST.as_view(),name='pricingupdate'),
+
+
 
 
 

@@ -44,6 +44,8 @@ class BaseModel(models.Model):
 class Country(BaseModel):
     name = models.CharField(max_length=100, unique=True)
     code = models.CharField(max_length=10, unique=True)  
+    symbol = models.CharField(max_length=10, default="$")
+    default=models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
@@ -207,6 +209,7 @@ class CountryPrice(BaseModel):
     product_sale = models.ForeignKey(ProductSale, related_name='country_sale_prices', on_delete=models.CASCADE, null=True, blank=True)
     country = models.ForeignKey(Country, related_name='country_prices', on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=10, decimal_places=2,default=0.00)
+    discount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
 
     class Meta:
         unique_together = ('product', 'country') 

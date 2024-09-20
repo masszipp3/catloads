@@ -1,6 +1,8 @@
 from django import forms
-from catloads_web.models import Category,Product,PromoCode,Banner,ProductSale
+from catloads_web.models import Category,Product,PromoCode,Banner,ProductSale,CountryPrice,Country
 from django_ckeditor_5.widgets import CKEditor5Widget
+from django.core.exceptions import ObjectDoesNotExist
+
 
 
 class CategoryForm(forms.ModelForm):
@@ -74,4 +76,22 @@ class ProductSaleForm(forms.ModelForm):
             'discount' : forms.NumberInput(attrs={'class': 'mb-10', 'placeholder': 'Enter Discount', 'required': True,'tabindex':"0",'aria-required':"true"}),
             'thumbnail' : forms.FileInput(attrs={'id':"myFile" }),
             # 'description':forms.Textarea(attrs={'class': 'mb-10', 'placeholder': 'Enter Discription', 'required': True,'tabindex':"0",'aria-required':"true"}),
-        }        
+        }  
+
+    def save(self, commit=True):
+        product_sale = super().save(commit=False)
+        price = self.cleaned_data.get('price')
+        if commit:
+            product_sale.save()
+        try:
+            default_country = Country.objects.get(default=True)
+        except ObjectDoesNotExist:
+            default_country = Country.objects.get(name='United States', code='US')
+
+        CountryPrice.objects.create(
+            product_sale=product_sale,
+            country=default_country,
+            price=price,
+            discount=self.cleaned_data.get('discount', 0.00) 
+        )
+        return product_sale      

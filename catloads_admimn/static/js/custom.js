@@ -99,6 +99,7 @@ $(function() {
 
 });
 
+
 function updateFormState() {
     var $productBox = $('#product_box');
     var $submitBtn = $('#submitbtn');

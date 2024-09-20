@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-j9_@c%1_sz#i#nqfluyd9h=&fkj%adcad@e5q=4!y#v+qhy71q
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-SITE_ID = 2
+SITE_ID = 3
 
 ALLOWED_HOSTS = ['*']
 
@@ -90,7 +90,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'allauth.account.middleware.AccountMiddleware'
+    'allauth.account.middleware.AccountMiddleware',
+    "catloads_admimn.middleware.GeoIPMiddleware"
 ]
 
 ROOT_URLCONF = 'catloads.urls'
@@ -106,6 +107,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'catloads_admimn.context_processors.get_countries'
                 
             ],
         },
@@ -181,7 +183,7 @@ LOGIN_REDIRECT_URL = '/login/redirect'
 
 PASSWORD_RESET_TIMEOUT = 7200
 
-
+GEOIP_PATH = os.path.join(BASE_DIR, 'geoip')
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
