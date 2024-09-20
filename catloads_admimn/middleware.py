@@ -39,4 +39,4 @@ class GeoIPMiddleware:
                 'ip':ip_address,
                 'e':error
             }
-        # return self.get_response(request)
+            return self.get_response(request)
