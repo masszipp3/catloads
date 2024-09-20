@@ -32,7 +32,7 @@ class DashboardView(View):
         # send_my_email()
         try:
             default_country = Country.get_default_country().id if Country.get_default_country() else None 
-            country_id = self.request.session.get('country_data', {}).get('country_id') or default_country
+            country_id = self.request.session.get('country_data', {}).get('country_id') or  default_country
             products_sale = ProductSale.objects.filter(country_sale_prices__country_id=country_id,is_deleted=False) 
             if not products_sale:
                products_sale= ProductSale.objects.filter(country_sale_prices__country_id=default_country,is_deleted=False)

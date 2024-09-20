@@ -213,7 +213,7 @@ class ProductSale(BaseModel):
             return {
                 'price': country_price.price,
                 'discount': country_price.discount,
-                'symbol':country_price.country.discount
+                'symbol':country_price.country.symbol
             }
         except:
             default_country = Country.get_default_country()
