@@ -35,13 +35,11 @@ class DashboardView(View):
             default_country = Country.get_default_country()
             country_id = self.request.session.get('country_data', {}).get('country_id') or default_country.id
 
-            # Fetch products for the given country_id
             products_sale = ProductSale.objects.filter(
                 country_sale_prices__country_id=country_id, 
                 is_deleted=False
             )
 
-            # If no products are found for the selected country, fetch products for the default country
             if not products_sale.exists():
                 products_sale = ProductSale.objects.filter(
                     country_sale_prices__country_id=default_country.id, 
@@ -49,7 +47,6 @@ class DashboardView(View):
                 )
                 country_id = default_country.id
 
-            # Annotate products with price, discount, symbol, and discount percentage for the country
             products_sale = products_sale.annotate(
                 price_for_country=Subquery(
                     CountryPrice.objects.filter(

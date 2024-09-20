@@ -20,8 +20,11 @@ class ProductDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        country_id = self.request.session.get('country_data', {}).get('country_id') or Country.get_default_country().id or None
+        default_country = Country.get_default_country()
+        country_id = self.request.session.get('country_data', {}).get('country_id') or default_country.id
         product = context['products']
+        if not product.country_sale_prices.filter(country_id=country_id).exists():
+            country_id = default_country.id
         banners = Banner.objects.filter(is_deleted=False)
         product_images = product.products_images.filter(is_deleted=False).order_by('id')
         product_videos = product.productssale_videos.filter(is_deleted=False).order_by('id')
