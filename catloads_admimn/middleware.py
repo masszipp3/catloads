@@ -11,6 +11,7 @@ class GeoIPMiddleware:
             ip_address = request.META.get('REMOTE_ADDR', None)
             
             try:
+                error = ''
                 if ip_address:
                     g = GeoIP2()
                     country_info = g.country(ip_address)
@@ -24,6 +25,7 @@ class GeoIPMiddleware:
                     'symbol': '$'
                 })
                 print(f"GeoIP lookup failed: {e}")
+                error=str(e)
 
             # Store country data in session
             request.session['country_data'] = {
@@ -31,7 +33,8 @@ class GeoIPMiddleware:
                 'country_name': country.name,
                 'country_id': country.id,
                 'ip':ip_address,
-                'e':str(e)
+                'e':error
             }
+
 
             return self.get_response(request)
