@@ -46,13 +46,14 @@ class Country(BaseModel):
     code = models.CharField(max_length=10, unique=True)  
     symbol = models.CharField(max_length=10, default="$")
     default=models.BooleanField(default=False)
+    active =models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
     
     @staticmethod
     def get_default_country(): 
-        return Country.objects.filter(default=True).first()
+        return Country.objects.filter(default=True,active=True).first()
 
 
 class CustomUser(AbstractUser):

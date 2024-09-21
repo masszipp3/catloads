@@ -15,7 +15,7 @@ class GeoIPMiddleware:
                     g = GeoIP2()
                     country_info = g.country(ip_address)
                     country_code = country_info['country_code']
-                    country = get_object_or_404(Country, code=country_code)
+                    country = get_object_or_404(Country, code=country_code,active=True)
                 else:
                     raise Exception("No IP address found")
             except Exception as e:
@@ -26,6 +26,7 @@ class GeoIPMiddleware:
                         'symbol': '$',
                     })
                     country.default=True
+                    country.active =True
                     country.save()
                 print(f"GeoIP lookup failed: {e}")
                 error=str(e)

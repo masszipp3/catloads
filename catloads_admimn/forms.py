@@ -1,6 +1,7 @@
 from django import forms
 from catloads_web.models import Category,Product,PromoCode,Banner,ProductSale,CountryPrice,Country
 from django_ckeditor_5.widgets import CKEditor5Widget
+from django.core.exceptions import ValidationError
 from django.core.exceptions import ObjectDoesNotExist
 
 
@@ -16,6 +17,35 @@ class CategoryForm(forms.ModelForm):
             'icon': forms.FileInput(attrs={'id':"myFile" ,'name':"filename"}),
         }
 
+
+class CountryForm(forms.ModelForm):
+    class Meta:
+        model = Country
+        fields = ['name','code','symbol','default','active']
+        
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'flex-grow', 'placeholder': 'Country name', 'required': True}),
+            'code': forms.TextInput(attrs={'class': 'flex-grow', 'placeholder': 'Country Code', 'required': True,'readonly':True}),
+            'symbol': forms.TextInput(attrs={'class': 'flex-grow', 'placeholder': 'Country Currency Symbol', 'required': True}),
+            'default': forms.CheckboxInput(attrs={'class': 'flex-grow', 'placeholder': 'Country Currency Symbol',}),
+            'active': forms.CheckboxInput(attrs={'class': 'flex-grow', 'placeholder': 'Country Currency Symbol'}),
+        }
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.instance_default = self.instance.default if self.instance.pk else False
+
+    def clean(self):
+        cleaned_data = super().clean()
+        default = cleaned_data.get('default')
+        active = cleaned_data.get('active')
+
+        if default and not active:
+            raise ValidationError('A country cannot be set as default if it is not active.')
+
+        if default and not self.instance_default:
+            Country.objects.filter(default=True).exclude(pk=self.instance.pk).update(default=False)
+
+        return cleaned_data
 
 class ProductForm(forms.ModelForm):
     class Meta:
@@ -84,10 +114,11 @@ class ProductSaleForm(forms.ModelForm):
         if commit:
             product_sale.save()
         try:
-            default_country = Country.objects.get(default=True)
+            default_country = Country.objects.get(default=True,active=True)
         except ObjectDoesNotExist:
             default_country = Country.objects.get(name='United States', code='US')
             default_country.default=True
+            default_country.active=True
             default_country.save()
 
         CountryPrice.objects.create(

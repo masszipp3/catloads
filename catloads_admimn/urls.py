@@ -1,5 +1,5 @@
 from django.urls import path
-from catloads_admimn.views_fc import (dashboard,product,promocode,banner,order,users,sale,login)
+from catloads_admimn.views_fc import (dashboard,product,promocode,banner,order,users,sale,login,country)
 
 app_name= "catloadsadmin"
 
@@ -66,8 +66,15 @@ urlpatterns=[
     path('sale/prices/<int:id>',sale.ProductPricingList.as_view(),name='pricinglist'),
     path('salesprice/update/<int:id>',sale.ProductPricingPOST.as_view(),name='pricingupdate'),
 
+    #------------------------- Country Management----------------------------------------------
 
+    path('country/create',country.CountryCreateView.as_view(),name='country_create'),
+    path('country/<int:id>/edit',country.CountryCreateView.as_view(),name='country_edit'),
+    path('country/<int:id>/delete',country.CountryDeleteView.as_view(),name='country_delete'),
+    path('country/list',country.CountryListView.as_view(),name='country_list'),
 
+    
+    
 
 
 
