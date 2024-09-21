@@ -157,7 +157,7 @@ class CustomerAbout(TemplateView):
 #         products = ProductSaleItems.objects.filter(sale_master__in=product_sales).distinct()
 #         context['products'] = products
 #         return context
-@method_decorator(custom_login_required(login_url='/login/'), name='dispatch')   
+@method_decorator(custom_login_required(login_url='catloads_web:login'), name='dispatch')   
 class CustomerOrders(TemplateView):
     template_name = 'catloads_web/account-orders.html'
 
