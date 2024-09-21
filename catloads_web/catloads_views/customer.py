@@ -229,7 +229,7 @@ class LoginView(View):
         try:
             username = request.POST.get('email')
             password = request.POST.get('password')
-            user = authenticate(request,username=username, password=password)
+            user = authenticate(request,email=username, password=password)
             if  user is not None and user.usertype==2:
                 user.backend = 'django.contrib.auth.backends.ModelBackend'
 
