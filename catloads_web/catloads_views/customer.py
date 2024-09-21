@@ -332,7 +332,7 @@ class CustomerDowloads(TemplateView):
         order_id = self.request.GET.get('order_id')
         order_items = OrderItem.objects.filter(order__user=self.request.user,order__order_status=2)
         if order_id:
-           order_items= order_items.filter(id=order_id)
+           order_items= order_items.filter(order_id=order_id)
         product_sales = ProductSale.objects.filter(id__in=order_items.values_list('product_id', flat=True))
         products = ProductSaleItems.objects.filter(sale_master__in=product_sales).distinct()
         context['products'] = products
