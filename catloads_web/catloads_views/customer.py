@@ -97,6 +97,9 @@ def updateto_Order(request=None,user=None):
     except Exception as e:
         print(e)
 
+  
+
+
 @method_decorator(custom_login_required(login_url='catloads_web:login'), name='dispatch')
 class CustomerDahsboard(TemplateView):
     template_name = 'catloads_web/account-dashboard.html'

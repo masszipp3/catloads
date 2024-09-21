@@ -3,6 +3,38 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.utils.crypto import constant_time_compare
 from datetime import datetime
+from django.views.decorators.clickjacking import xframe_options_exempt
+from django.core.mail import send_mail
+from django.urls import reverse
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
+from catloads_web.utils import *
+from django.core.mail import EmailMessage
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+from catloads import settings
+from django.core.mail import EmailMultiAlternatives
+
+
+
+def send_confirm_email( user,request):
+        orders_link = request.build_absolute_uri(
+                    reverse('catloads_web:orders'))
+        context = {
+            'name': user.name,
+            'email': user.email,
+            'orders_link': orders_link,     
+        }
+        html_content = render_to_string('catloads_web/order_confirmation_email.html', context)
+        text_content = strip_tags(html_content) 
+        email = EmailMultiAlternatives(
+        subject='Catloads Order Confirmation',
+        body=text_content,
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        to=[user.email]
+         )
+        email.attach_alternative(html_content, "text/html")
+        email.send()  
 
 # class CustomPasswordResetTokenGenerator(PasswordResetTokenGenerator):
 #     def _today(self):
