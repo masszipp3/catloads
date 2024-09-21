@@ -141,7 +141,7 @@ class ProductPricingList(UserPassesTestMixin,View):
                 'country': country_price.country.id,
                 'discount':country_price.discount
             }for country_price in country_prices]
-            countries = Country.objects.values('id', 'code', 'name', 'symbol')
+            countries = Country.objects.filter(active=True).values('id', 'code', 'name', 'symbol')
             countries = list(countries)
             return JsonResponse({'price_list':price_list,'countries':countries},status=200)
 
