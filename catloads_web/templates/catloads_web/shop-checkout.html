@@ -927,7 +927,7 @@
 	<script src="{% static 'web/js/custom.js' %}"></script><!-- CUSTOM JS -->
 	<script src="{% static 'web/js/myjs.js' %}"></script><!-- CUSTOM JS -->
 	<script>
-		fbq('track', 'Purchase', {currency: "{{ request.session.country_data.symbol }}}"}, value:{{order.get_order_total}} ) ;
+		fbq('track', 'Purchase', {currency: "{{ request.session.country_data.symbol }}}", value:{{order.get_order_total}} }) ;
 	  </script>
 	<!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T44FCQNK"
