@@ -89,7 +89,7 @@ class OrderViewList(UserPassesTestMixin,ListView):
     model = Order
     template_name = 'catloads_admin/order_data.html'
     context_object_name = 'orders'
-    # paginate_by = 10
+    paginate_by = 50
     queryset = OrderItem.objects.filter(is_deleted=False).order_by('-id')
     def test_func(self):
         return self.request.user.is_superuser   
