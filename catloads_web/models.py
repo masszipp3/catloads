@@ -280,6 +280,10 @@ class Order(BaseModel):
     def get_status_display(self):
         return dict(self.ORDER_STATUS)[self.order_status]  
     
+    def get_payment_display(self):
+        return dict(self.PAYMENT_TYPE)[self.payment_method]  
+    
+
     def get_orderitemcount(self):
         return self.items.count()
     

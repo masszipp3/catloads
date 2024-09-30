@@ -47,7 +47,7 @@ urlpatterns=[
     path('order/<int:pk>/detail',order.OrderDetailView.as_view(),name='order_detail'),
     path('order/<int:id>/update',order.OrderUpdateView.as_view(),name='order_update'),
     path('order/<int:id>/delete',order.OrderSoftDeleteView.as_view(),name='order_delete'),
-    path('order/data/excel',order.ExportOrderExcel.as_view(),name='order_excel'),
+    path('order/data/excel',order.OrderViewList.as_view(),name='order_excel'),
 
 
     #------------------------- User Management----------------------------------------------
