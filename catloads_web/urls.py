@@ -34,5 +34,5 @@ urlpatterns=[
     path('send/mail',customer.SendEmialTempView.as_view(),name='send_mail'),
     path('forgot_password',customer.ForgetpasswordView.as_view(),name='forget_pasword'),
     path('change_password/<uidb64>/<token>',customer.ChangepasswordView.as_view(),name='change_password'),
-    path('razorpay/payment_update',order.Update_paymentView.as_view(),name='update_payments'),
+    path('razorpay/payment_update',order.UpdatePaymentView.as_view(),name='update_payments'),
 ]

@@ -24,6 +24,7 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 import hmac
 import hashlib
+import logging
 from catloads_web.utils import send_confirm_email
 
 class CartView(TemplateView):
@@ -119,7 +120,7 @@ class OrderConfirmView(View):
             order.user.save()
             if payment_id:
                 Payment.objects.create(order=order,transaction_id=payment_id,signature=payment_signature_id,amount=order.total_price,status=2)
-            send_confirm_email(user=order.user,request=request)    
+            # send_confirm_email(user=order.user,request=request)    
             redirect_url = reverse('catloads_web:downloads') 
             return JsonResponse({'Message':'Success','redirect_url':redirect_url})
         except (Exception, Exception) as e:
@@ -149,35 +150,102 @@ class VerifyPaymentView(View):
         instance.save()
         return redirect('catloads_web:downloads') if paymemnt.get('status') == 'captured' else redirect('catloads_web:orders')
 
+# Configure logging
+logger = logging.getLogger(__name__)
 
-class Update_paymentView(View):
-    @csrf_exempt
-    def post(self,request):
-        securyt_key = RAZO_PAY_WEBHOOK
+@method_decorator(csrf_exempt, name='dispatch')
+class UpdatePaymentView(View):
+    def post(self, request):
+        try:
+            # Log request details for debugging
+            logger.info("Received Razorpay webhook:")
+            logger.info(f"Headers: {request.headers}")
+            logger.info(f"Body: {request.body}")
 
-        webhook_payload = request.body
-        received_signature = request.headers.get('X-Razorpay-Signature')
-        generated_signature = hmac.new(securyt_key.encode(), webhook_payload, hashlib.sha256).hexdigest()
-        if hmac.compare_digest(received_signature, generated_signature):
+            # Razorpay secret key for generating signature
+            security_key = RAZO_PAY_WEBHOOK
+
+            # Verify the webhook signature
+            webhook_payload = request.body
+            received_signature = request.headers.get('X-Razorpay-Signature')
+            generated_signature = hmac.new(security_key.encode(), webhook_payload, hashlib.sha256).hexdigest()
+
+            if not hmac.compare_digest(received_signature, generated_signature):
+                logger.error("Signature mismatch: Verification failed.")
+                return HttpResponse("Signature mismatch: Verification failed.", status=400)
+
+            # Parse the webhook payload
             webhook_payload = json.loads(webhook_payload)
+            logger.info(f"Parsed Webhook Payload: {webhook_payload}")
+            print(webhook_payload,'hhhhkkk')
+            # Extract necessary details
+            event = webhook_payload.get('event')
+            payment_entity = webhook_payload.get('payload', {}).get('payment', {}).get('entity', {})
+            payment_id = payment_entity.get('id')
+            order_id = payment_entity.get('order_id')
+            amount = payment_entity.get('amount')
+            phone = payment_entity.get('contact')
 
-            # Handle the event - e.g., check if it's a payment captured event
-            if webhook_payload['event'] == 'payment.captured':
-                # Get the relevant information from the payload
-                payment_id = webhook_payload['payload']['payment']['entity']['id']
-                order_id = webhook_payload['payload']['payment']['entity']['order_id']
-                amount = webhook_payload['payload']['payment']['entity']['amount']
-                if order := Order.objects.filter(razorpay_id=order_id).first():
-                    order.order_status= 2
-                    order.save()
-                    payment,_ = Payment.objects.get_or_create(order=order, transaction_id=payment_id)
-                    payment.amount = amount
-                    payment.save()
-                    return HttpResponse(status=200)
-        return HttpResponse(status=400)    
+            status = payment_entity.get('status')
 
+            # Validate extracted data
+            if not payment_id or not order_id or amount is None:
+                logger.error("Invalid payment information extracted from webhook.")
+                return HttpResponse("Invalid payment information", status=400)
 
+            # Process order and payment based on the event type
+            order = Order.objects.filter(razorpay_id=order_id).first()
+            if not order:
+                logger.error(f"Order not found for order_id: {order_id}")
+                return HttpResponse(f"Order not found: {order_id}", status=404)
 
+            if event == 'payment.captured':
+                # Update order and payment for captured payment
+                order.order_status = 2  # Assume 2 is the status for "Captured"
+                order.save()
+                payment, _ = Payment.objects.get_or_create(order=order, transaction_id=payment_id)
+                payment.amount = amount
+                payment.status = 2
+                order.user.phone = phone
+                order.user.save()
+                payment.save()
+                logger.info(f"Payment captured for order_id: {order_id}, payment_id: {payment_id}")
+
+                return HttpResponse("Payment captured and processed successfully.", status=200)
+            
+            elif event == 'payment.failed':
+                # Update order and payment for failed payment
+                order.order_status = 3  # Assume 3 is the status for "Failed"
+                order.save()
+                payment, _ = Payment.objects.get_or_create(order=order, transaction_id=payment_id)
+                payment.amount = amount
+                payment.status = 0
+                order.user.phone = phone
+                order.user.save()
+                payment.save()
+                logger.info(f"Payment failed for order_id: {order_id}, payment_id: {payment_id}")
+                return HttpResponse("Payment failed and processed successfully.", status=200)
+
+            elif event == 'payment.pending':
+                # Update order and payment for pending payment
+                order.order_status = 1  #1 is the status for "Pending"
+                order.save()
+                payment, _ = Payment.objects.get_or_create(order=order, transaction_id=payment_id)
+                payment.amount = amount
+                payment.status = 1
+                order.user.phone = phone
+                order.user.save()
+                payment.save()
+                logger.info(f"Payment pending for order_id: {order_id}, payment_id: {payment_id}")
+                return HttpResponse("Payment pending and processed successfully.", status=200)
+            
+            else:
+                logger.error(f"Unhandled event type: {event}")
+                return HttpResponse(f"Unhandled event type: {event}", status=400)
+                
+        except Exception as e:
+            logger.exception(f"Exception occurred while processing the webhook: {e}")
+            return HttpResponse(f"Exception occurred: {e}", status=400)
 
 
 

@@ -160,7 +160,7 @@ class ProductListView(UserPassesTestMixin,ListView):
         queryset = Product.objects.filter(is_deleted=False).annotate(
             download_count=Count('products_sale__order_items', filter=Q(products_sale__order_items__order__paid=True))).filter(is_deleted=False).order_by('-id')
         return queryset   
-                 
+     
 @method_decorator(login_required, name='dispatch')  
 class ProductSoftDeleteView(UserPassesTestMixin,View):
     success_url = reverse_lazy('catloadsadmin:product_list')
