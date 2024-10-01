@@ -89,6 +89,83 @@ $(function () {
 
 })
 
+
+$(function () {
+  var $keyword = $('#order_search');
+  var $searchdiv = $('#order_box');
+  function debounce2(func, wait, immediate) {
+    var timeout;
+    return function () {
+      var context = this, args = arguments;
+      var later = function () {
+        timeout = null;
+        if (!immediate) func.apply(context, args);
+      };
+      var callNow = immediate && !timeout;
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+      if (callNow) func.apply(context, args);
+    };
+  }
+
+  var handleInput = debounce2(function () {
+    var value = $keyword.val().trim();
+    let url = window.location.href
+
+    if (value.length >= 1) {
+      $.ajax({
+        type: 'GET',
+        url: url,
+        data: { 'search': value },
+        success: function (response) {
+          $searchdiv.empty()
+          const orders = response.orders
+          console.log(orders)
+          for (i = 0; i < orders.length; i++) {
+            var context = `<li class="product-item gap14">
+                        
+                        <div class="image no-bg">
+                            <img src="" alt="">
+                        </div>
+                        <div class="flex items-center justify-between gap20 flex-grow">
+                            <div class="body-text">${orders[i].order_id}</div>
+                            <div class="body-text">${orders[i].amount}</div>
+                            <div class="body-text">${orders[i].count}</div>
+                            <div class="body-text">${orders[i].date}</div>
+                            <div>
+                                <div class="block-available">${orders[i].status}</div>
+                            </div>
+                            <!-- <div>
+                                <div class="block-tracking">Tracking</div>
+                            </div> -->   
+                            <div class="list-icon-function">
+                                <div class="item edit">
+                                    <a style="text-decoration: none !important;" href="${orders[i].edit_link}"><i style="color: green;" class="icon-edit-3"></i></a> 
+
+                                </div>
+                                <div class="item trash">
+                                    <a style="text-decoration: none !important;" onclick="return confirm('Are you Sure..?')" href="${orders[i].delete_link}"> <i style="color: red;" class="icon-trash-2"></i></a>
+
+                                </div>
+                            </div>
+                        </div>
+                    </li>`
+            $searchdiv.append(context)
+          }
+        },
+        error: function (xhr) {
+          console.error(xhr.responseText);
+        }
+      });
+    } else {
+      window.location.reload()
+    }
+  }, 250);
+
+  $keyword.on('input', handleInput);
+
+})
+
   
 
 

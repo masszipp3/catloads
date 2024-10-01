@@ -15,6 +15,8 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.http import HttpResponse
 import xlwt
+from django.http import JsonResponse   
+
 
 
 @method_decorator(login_required, name='dispatch')
@@ -24,6 +26,27 @@ class OrderListView(UserPassesTestMixin,ListView):
     context_object_name = 'orders'
     paginate_by = 10
     queryset = Order.objects.filter(is_deleted=False).order_by('-id').annotate( items_count=Count('items'))
+
+    def get(self, request, *args, **kwargs):
+        if 'search' in self.request.GET:
+            keyword=  self.request.GET.get('search','')
+            queryset = self.get_queryset().filter(
+                Q(order_id__icontains=keyword) | 
+                Q(user__email=keyword) |
+                Q(user__phone=keyword) 
+            ) 
+            order_list = [{
+            'id': order.id,
+            'order_id': order.order_id,
+            'amount':  order.total_price,
+            'count': order.items_count,
+            'edit_link': reverse("catloadsadmin:order_detail" , kwargs={'pk': order.id}),
+            'delete_link': reverse("catloadsadmin:order_delete" , kwargs={'id': order.id}),  
+            'date': order.created_on,
+            'status': order.get_order_status_display()
+        } for order in queryset] 
+            return JsonResponse({'orders': order_list}, safe=False)
+        return super().get(request, *args, **kwargs)     
     def test_func(self):
         return self.request.user.is_superuser   
     
