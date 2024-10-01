@@ -120,7 +120,7 @@ class OrderConfirmView(View):
             order.user.save()
             if payment_id:
                 Payment.objects.create(order=order,transaction_id=payment_id,signature=payment_signature_id,amount=order.total_price,status=2)
-            # send_confirm_email(user=order.user,request=request)    
+            send_confirm_email(user=order.user,request=request)    
             redirect_url = reverse('catloads_web:downloads') 
             return JsonResponse({'Message':'Success','redirect_url':redirect_url})
         except (Exception, Exception) as e:
