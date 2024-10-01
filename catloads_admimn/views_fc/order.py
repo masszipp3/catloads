@@ -89,8 +89,17 @@ class OrderViewList(UserPassesTestMixin,ListView):
     model = Order
     template_name = 'catloads_admin/order_data.html'
     context_object_name = 'orders'
-    paginate_by = 50
+    paginate_by = 60
     queryset = OrderItem.objects.filter(is_deleted=False).order_by('-id')
+
+    def get_queryset(self) :
+        queryset = super().get_queryset()
+        start_date = self.request.GET.get('start',None)
+        end_date = self.request.GET.get('end',None)
+        if start_date and end_date:
+            queryset = queryset.filter(order__created_on__date__range=(start_date,end_date))
+        return queryset
+        
     def test_func(self):
         return self.request.user.is_superuser   
 

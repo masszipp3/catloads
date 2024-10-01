@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,13 +9,56 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Export HTML Table to Excel</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-select.min.css' %}">
 
 </head>
 <body>
-    <table id="orderTable" border="1" style="width: 100%;">
+    <h2 style="text-align: center;padding: 10px;" > ORDER DATA </h2>
+    <div class="data" style="padding: 6px; display: flex; flex-direction: column; align-items: center; margin-bottom: 10px;">
+        <div style="display: flex; justify-content: center; align-items: center;">
+            <div>
+                <span style="text-align: center;">Starting Date</span>
+                <input type="date" id="start_date" style="margin-left: 10px;margin-right: 10px; padding: 2px;"> <br>
+            </div>
+            <div>
+                <span style="text-align: center;">End Date</span>
+                <input type="date" id="end_date" style="margin-left: 10px;padding: 2px;"> <br>
+            </div>
+            <button class="btn btn-primary" onclick="filterData()" style="margin-left: 10px;">Filter</button>
+            <a class="btn btn-danger"  style="margin-left: 10px;" href="{% url 'catloadsadmin:order_excel' %}"> All</a>
+            <button class="btn btn-success" onclick="exportTableToExcel('orderTable', 'OrderData')" style="margin-left: 10px;">Export Excel</button>
+
+        </div>
+    
+        <!-- Pagination container -->
+        <div style="width: 100%; display: flex; justify-content: flex-end; align-items: center; margin-top: 10px;">
+            <ul class="wg-pagination" style="list-style: none; display: flex; align-items: center;">
+                <li>
+                    {% if page_obj.has_previous %}
+                        <a href="?page={{ page_obj.previous_page_number }}">
+                            <i class="fa fa-arrow-circle-left" style="font-size: 40px;"></i>
+                        </a>
+                    {% endif %}
+                </li>
+                <li>
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}">
+                            <i class="fa fa-arrow-circle-right" style="font-size: 40px;"></i>
+                        </a>
+                    {% endif %}
+                </li>   
+            </ul>
+        </div>
+    </div>
+    
+
+    <table id="orderTable" class="table table-bordered"  border="1" style="width: 100%;border: 1px solid black;">
         <thead>
             <th>Order ID</th>
             <th>Customer</th>
+            <th>Phone</th>
             <th>Payment Method</th>
             <th>Order Status</th>
             <th>Tax</th>
@@ -31,9 +75,9 @@
             <tr>
                 <td>{{order.order_id}}</td>
                 <td>{{order.order.user.email }}</td>
+                <td>{{order.order.user.phone }}</td>
                 <td>{{order.order.get_payment_display}}</td>
                 <td>{{order.order.get_status_display}}</td>
-
                 <td>{{order.order.tax}}</td>
                 <td>{{order.order.discount}}</td>
                 <td>{{order.order.total_price}}</td>
@@ -47,8 +91,19 @@
 
         </tbody>
     </table>
-    <button onclick="exportTableToExcel('orderTable', 'OrderData')">Export Table to Excel</button>
+    
     <script>
+        function filterData() {
+        const startDate = document.getElementById('start_date').value;
+        const endDate = document.getElementById('end_date').value;
+
+        const url = new URL(window.location.href);
+        url.searchParams.set('start', startDate);
+        url.searchParams.set('end', endDate);
+
+        // Redirect to the new URL
+        window.location.href = url.toString();
+    }
         function exportTableToExcel(tableID, filename = '') {
             // Get the HTML table
             var table = document.getElementById(tableID);
@@ -77,5 +132,8 @@
             window.URL.revokeObjectURL(url);
         }
     </script>
+
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/bootstrap-select.min.js' %}"></script>
 </body>
 </html>

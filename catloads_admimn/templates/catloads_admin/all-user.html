@@ -209,9 +209,12 @@
                         <fieldset class="name">
                             <input type="text" placeholder="Search here..." class="" name="name" tabindex="2" value="" aria-required="true" required="">
                         </fieldset>
-                        <div class="button-submit">
-                            <button class="" type="submit"><i class="icon-search"></i></button>
-                        </div>
+                        <fieldset class="name">
+                            <div class="body-title mb-10">Product date</div>
+                            <div class="select">
+                                <input type="date" id="dateInput" name="date" >
+                            </div>
+                        </fieldset>
                     </form>
                 </div>
                 <a class="tf-button style-1 w208" href="{% url 'catloadsadmin:export_user' %}"><i class="icon-file-text"></i>Export all Users</a>
