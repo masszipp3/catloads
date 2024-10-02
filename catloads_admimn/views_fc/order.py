@@ -16,6 +16,8 @@ from django.urls import reverse
 from django.http import HttpResponse
 import xlwt
 from django.http import JsonResponse   
+from catloads_web.utils import send_confirm_email
+
 
 
 
@@ -84,6 +86,9 @@ class OrderUpdateView(UserPassesTestMixin,View):
             if status:
                 order.order_status = status
                 order.save()
+                if status == '2':
+                    send_confirm_email(user=order.user,request=request)    
+
             return redirect(reverse('catloadsadmin:order_detail', kwargs={'pk': id}) )    
         except Order.DoesNotExist:
             return redirect('catloadsadmin:orderlist')

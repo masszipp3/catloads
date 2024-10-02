@@ -927,8 +927,18 @@
 	<script src="{% static 'web/js/custom.js' %}"></script><!-- CUSTOM JS -->
 	<script src="{% static 'web/js/myjs.js' %}"></script><!-- CUSTOM JS -->
 	<script>
-		fbq('track', 'Purchase', {currency: "INR", value:{{order.get_order_total}} }) ;
-	  </script>
+		// Check if the 'purchaseTracked' flag is already set in session storage
+		if (!sessionStorage.getItem('purchaseTracked')) {
+			fbq('track', 'Purchase', {
+				currency: "INR", 
+				value: {{ order.get_order_total }}
+			});
+	
+			// Set the flag in session storage to prevent future triggers
+			sessionStorage.setItem('purchaseTracked', 'true');
+		}
+	</script>
+	
 	<!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T44FCQNK"
 	height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
