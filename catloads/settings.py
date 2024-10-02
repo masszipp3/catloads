@@ -204,7 +204,7 @@ LOGIN_REDIRECT_URL = '/login/redirect'
 
 PASSWORD_RESET_TIMEOUT = 7200
 
-GEOIP_PATH = os.path.join(BASE_DIR, 'geoip')
+GEOIP_PATH = os.path.join(BASE_DIR, 'geoip2')
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
