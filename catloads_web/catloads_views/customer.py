@@ -327,16 +327,25 @@ class CartDataView(View):
 class CustomerDowloads(TemplateView):
     template_name = 'catloads_web/account-downloads.html'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        order_id = self.request.GET.get('order_id')
-        order_items = OrderItem.objects.filter(order__user=self.request.user,order__order_status=2)
-        if order_id:
-           order_items= order_items.filter(order_id=order_id)
-        product_sales = ProductSale.objects.filter(id__in=order_items.values_list('product_id', flat=True))
-        products = ProductSaleItems.objects.filter(sale_master__in=product_sales).distinct()
-        context['products'] = products
-        return context
+    def get(self, request, *args, **kwargs):
+        try:
+            token = request.GET.get('acctoken')
+            order_id = request.GET.get('order_id')
+            if token:
+                user = AuthToken.objects.get(token=token)
+                if user.is_expired():
+                    login_url = f"{reverse('catloads_web:login')}?next=/customer/downloads"
+                    return redirect(login_url)
+                login_user_without_password(request=request,user=user)
+            order_items = OrderItem.objects.filter(order__user=request.user, order__order_status=2)
+            if order_id:
+                order_items = order_items.filter(order_id=order_id)
+            product_sales = ProductSale.objects.filter(id__in=order_items.values_list('product_id', flat=True))
+            products = ProductSaleItems.objects.filter(sale_master__in=product_sales).distinct()
+            context = {'products': products}
+            return self.render_to_response(context)
+        except Exception as e:
+            return redirect('catloads_web:login')
     
 @method_decorator(custom_login_required(login_url='/login/'), name='dispatch')
 class AccountUpdateView(UpdateView):

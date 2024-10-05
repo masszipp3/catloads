@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import CustomUser,CartItem,Cart,OrderItem,Order,Product,ProductImages,ProductVideos,Category,ProductSale,ProductSaleItems,Country,CountryPrice,Payment
+from .models import CustomUser,CartItem,Cart,OrderItem,Order,Product,ProductImages,ProductVideos,Category,ProductSale,ProductSaleItems,Country,CountryPrice,Payment,AuthToken
 
 # Register your models here.
 admin.site.register(CustomUser)
@@ -14,6 +14,8 @@ admin.site.register(Category)
 admin.site.register(CountryPrice)
 admin.site.register(Country)
 admin.site.register(Payment)
+admin.site.register(AuthToken)
+
 
 
 

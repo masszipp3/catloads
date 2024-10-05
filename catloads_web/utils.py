@@ -14,7 +14,74 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from catloads import settings
 from django.core.mail import EmailMultiAlternatives
+from twilio.rest import Client
+from . models import Order,AuthToken
+import base64
+import json
+from django.contrib.auth import login
+import secrets
+from django.utils import timezone
 
+def login_user_without_password(request, user):
+    if user :
+        user.backend = 'django.contrib.auth.backends.ModelBackend'
+        login(request, user)
+
+def generate_unique_token(user):
+    token = secrets.token_hex(20) 
+    
+    # Ensure the token is unique
+    while AuthToken.objects.filter(token=token).exists():
+        token = secrets.token_hex(20)  # Regenerate token if not unique
+    auth_token, created = AuthToken.objects.update_or_create(user=user, defaults={'token': token,'created_on': timezone.now() })
+    return auth_token.token
+
+def encode_id_to_base64(id):
+    id_bytes = str(id).encode('utf-8')
+    base64_bytes = base64.b64encode(id_bytes)
+    return base64_bytes.decode('utf-8')
+
+
+def send_failedwhatsapp_notification(order,template='HXf45afb1457b1acb423258f08f28276ad'):
+        account_sid = settings.TWILIO_ACCOUNT_SID
+        auth_token = settings.TWILIO_AUTH_TOKEN
+        client = Client(account_sid, auth_token)
+        order_id = encode_id_to_base64(order.id)
+        token = generate_unique_token(order.user)
+        url = f'customer/order/{order_id}?acctoken={token}'
+        phone_number = order.user.phone.strip().replace(" ", "")
+        if not phone_number.startswith("+91"):
+            phone_number = "+91" + phone_number
+        if phone_number:    
+            message = client.messages.create(
+                    content_sid=template,
+                    content_variables=json.dumps({
+                        "1": str(order.order_id), 
+                        "2": url 
+                    }),
+                    from_=f'whatsapp:{settings.TWILIO_PHONE_NUMBER}',
+                    to=f'whatsapp:{phone_number}')
+
+def send_successwhatsapp_notification(order,template='HXbf9e4e5db502ba92a047c86123202218'):
+        account_sid = settings.TWILIO_ACCOUNT_SID
+        auth_token = settings.TWILIO_AUTH_TOKEN
+        client = Client(account_sid, auth_token)
+        order_id = encode_id_to_base64(order.id)
+        token = generate_unique_token(order.user)
+        url = f'customer/downloads?acctoken={token}&order_id={order.id}'
+        phone_number = order.user.phone.strip().replace(" ", "")
+        if not phone_number.startswith("+91"):
+            phone_number = "+91" + phone_number
+        if phone_number:    
+            message = client.messages.create(
+                    content_sid=template,
+                    content_variables=json.dumps({
+                        "1": "Worksheets", 
+                        "2": url ,
+                        "3":order.user.name
+                    }),
+                    from_=f'whatsapp:{settings.TWILIO_PHONE_NUMBER}',
+                    to=f'whatsapp:{phone_number}')
 
 
 def send_confirm_email( user,request):

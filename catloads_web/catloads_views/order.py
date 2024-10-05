@@ -2,7 +2,7 @@ import contextlib
 from django.shortcuts import render,get_object_or_404,redirect
 from django.urls import reverse_lazy,reverse
 from django.views import View
-from catloads_web.models import Order,OrderItem,PromoCode,CustomUser,Payment
+from catloads_web.models import Order,OrderItem,PromoCode,CustomUser,Payment,AuthToken
 from catloads_admimn.forms import CategoryForm,ProductForm
 from django.views.generic.list import ListView
 from django.views.generic.edit import UpdateView
@@ -25,7 +25,7 @@ import json
 import hmac
 import hashlib
 import logging
-from catloads_web.utils import send_confirm_email
+from catloads_web.utils import send_confirm_email,login_user_without_password,generate_unique_token,send_failedwhatsapp_notification,send_successwhatsapp_notification
 
 class CartView(TemplateView):
     template_name = 'catloads_web/shop-cart.html'
@@ -39,6 +39,10 @@ class OrderCreate(View):
 
     def get(self,request,encoded_id=None):
         try:
+            token = request.GET.get('acctoken')
+            if token:
+                user = AuthToken.objects.get(token=token).user
+                login_user_without_password(request=request,user=user)
             razorpay_client = razorpay.Client(auth=(RAZOR_PAY_KEY, RAZOR_PAY_SECRET))
             if not request.user.is_authenticated:
                 login_url = f"{reverse('catloads_web:login')}?redirect=order"
@@ -209,6 +213,7 @@ class UpdatePaymentView(View):
                 order.user.phone = phone
                 order.user.save()
                 payment.save()
+                send_successwhatsapp_notification(order=order)
                 logger.info(f"Payment captured for order_id: {order_id}, payment_id: {payment_id}")
 
                 return HttpResponse("Payment captured and processed successfully.", status=200)
@@ -223,6 +228,7 @@ class UpdatePaymentView(View):
                 order.user.phone = phone
                 order.user.save()
                 payment.save()
+                send_failedwhatsapp_notification(order=order)
                 logger.info(f"Payment failed for order_id: {order_id}, payment_id: {payment_id}")
                 return HttpResponse("Payment failed and processed successfully.", status=200)
 

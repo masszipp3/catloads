@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 import math
+from datetime import timedelta
 # Create your models here.
 from django.db import models
 from django.contrib.auth.models import User
@@ -77,6 +78,16 @@ class CustomUser(AbstractUser):
     def __str__(self):
         return self.username
 
+
+class AuthToken(BaseModel):
+    user = models.ForeignKey(CustomUser,on_delete=models.CASCADE,null=True,blank=True)
+    token = models.CharField(max_length=255, unique=True,null=True)
+
+    def is_expired(self):
+        return timezone.now() > self.created_on + timedelta(days=5)
+
+    def __str__(self):
+        return self.token
 class Category(BaseModel):
     name = models.CharField(max_length=255)
     slug = models.SlugField(max_length=255, unique=True)
