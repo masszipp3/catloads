@@ -336,7 +336,7 @@ class CustomerDowloads(TemplateView):
                 if user.is_expired():
                     login_url = f"{reverse('catloads_web:login')}?next=/customer/downloads"
                     return redirect(login_url)
-                login_user_without_password(request=request,user=user)
+                login_user_without_password(request=request,user=user.user)
             order_items = OrderItem.objects.filter(order__user=request.user, order__order_status=2)
             if order_id:
                 order_items = order_items.filter(order_id=order_id)
