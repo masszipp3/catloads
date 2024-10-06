@@ -42,7 +42,7 @@ def encode_id_to_base64(id):
     return base64_bytes.decode('utf-8')
 
 
-def send_failedwhatsapp_notification(order,template='HXf45afb1457b1acb423258f08f28276ad'):
+def send_failedwhatsapp_notification(order,template='HX5d900d34c3f6d587c6b81e959587d9c1'):
         account_sid = settings.TWILIO_ACCOUNT_SID
         auth_token = settings.TWILIO_AUTH_TOKEN
         client = Client(account_sid, auth_token)
@@ -57,7 +57,8 @@ def send_failedwhatsapp_notification(order,template='HXf45afb1457b1acb423258f08f
                     content_sid=template,
                     content_variables=json.dumps({
                         "1": str(order.order_id), 
-                        "2": url 
+                        "2": url ,
+                        "3":order.user.name
                     }),
                     from_=f'whatsapp:{settings.TWILIO_PHONE_NUMBER}',
                     to=f'whatsapp:{phone_number}')
@@ -66,7 +67,6 @@ def send_successwhatsapp_notification(order,template='HXbf9e4e5db502ba92a047c861
         account_sid = settings.TWILIO_ACCOUNT_SID
         auth_token = settings.TWILIO_AUTH_TOKEN
         client = Client(account_sid, auth_token)
-        order_id = encode_id_to_base64(order.id)
         token = generate_unique_token(order.user)
         url = f'customer/downloads?acctoken={token}&order_id={order.id}'
         phone_number = order.user.phone.strip().replace(" ", "")
