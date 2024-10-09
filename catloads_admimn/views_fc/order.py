@@ -113,23 +113,37 @@ class OrderSoftDeleteView(UserPassesTestMixin,View):
 
 
 @method_decorator(login_required, name='dispatch')
-class OrderViewList(UserPassesTestMixin,ListView):
+class OrderViewList(UserPassesTestMixin, ListView):
     model = Order
     template_name = 'catloads_admin/order_data.html'
     context_object_name = 'orders'
     paginate_by = 40
     queryset = OrderItem.objects.filter(is_deleted=False).order_by('-id')
 
-    def get_queryset(self) :
+    def get_queryset(self):
         queryset = super().get_queryset()
-        start_date = self.request.GET.get('start',None)
-        end_date = self.request.GET.get('end',None)
+        start_date = self.request.GET.get('start', None)
+        end_date = self.request.GET.get('end', None)
         if start_date and end_date:
-            queryset = queryset.filter(order__created_on__date__range=(start_date,end_date))
+            queryset = queryset.filter(order__created_on__date__range=(start_date, end_date))
         return queryset
-        
+
     def test_func(self):
-        return self.request.user.is_superuser   
+        return self.request.user.is_superuser
 
     def handle_no_permission(self):
         return HttpResponseRedirect(reverse('catloadsadmin:login'))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Check if 'page' parameter exists in the request to paginate
+        if 'page' not in self.request.GET:
+            context['is_paginated'] = False
+            context['object_list'] = self.get_queryset()
+        return context
+
+    def get_paginate_by(self, queryset):
+        # Disable pagination if 'page' parameter is not present in the request
+        if 'page' not in self.request.GET:
+            return None
+        return self.paginate_by
