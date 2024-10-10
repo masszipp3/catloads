@@ -129,7 +129,6 @@ class OrderConfirmView(View):
             if payment_id:
                 Payment.objects.create(order=order,transaction_id=payment_id,signature=payment_signature_id,amount=order.total_price,status=2)    
             send_confirm_email(user=order.user,request=request) 
-            send_meta_apiconversion(order)   
             redirect_url = reverse('catloads_web:downloads') 
             return JsonResponse({'Message':'Success','redirect_url':redirect_url})
         except (Exception, Exception) as e:
@@ -148,7 +147,6 @@ class VerifyPaymentView(View):
 
     def _extracted_from_get_(self, orderid, payment_id):
         instance = get_object_or_404(Order, pk=orderid)
-        send_meta_apiconversion(instance)   
         client = razorpay.Client(auth=(RAZOR_PAY_KEY,RAZOR_PAY_SECRET))
         paymemnt = client.payment.fetch(payment_id)
         payment_instance = Payment.objects.create(order=instance
