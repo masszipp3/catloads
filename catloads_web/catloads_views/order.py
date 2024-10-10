@@ -25,7 +25,7 @@ import json
 import hmac
 import hashlib
 import logging
-from catloads_web.utils import send_confirm_email,login_user_without_password,generate_unique_token,send_failedwhatsapp_notification,send_successwhatsapp_notification
+from catloads_web.utils import send_confirm_email,login_user_without_password,generate_unique_token,send_failedwhatsapp_notification,send_successwhatsapp_notification,send_meta_apiconversion
 
 class CartView(TemplateView):
     template_name = 'catloads_web/shop-cart.html'
@@ -53,6 +53,10 @@ class OrderCreate(View):
             print(request.user.pk)
             order_id = decode_base64_to_id(encoded_id)
             order = Order.objects.get(user=request.user,is_deleted =False,id=order_id,order_status__in=[1,3])
+            order.client_ip_address = request.META.get('HTTP_X_FORWARDED_FOR', None)  or request.META.get('REMOTE_ADDR')
+            order.client_user_agent = request.META.get('HTTP_USER_AGENT', None)  
+            if 'fbc' in request.session:
+                order.fcb_id = request.session['fbc']
             orderitems  = order.items.all()
             total_amount = order.get_order_total()*100
 
@@ -67,7 +71,7 @@ class OrderCreate(View):
                 # Save the Razorpay order ID to the order instance
                 order.razorpay_id = razorpay_order['id']
                 order.total_price = order.get_order_total()  # Save the initial amount
-                order.save()
+            order.save()
             context = {
                 'orderitems':orderitems,
                 'order':order,
@@ -123,7 +127,7 @@ class OrderConfirmView(View):
             order.save()
             order.user.save()
             if payment_id:
-                Payment.objects.create(order=order,transaction_id=payment_id,signature=payment_signature_id,amount=order.total_price,status=2)
+                Payment.objects.create(order=order,transaction_id=payment_id,signature=payment_signature_id,amount=order.total_price,status=2)    
             send_confirm_email(user=order.user,request=request)    
             redirect_url = reverse('catloads_web:downloads') 
             return JsonResponse({'Message':'Success','redirect_url':redirect_url})
@@ -202,7 +206,7 @@ class UpdatePaymentView(View):
             if not order:
                 logger.error(f"Order not found for order_id: {order_id}")
                 return HttpResponse(f"Order not found: {order_id}", status=404)
-
+            send_meta_apiconversion(order)
             if event == 'payment.captured':
                 # Update order and payment for captured payment
                 order.order_status = 2  # Assume 2 is the status for "Captured"

@@ -277,6 +277,10 @@ class Order(BaseModel):
     order_id  = models.CharField(max_length=255,null=True)
     razorpay_id = models.CharField(max_length=200,null=True,blank=True)
     country = models.ForeignKey(Country,on_delete=models.SET_NULL,null=True,blank=True)
+    client_ip_address = models.CharField(max_length=45, null=True, blank=True)  
+    client_user_agent = models.TextField(null=True, blank=True)  
+    fcb_id = models.TextField(null=True, blank=True)  
+
 
 
     def get_order_total(self):

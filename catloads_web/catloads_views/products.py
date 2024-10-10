@@ -20,6 +20,9 @@ class ProductDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        fbclid = self.request.GET.get('fbclid')
+        if fbclid :
+            self.request.session['fbc'] = fbclid
         default_country = Country.get_default_country()
         country_id = self.request.session.get('country_data', {}).get('country_id') or default_country.id
         product = context['products']

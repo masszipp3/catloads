@@ -2,7 +2,6 @@ from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.utils.crypto import constant_time_compare
-from datetime import datetime
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.core.mail import send_mail
 from django.urls import reverse
@@ -21,11 +20,20 @@ import json
 from django.contrib.auth import login
 import secrets
 from django.utils import timezone
+from catloads.settings import METAAPI_URL
+import hashlib
+import requests
+
+
 
 def login_user_without_password(request, user):
     if user :
         user.backend = 'django.contrib.auth.backends.ModelBackend'
         login(request, user)
+
+
+def hash_user_data(data):
+    return hashlib.sha256(data.encode()).hexdigest()
 
 def generate_unique_token(user):
     token = secrets.token_hex(20) 
@@ -41,6 +49,45 @@ def encode_id_to_base64(id):
     base64_bytes = base64.b64encode(id_bytes)
     return base64_bytes.decode('utf-8')
 
+def send_meta_apiconversion(order):
+    from datetime import datetime,timezone
+    try:
+        data = {
+            "data": [
+                {
+                "event_name": "Purchase",
+                "event_time": int(datetime.now(timezone.utc).timestamp()),
+                "action_source": "website",
+                "user_data": {
+                    "em": [
+                       hash_user_data(order.user.email.strip().replace(" ", ""))  if order.user.email else None
+                    ],
+                    "ph": [
+                        hash_user_data(order.user.phone.strip().replace(" ", ""))  if order.user.phone else None
+                    ],
+                    'client_ip_address': order.client_ip_address,
+                    'client_user_agent': order.client_user_agent,
+                    "fbc":order.fcb_id
+                },
+                "custom_data": {
+                    "currency": "INR",
+                    "value": float(order.total_price)
+                }
+                }
+                ]
+            }
+        response = requests.post(METAAPI_URL,
+            headers={'Content-Type': 'application/json'},
+            data=json.dumps(data)
+        )
+
+        if response.status_code == 200:
+            print("Event sent successfully:", response.json())
+        else:
+            print(f"Failed to send event. Status code: {response.status_code}, Response: {response.text}")
+
+    except Exception as e:
+         print(e)
 
 def send_failedwhatsapp_notification(order,template='HX5d900d34c3f6d587c6b81e959587d9c1'):
         account_sid = settings.TWILIO_ACCOUNT_SID

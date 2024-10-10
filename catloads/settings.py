@@ -222,3 +222,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+META_ACCESSTOKEN = ""
+
+PIXEL_ID = ''
+
+METAAPI_URL = f'https://graph.facebook.com/v16.0/{PIXEL_ID}/events?access_token={META_ACCESSTOKEN}'
+
