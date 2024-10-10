@@ -148,6 +148,7 @@ class VerifyPaymentView(View):
 
     def _extracted_from_get_(self, orderid, payment_id):
         instance = get_object_or_404(Order, pk=orderid)
+        send_meta_apiconversion(instance)   
         client = razorpay.Client(auth=(RAZOR_PAY_KEY,RAZOR_PAY_SECRET))
         paymemnt = client.payment.fetch(payment_id)
         payment_instance = Payment.objects.create(order=instance
