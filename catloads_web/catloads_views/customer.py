@@ -165,7 +165,7 @@ class CustomerOrders(TemplateView):
 
         context = super().get_context_data(**kwargs)  
         country_id = self.request.session.get('country_data', {}).get('country_id') or Country.get_default_country().id or None
-        order = Order.objects.filter(user=self.request.user,country_id=country_id) 
+        order = Order.objects.filter(user=self.request.user) 
         context['orders'] = order
         return context
 
