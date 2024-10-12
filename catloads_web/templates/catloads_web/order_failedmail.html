@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1 style="text-align: center;"> Order Failed</h1>
+
+    <h3>Order Details</h6>
+    <ul>
+        <li>{{order_id}}</li>
+        <li>{{name}}</li>
+        <li>{{email}}</li>
+        <li><a href="tel:{{phone}}"><{{phone}}</a></li>
+    </ul>
+
+    <h3>Products</h6>
+    <ul>
+        {% for product in products %}
+        <li>{{product.product.name}} - {{product.price}} - {{product.quantity}}</li>
+        {% endfor %}
+    </ul>
+
+</body>
+</html>

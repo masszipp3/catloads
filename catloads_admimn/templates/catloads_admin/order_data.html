@@ -37,14 +37,14 @@
             <ul class="wg-pagination" style="list-style: none; display: flex; align-items: center;">
                 <li>
                     {% if page_obj.has_previous %}
-                        <a href="?page={{ page_obj.previous_page_number }}">
+                        <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.start %}&start={{ request.GET.start }}{% endif %}{% if request.GET.end %}&end={{ request.GET.end }}{% endif %}">
                             <i class="fa fa-arrow-circle-left" style="font-size: 40px;"></i>
                         </a>
                     {% endif %}
                 </li>
                 <li>
                     {% if page_obj.has_next %}
-                        <a href="?page={{ page_obj.next_page_number }}">
+                        <a href="?page={{ page_obj.next_page_number }}{% if request.GET.start %}&start={{ request.GET.start }}{% endif %}{% if request.GET.end %}&end={{ request.GET.end }}{% endif %}">
                             <i class="fa fa-arrow-circle-right" style="font-size: 40px;"></i>
                         </a>
                     {% endif %}

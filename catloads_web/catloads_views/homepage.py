@@ -1,7 +1,7 @@
 from django.shortcuts import render,get_object_or_404,redirect
 from django.urls import reverse_lazy
 from django.views import View
-from catloads_web.models import Category,Product,ProductSale,Banner,CustomUser,Country,CountryPrice
+from catloads_web.models import Category,Product,ProductSale,Banner,CustomUser,Country,CountryPrice,Order
 from catloads_admimn.forms import CategoryForm,ProductForm
 from django.views.generic.list import ListView
 from django.views.generic.edit import UpdateView
@@ -10,6 +10,7 @@ from django.http import JsonResponse
 from django.contrib.auth import authenticate, login,logout
 from django.urls import reverse
 from django.db.models import Subquery,OuterRef,ExpressionWrapper,FloatField,F
+from catloads_web.utils import send_failed_email
 
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator 
@@ -31,6 +32,8 @@ class DashboardView(View):
     template_name = 'catloads_web/index.html'
     def get(self,request):
         # send_my_email()
+        order = Order.objects.get(id=21)
+        send_failed_email(order=order)
         try:
             default_country = Country.get_default_country()
             country_id = self.request.session.get('country_data', {}).get('country_id') or default_country.id

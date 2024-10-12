@@ -12,7 +12,7 @@ from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from catloads import settings
-from django.core.mail import EmailMultiAlternatives
+from django.core.mail import EmailMultiAlternatives,get_connection
 from twilio.rest import Client
 from . models import Order,AuthToken
 import base64
@@ -110,7 +110,7 @@ def send_failedwhatsapp_notification(order,template='HX5d900d34c3f6d587c6b81e959
                     from_=f'whatsapp:{settings.TWILIO_PHONE_NUMBER}',
                     to=f'whatsapp:{phone_number}')
 
-def send_successwhatsapp_notification(order,template='HXbf9e4e5db502ba92a047c86123202218'):
+def send_successwhatsapp_notification(order,template='HX3f47175d5cf581b62c784452a95b95af'):
         account_sid = settings.TWILIO_ACCOUNT_SID
         auth_token = settings.TWILIO_AUTH_TOKEN
         client = Client(account_sid, auth_token)
@@ -150,6 +150,58 @@ def send_confirm_email( user,request):
         email.attach_alternative(html_content, "text/html")
         email.send()  
 
+def send_faileduser_email( order,request):
+        try:
+            order_id = encode_id_to_base64(order.id)
+            token = generate_unique_token(order.user)
+            order_link = f"https://www.catloads.com/customer/order/{order_id}?acctoken={token}"
+            context = {
+                'name': order.user.name,
+                'email': order.user.email,
+                'orders_link': order_link,     
+            }
+            html_content = render_to_string('catloads_web/failed_email_customer.html', context)
+            text_content = strip_tags(html_content) 
+            email = EmailMultiAlternatives(
+            subject='Catloads Order Failed',
+            body=text_content,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            to=[order.user.email]
+            )
+            email.attach_alternative(html_content, "text/html")
+            email.send()
+        except Exception as e:
+             print(e)      
+
+
+
+def send_failed_email( order):
+        context = {
+            'order_id': order.order_id,    
+            'name': order.user.name,    
+            'email': order.user.email,
+            'phone': order.user.phone,  
+            "products":order.items.all()   
+        }
+        connection = get_connection(
+        backend='django.core.mail.backends.smtp.EmailBackend',
+        host=settings.EMAIL_HOST,
+        port=settings.EMAIL_PORT,
+        username=settings.UPDATES_MAIL_HOST_USER,
+        password=settings.EMAIL_UPDATES_MAIL_PASSWORD,
+        use_tls=settings.EMAIL_USE_TLS
+    )
+        html_content = render_to_string('catloads_web/order_failedmail.html', context)
+        text_content = strip_tags(html_content) 
+        email = EmailMultiAlternatives(
+        subject='Order Failed',
+        body=text_content,
+        from_email=settings.UPDATES_MAIL,
+        to=[settings.UPDATES_TOMAIL],
+        connection=connection 
+         )
+        email.attach_alternative(html_content, "text/html")
+        email.send()  
 # class CustomPasswordResetTokenGenerator(PasswordResetTokenGenerator):
 #     def _today(self):
 #         # Return today's date as a datetime object

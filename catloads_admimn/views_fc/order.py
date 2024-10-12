@@ -34,8 +34,8 @@ class OrderListView(UserPassesTestMixin,ListView):
             keyword=  self.request.GET.get('search','')
             queryset = self.get_queryset().filter(
                 Q(order_id__icontains=keyword) | 
-                Q(user__email=keyword) |
-                Q(user__phone=keyword) 
+                Q(user__email__icontains=keyword) |
+                Q(user__phone__icontains=keyword) 
             ) 
             order_list = [{
             'id': order.id,
