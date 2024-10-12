@@ -117,7 +117,7 @@ class OrderViewList(UserPassesTestMixin,ListView):
     model = Order
     template_name = 'catloads_admin/order_data.html'
     context_object_name = 'orders'
-    paginate_by = 2500
+    paginate_by = 60
     queryset = OrderItem.objects.filter(is_deleted=False).order_by('-id')
 
     def get_queryset(self) :
