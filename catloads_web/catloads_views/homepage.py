@@ -32,8 +32,6 @@ class DashboardView(View):
     template_name = 'catloads_web/index.html'
     def get(self,request):
         # send_my_email()
-        order = Order.objects.get(id=21)
-        send_failed_email(order=order)
         try:
             default_country = Country.get_default_country()
             country_id = self.request.session.get('country_data', {}).get('country_id') or default_country.id

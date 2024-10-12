@@ -76,7 +76,7 @@
                 <td>{{order.order_id}}</td>
                 <td>{{order.order.user.email }}</td>
                 <td>{{order.order.user.phone }}</td>
-                <td>{{order.order.get_payment_display}}</td>
+                <td> {% if order.order.payment_method %}{{order.order.get_payment_display}}{% endif %}</td> 
                 <td>{{order.order.get_status_display}}</td>
                 <td>{{order.order.tax}}</td>
                 <td>{{order.order.discount}}</td>
