@@ -194,7 +194,7 @@ def send_failed_email( order):
         html_content = render_to_string('catloads_web/order_failedmail.html', context)
         text_content = strip_tags(html_content) 
         email = EmailMultiAlternatives(
-        subject='Order Failed',
+        subject=f'Order Failed {order.order_id}',
         body=text_content,
         from_email=settings.UPDATES_MAIL,
         to=[settings.UPDATES_TOMAIL],
