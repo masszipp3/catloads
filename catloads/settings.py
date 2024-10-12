@@ -230,8 +230,8 @@ PIXEL_ID = '525136436717782'
 METAAPI_URL = f'https://graph.facebook.com/v16.0/{PIXEL_ID}/events?access_token={META_ACCESSTOKEN}'
 
 
-UPDATES_MAIL_HOST_USER = ""
-UPDATES_MAIL = ""
-UPDATES_TOMAIL = ""
-EMAIL_UPDATES_MAIL_PASSWORD=""
+UPDATES_MAIL_HOST_USER = "updates@catloads.com"
+UPDATES_MAIL = "updates@catloads.com"
+UPDATES_TOMAIL = "newsblander12@gmail.com"
+EMAIL_UPDATES_MAIL_PASSWORD="Theeditor@1"
 

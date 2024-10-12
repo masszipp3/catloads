@@ -25,7 +25,7 @@ import json
 import hmac
 import hashlib
 import logging
-from catloads_web.utils import send_confirm_email,login_user_without_password,generate_unique_token,send_failedwhatsapp_notification,send_successwhatsapp_notification,send_meta_apiconversion,send_failed_email
+from catloads_web.utils import send_confirm_email,login_user_without_password,generate_unique_token,send_failedwhatsapp_notification,send_successwhatsapp_notification,send_meta_apiconversion,send_failed_email,send_faileduser_email
 
 class CartView(TemplateView):
     template_name = 'catloads_web/shop-cart.html'
@@ -232,7 +232,7 @@ class UpdatePaymentView(View):
                 order.user.phone = phone
                 order.user.save()
                 payment.save()
-                send_confirm_email(user=order.user,request=request) 
+                send_faileduser_email(order=order) 
                 send_failed_email(order=order) 
                 send_failedwhatsapp_notification(order=order)
                 logger.info(f"Payment failed for order_id: {order_id}, payment_id: {payment_id}")

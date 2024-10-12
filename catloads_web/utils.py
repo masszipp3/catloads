@@ -150,7 +150,7 @@ def send_confirm_email( user,request):
         email.attach_alternative(html_content, "text/html")
         email.send()  
 
-def send_faileduser_email( order,request):
+def send_faileduser_email( order):
         try:
             order_id = encode_id_to_base64(order.id)
             token = generate_unique_token(order.user)
