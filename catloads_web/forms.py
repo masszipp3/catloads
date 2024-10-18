@@ -19,7 +19,8 @@ class RegisterForm(forms.ModelForm):
     def save(self, commit=True):
         user = super().save(commit=False)
         user.usertype=2
-        user.username=self.cleaned_data['email']
+        user.username = self.cleaned_data['email'].lower()  # Convert email to lowercase
+        user.email = self.cleaned_data['email'].lower()
         user.set_password(self.cleaned_data['password'])
         if commit:
             user.save()
